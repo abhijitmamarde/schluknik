@@ -2,16 +2,24 @@
 #			schluknik 2016
 #			run with python 2.7.6
 ########################################################################
-
 import kivy
+kivy.require('1.0.7')
+
+#import kivy
 from kivy.app import App
-from kivy.uix.button import Button
+#from kivy.uix.button import Button
+#from kivy.uix.label import Label
+#from kivy.uix.boxlayout import BoxLayout
+#from ftplib import FTP
+#from kivy.core.window import Window
+#from kivy.uix.screenmanager import ScreenManager, Screen, FadeTransition
+#from kivy.core.image import Image
+
+from kivy.uix.floatlayout import FloatLayout
 from kivy.uix.label import Label
-from kivy.uix.boxlayout import BoxLayout
-from ftplib import FTP
+from kivy.uix.widget import Widget
+from kivy.uix.image import Image
 from kivy.core.window import Window
-
-
 ########################################################################
 class VBoxLayoutExample(App):
     """
@@ -53,10 +61,22 @@ class VBoxLayoutExample(App):
             btn = Button(text="Button%s" % (i+1) )
 	    btn.bind(on_press=self.callback)
             layout.add_widget(btn)
-        return layout
+        return RootScreen(ScreenManager)
+
+########################################################################
+
+class StartScreen(FloatLayout):
+
+  def __init__(self, **kwargs):
+     	super(StartScreen, self).__init__(**kwargs)
+class TestApp(App):
+  
+  def build(self):
+      Window.clearcolor = (1, 1, 1, 1)	
+      return StartScreen()
 
 #--- Entry Point
 if __name__ == "__main__":
-    app = VBoxLayoutExample()
-    app.setOrientation(orient="vertical")
-    app.run()
+ #   app = VBoxLayoutExample()
+ #   app.setOrientation(orient="vertical")
+    TestApp().run()
