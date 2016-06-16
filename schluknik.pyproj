@@ -1,0 +1,59 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" DefaultTargets="Build">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{bd5d139f-a88b-470e-bcf3-d029e51d9886}</ProjectGuid>
+    <ProjectHome />
+    <StartupFile>main.py</StartupFile>
+    <SearchPath />
+    <WorkingDirectory>.</WorkingDirectory>
+    <OutputPath>.</OutputPath>
+    <ProjectTypeGuids>{888888a0-9f3d-457c-b088-3a5042f75d52}</ProjectTypeGuids>
+    <LaunchProvider>Standard Python launcher</LaunchProvider>
+    <InterpreterId>{2af0f10d-7135-4994-9156-5d01c9c11b7e}</InterpreterId>
+    <InterpreterVersion>2.7</InterpreterVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)' == 'Debug'" />
+  <PropertyGroup Condition="'$(Configuration)' == 'Release'" />
+  <PropertyGroup>
+    <VisualStudioVersion Condition=" '$(VisualStudioVersion)' == '' ">10.0</VisualStudioVersion>
+    <PtvsTargetsFile>$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Python Tools\Microsoft.PythonTools.targets</PtvsTargetsFile>
+  </PropertyGroup>
+  <ItemGroup>
+    <Content Include=".designer\config.ini" />
+    <Content Include="pics\1_stable.png" />
+    <Content Include="pics\1_stable.svg" />
+    <Content Include="pics\app_pics\mipmap-hdpi\ic_launcher.png" />
+    <Content Include="pics\app_pics\mipmap-mdpi\ic_launcher.png" />
+    <Content Include="pics\app_pics\mipmap-xhdpi\ic_launcher.png" />
+    <Content Include="pics\app_pics\mipmap-xxhdpi\ic_launcher.png" />
+    <Content Include="pics\app_pics\mipmap-xxxhdpi\ic_launcher.png" />
+    <Content Include="pics\draft.svg" />
+    <Content Include="pics\logo.png" />
+    <Content Include="stable.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include=".buildozer\android\app\main.py" />
+    <Compile Include=".buildozer\android\app\sitecustomize.py" />
+    <Compile Include="main.py" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include=".buildozer\" />
+    <Folder Include=".buildozer\android\" />
+    <Folder Include=".buildozer\android\app" />
+    <Folder Include=".designer" />
+    <Folder Include="pics" />
+    <Folder Include="pics\app_pics\" />
+    <Folder Include="pics\app_pics\mipmap-hdpi" />
+    <Folder Include="pics\app_pics\mipmap-mdpi" />
+    <Folder Include="pics\app_pics\mipmap-xhdpi" />
+    <Folder Include="pics\app_pics\mipmap-xxhdpi" />
+    <Folder Include="pics\app_pics\mipmap-xxxhdpi" />
+  </ItemGroup>
+  <ItemGroup>
+    <InterpreterReference Include="{2af0f10d-7135-4994-9156-5d01c9c11b7e}\2.7" />
+  </ItemGroup>
+  <Import Project="$(PtvsTargetsFile)" Condition="Exists($(PtvsTargetsFile))" />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.Common.targets" Condition="!Exists($(PtvsTargetsFile))" />
+</Project>
