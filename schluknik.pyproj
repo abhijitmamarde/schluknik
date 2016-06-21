@@ -32,7 +32,6 @@
     <Content Include="pics\draft.svg" />
     <Content Include="pics\logo.png" />
     <Content Include="stable.png" />
-    <Content Include="test.kv" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include=".buildozer\android\app\main.py" />

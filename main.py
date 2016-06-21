@@ -17,7 +17,7 @@ __status__ = "development"
 ###     Imports     ###
 
 import kivy
-kivy.require('1.0.7')
+kivy.require('1.8.7')
 
 import kivy
 from kivy.app import App
@@ -28,22 +28,79 @@ from ftplib import FTP
 from kivy.core.window import Window
 from kivy.uix.screenmanager import ScreenManager, Screen, FadeTransition
 from kivy.core.image import Image
-from kivy.uix.floatlayout import FloatLayout
 from kivy.uix.label import Label
 from kivy.uix.widget import Widget
 from kivy.uix.image import Image
-from kivy.core.window import Window
+from kivy.uix.boxlayout import BoxLayout
+from kivy.lang import Builder
+from kivy.uix.screenmanager import ScreenManager, Screen
 
-###     Body        ###
-class VBoxLayoutExample(App):
-    """
-    Main class
-    """
-    def setOrientation(self, orient):
-        """
-		Todo
-        """
-        self.orient = orient
+###     kv integration     ###
+
+Builder.load_string("""
+<CityButton@Button>:
+    color: 1,1,1,1
+    font_size: 32
+    
+
+<FTPButton@Button>:
+    color: 1,1,1,1
+    font_size: 32
+    on_press: self.parent.parent.callback
+    
+
+<CityScreen>:
+    BoxLayout:
+        orientation: 'vertical'
+        Image:
+            source: 'start.png'
+        CityButton:
+            text: 'Prenzlauer-Berg'
+            on_press: root.manager.current = 'beer'
+        CityButton:
+            text: 'Friedrichshain'
+            on_press: root.manager.current = 'beer'
+
+<BeerScreen>:
+    BoxLayout:
+        orientation: 'vertical'
+        Image:
+            source: 'start.png'
+        FTPButton:
+            text: '1'
+            on_press: root.manager.current = 'result'
+        FTPButton:
+            text: '2'
+            on_press: root.manager.current = 'result'
+        FTPButton:
+            text: '3'
+        FTPButton:
+            text: '4'
+        FTPButton:
+            text: '5'
+        FTPButton:
+            text: '6'
+<ResultScreen>:
+    BoxLayout:
+        orientation: 'vertical'
+        Image:
+            source: 'stable.png'
+
+        
+""")
+
+###     Screen Declaration     ####    
+
+class SettingsScreen(Screen):
+    pass
+
+class ResultScreen(Screen):
+    pass
+
+class CityScreen(Screen):
+    pass
+
+class BeerScreen(Screen):
 
     def callback(instance, event):
         """
@@ -61,44 +118,35 @@ class VBoxLayoutExample(App):
             ftp.storlines("STOR " + filename, open(filename, 'r'))
             ftp.quit()
             print('sucessfully created file'+ filename)
-    
+        instance.disabled = True
+    pass
+
+# create the screen manager
+sm = ScreenManager()
+sm.add_widget(CityScreen(name='city'))
+sm.add_widget(BeerScreen(name='beer'))
+sm.add_widget(ResultScreen(name='result'))
+
+###     Body        ###
+class Myapp(App):
+    """
+    Main class
+    """
     def build(self):
         """
 		Layout builder of main window
         """
-        self.icon = 'icon.png'
-        Window.clearcolor = (1, 1, 1, 0)	
-        layout = BoxLayout(padding=10, orientation=self.orient)
-        l = Label(text='[color=ff3333]Where have you been last night?[/color]',markup = True, font_size='20sp')
-        l.bind(texture_size=l.setter('size'))
-        layout.add_widget(l)
-        wimg = Image(source='stable.png')
-        layout.add_widget(wimg)
-        zone = ['PBerg', 'Friedrichshain', 'Mitte', 'Kreuzberg', 'Lichtenberg']
-        for i in zone:
-			btn = Button(text= str(i))
-			btn.bind(on_press=self.callback)
-			layout.add_widget(btn)
-        return layout
+        # set bg color to white
+        Window.clearcolor = (1, 1, 1, 0)
 
-###     Class section       ###
-class RootScreen(ScreenManager):
-    pass
-class StartScreen(FloatLayout):
+        # load start screen
+        #startscreen = CityScreen()
+        return sm 
 
-	def __init__(self, **kwargs):
-		super(StartScreen, self).__init__(**kwargs)
-class TestApp(App):
-  
-	def build(self):
-		
-		return StartScreen()
-
-#######
+###    entry point      ####
 if __name__ == "__main__":
     """
 		Entry point for the application
     """
-    app = VBoxLayoutExample()
-    app.setOrientation(orient="vertical")  
+    app = Myapp()
     app.run()
