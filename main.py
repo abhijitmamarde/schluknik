@@ -34,6 +34,7 @@ from kivy.uix.image import Image
 from kivy.uix.boxlayout import BoxLayout
 from kivy.lang import Builder
 from kivy.uix.screenmanager import ScreenManager, Screen
+from kivy.uix.slider import Slider
 
 ###     kv integration     ###
 
@@ -46,14 +47,13 @@ Builder.load_string("""
 <FTPButton@Button>:
     color: 1,1,1,1
     font_size: 32
-    on_press: self.parent.parent.callback
     
 
 <CityScreen>:
     BoxLayout:
         orientation: 'vertical'
         Image:
-            source: 'start.png'
+            source: 'city.png'
         CityButton:
             text: 'Prenzlauer-Berg'
             on_press: root.manager.current = 'beer'
@@ -65,26 +65,36 @@ Builder.load_string("""
     BoxLayout:
         orientation: 'vertical'
         Image:
-            source: 'start.png'
-        FTPButton:
-            text: '1'
-            on_press: root.manager.current = 'result'
-        FTPButton:
-            text: '2'
-            on_press: root.manager.current = 'result'
-        FTPButton:
-            text: '3'
-        FTPButton:
-            text: '4'
-        FTPButton:
-            text: '5'
-        FTPButton:
-            text: '6'
+            source: 'beer.png'
+        Slider:
+            id: slider_id
+            min: 0
+            step: 1.5
+            max: 10
+            on_touch_up: root.manager.current = 'hang'
+            on_touch_move: self.parent.parent.addbeer 
+        Label:
+            text: str(slider_id.value)
+            color: 0,0,0,1
+<HangScreen>:
+    BoxLayout:
+        orientation: 'vertical'
+        Image:
+            source: 'hang.png'
+        Slider:
+            id: slider_id
+            min: 0
+            step: 1.5
+            max: 10
+            on_touch_up: root.manager.current = 'result'
+        Label:
+            text: str(slider_id.value)
+            color: 0,0,0,1
 <ResultScreen>:
     BoxLayout:
         orientation: 'vertical'
         Image:
-            source: 'stable.png'
+            source: 'result.png'
 
         
 """)
@@ -100,7 +110,16 @@ class ResultScreen(Screen):
 class CityScreen(Screen):
     pass
 
+class HangScreen(Screen):
+    pass
+
 class BeerScreen(Screen):
+
+    def addbeer():
+        """
+		Button pressed handler
+        """
+    pass
 
     def callback(instance, event):
         """
@@ -126,6 +145,7 @@ sm = ScreenManager()
 sm.add_widget(CityScreen(name='city'))
 sm.add_widget(BeerScreen(name='beer'))
 sm.add_widget(ResultScreen(name='result'))
+sm.add_widget(HangScreen(name='hang'))
 
 ###     Body        ###
 class Myapp(App):

@@ -17,7 +17,7 @@
    version="1.1"
    inkscape:version="0.91 r13725"
    sodipodi:docname="3_start.svg"
-   inkscape:export-filename="C:\Workspace\Projekte\schluknik\pics\start.png"
+   inkscape:export-filename="C:\Workspace\Projekte\schluknik\pics\city.png"
    inkscape:export-xdpi="300"
    inkscape:export-ydpi="300">
   <defs
@@ -109,14 +109,14 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="0.7"
-     inkscape:cx="43.325212"
-     inkscape:cy="-200.46777"
+     inkscape:cx="36.324813"
+     inkscape:cy="151.75095"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="false"
      inkscape:window-width="1920"
-     inkscape:window-height="1058"
-     inkscape:window-x="-8"
+     inkscape:window-height="1018"
+     inkscape:window-x="1912"
      inkscape:window-y="-8"
      inkscape:window-maximized="1"
      fit-margin-top="0"
@@ -139,7 +139,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -353,6 +353,14 @@
          sodipodi:role="line"
          x="645.73145"
          y="454.2182"
-         id="tspan4191">a schluknik again!</tspan></text>
+         id="tspan4191">a schluknik again!</tspan><tspan
+         sodipodi:role="line"
+         x="645.73145"
+         y="504.2182"
+         id="tspan4177" /><tspan
+         sodipodi:role="line"
+         x="645.73145"
+         y="554.2182"
+         id="tspan4179">Where have you been?</tspan></text>
   </g>
 </svg>
