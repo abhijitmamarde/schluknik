@@ -5,6 +5,8 @@
 *.suo
 *.user
 *.sln.docstates
+*~
+bin/
 
 # Build results
 [Dd]ebug/
@@ -15,6 +17,7 @@ build/
 bld/
 [Bb]in/
 [Oo]bj/
+bin/
 
 # Roslyn cache directories
 *.ide/
