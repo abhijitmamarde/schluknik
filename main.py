@@ -47,11 +47,14 @@ Builder.load_string("""
 <FTPButton@Button>:
     color: 1,1,1,1
     font_size: 32
-    
+ 
+<MyBoxLayout@BoxLayout>:
+    orientation: 'vertical'
+    padding: 30,30,30,30
+    spacing: 5           
 
 <CityScreen>:
-    BoxLayout:
-        orientation: 'vertical'
+    MyBoxLayout:
         Image:
             source: 'city.png'
         CityButton:
@@ -60,43 +63,49 @@ Builder.load_string("""
         CityButton:
             text: 'Friedrichshain'
             on_press: root.manager.current = 'beer'
-
 <BeerScreen>:
-    BoxLayout:
-        orientation: 'vertical'
+    grid: Grid
+    MyBoxLayout:
         Image:
             source: 'beer.png'
         Slider:
             id: slider_id
             min: 0
-            step: 1.5
+            step: 0.01
             max: 10
             on_touch_up: root.manager.current = 'hang'
-            on_touch_move: self.parent.parent.addbeer 
+            on_value: root.addbeer(slider_id.value)
         Label:
-            text: str(slider_id.value)
+            text: str(round(slider_id.value, 1))
             color: 0,0,0,1
+        GridLayout:
+            id: Grid
+            cols: 10
+            rows: 1
 <HangScreen>:
-    BoxLayout:
-        orientation: 'vertical'
+    grid: Grid
+    MyBoxLayout:
         Image:
             source: 'hang.png'
+            scale: 2.0
         Slider:
             id: slider_id
             min: 0
-            step: 1.5
+            step: 0.01
             max: 10
             on_touch_up: root.manager.current = 'result'
+            on_value: root.addpoop(slider_id.value)
         Label:
-            text: str(slider_id.value)
+            text: str(round(slider_id.value, 0))
             color: 0,0,0,1
+        GridLayout:
+            id: Grid
+            cols: 10
+            rows: 1
 <ResultScreen>:
-    BoxLayout:
-        orientation: 'vertical'
+    MyBoxLayout:
         Image:
             source: 'result.png'
-
-        
 """)
 
 ###     Screen Declaration     ####    
@@ -111,14 +120,27 @@ class CityScreen(Screen):
     pass
 
 class HangScreen(Screen):
+
+    def addpoop(instance, value):
+        """
+		Button pressed handler
+        """
+        instance.grid.clear_widgets()
+        for x in range(0, int(value)):
+            wimg = Image(source='poop.png')
+            instance.grid.add_widget(wimg)
     pass
 
 class BeerScreen(Screen):
 
-    def addbeer():
+    def addbeer(instance, value):
         """
 		Button pressed handler
         """
+        instance.grid.clear_widgets()
+        for x in range(0, int(value)):
+            wimg = Image(source='beerchen.jpg')
+            instance.grid.add_widget(wimg)
     pass
 
     def callback(instance, event):
