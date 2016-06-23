@@ -35,6 +35,10 @@ from kivy.uix.boxlayout import BoxLayout
 from kivy.lang import Builder
 from kivy.uix.screenmanager import ScreenManager, Screen
 from kivy.uix.slider import Slider
+# for gps access 
+from plyer import gps
+from kivy.clock import Clock, mainthread
+from kivy.properties import StringProperty
 
 ###     kv integration     ###
 
@@ -135,17 +139,40 @@ Builder.load_string("""
                         text: "[b]Lille[/b]\\n1 154 861 hab\\n5 759 hab./km2"
                         markup: True
                         halign: "center"
+                    Label:
+                        text: root.gps_location
+                    
 """)
 
 ###     Screen Declaration     ####    
 
-class SettingsScreen(Screen):
-    pass
-
 class ResultScreen(Screen):
-    pass
 
-class CityScreen(Screen):
+    gps_location = StringProperty()
+    gps_status = StringProperty('Click Start to get GPS location updates')
+
+    def build(self):
+        self.gps = gps
+        try:
+            self.gps.configure(on_location=self.on_location,
+                               on_status=self.on_status)
+        except NotImplementedError:
+            import traceback
+            traceback.print_exc()
+            self.gps_status = 'GPS is not implemented for your platform'
+
+        return Builder.load_string(kv)
+
+    @mainthread
+    def on_location(self, **kwargs):
+        self.gps_location = '\n'.join([
+            '{}={}'.format(k, v) for k, v in kwargs.items()])
+        print(self.gps_location)
+
+    @mainthread
+    def on_status(self, stype, status):
+        self.gps_status = 'type={}\n{}'.format(stype, status)
+
     pass
 
 class HangScreen(Screen):
