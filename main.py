@@ -57,8 +57,14 @@ Builder.load_string("""
 
 <CityScreen>:
     MyBoxLayout:
-        Image:
-            source: 'city.png'
+        GridLayout:
+            cols: 2
+            rows: 1
+            Image:
+                source: 'icon.png'
+            Label:
+                text: 'Lets face it! You have been a schluknik again! Where have you been?'
+                color: 0,0,0,1
         CityButton:
             text: 'Prenzlauer-Berg'
             on_press: root.manager.current = 'beer'
@@ -68,8 +74,14 @@ Builder.load_string("""
 <BeerScreen>:
     grid: Grid
     MyBoxLayout:
-        Image:
-            source: 'beer.png'
+        GridLayout:
+            cols: 2
+            rows: 1
+            Image:
+                source: 'icon.png'
+            Label:
+                text: 'Nice! Remember how many beer?'
+                color: 0,0,0,1
         Slider:
             id: slider_id
             min: 0
@@ -87,9 +99,14 @@ Builder.load_string("""
 <HangScreen>:
     grid: Grid
     MyBoxLayout:
-        Image:
-            source: 'hang.png'
-            scale: 2.0
+        GridLayout:
+            cols: 2
+            rows: 1
+            Image:
+                source: 'icon.png'
+            Label:
+                text: 'Yuck...And how do you feel today?'
+                color: 0,0,0,1
         Slider:
             id: slider_id
             min: 0
