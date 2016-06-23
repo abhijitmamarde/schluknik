@@ -41,47 +41,39 @@ from kivy.uix.slider import Slider
 Builder.load_string("""
 #:import sys sys
 #:import MapSource mapview.MapSource
-<CityButton@Button>:
-    color: 1,1,1,1
-    font_size: 32
-    
 
+    
 <FTPButton@Button>:
     color: 1,1,1,1
     font_size: 32
  
 <MyBoxLayout@BoxLayout>:
     orientation: 'vertical'
-    padding: 30,30,30,30
-    spacing: 5           
+    padding: 60,60,30,30
+    spacing: 5
+               
+<HeaderLabel@Label>:
+    color: 0,0,0,1
+    text_size: root.width, None
+    size: self.texture_size
+    font_size: 35
+    font_name: 'Roboto'
+    halign: 'left'
+    valign: 'middle'
 
-<CityScreen>:
-    MyBoxLayout:
-        GridLayout:
-            cols: 2
-            rows: 1
-            Image:
-                source: 'icon.png'
-            Label:
-                text: 'Lets face it! You have been a schluknik again! Where have you been?'
-                color: 0,0,0,1
-        CityButton:
-            text: 'Prenzlauer-Berg'
-            on_press: root.manager.current = 'beer'
-        CityButton:
-            text: 'Friedrichshain'
-            on_press: root.manager.current = 'beer'
+<HeaderImage@Image>
+    scale: 6.0
+
 <BeerScreen>:
     grid: Grid
     MyBoxLayout:
         GridLayout:
             cols: 2
             rows: 1
-            Image:
+            HeaderImage:
                 source: 'icon.png'
-            Label:
-                text: 'Nice! Remember how many beer?'
-                color: 0,0,0,1
+            HeaderLabel:
+                text: 'Lets face it! You have been a schluknik again! Remember how many beer?'
         Slider:
             id: slider_id
             min: 0
@@ -102,11 +94,10 @@ Builder.load_string("""
         GridLayout:
             cols: 2
             rows: 1
-            Image:
+            HeaderImage:
                 source: 'icon.png'
-            Label:
+            HeaderLabel:
                 text: 'Yuck...And how do you feel today?'
-                color: 0,0,0,1
         Slider:
             id: slider_id
             min: 0
@@ -202,7 +193,6 @@ class BeerScreen(Screen):
 
 # create the screen manager
 sm = ScreenManager()
-sm.add_widget(CityScreen(name='city'))
 sm.add_widget(BeerScreen(name='beer'))
 sm.add_widget(ResultScreen(name='result'))
 sm.add_widget(HangScreen(name='hang'))
@@ -218,9 +208,6 @@ class Myapp(App):
         """
         # set bg color to white
         Window.clearcolor = (1, 1, 1, 0)
-
-        # load start screen
-        #startscreen = CityScreen()
         return sm 
 
 ###    entry point      ####
