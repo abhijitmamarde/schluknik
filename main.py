@@ -39,6 +39,11 @@ from kivy.uix.slider import Slider
 from plyer import gps
 from kivy.clock import Clock, mainthread
 from kivy.properties import StringProperty
+# for date and time stamp
+import datetime
+import pandas as pd
+import csv
+import traceback
 
 ###     kv integration     ###
 
@@ -107,7 +112,7 @@ Builder.load_string("""
             min: 0
             step: 0.01
             max: 10
-            on_touch_up: root.manager.current = 'result'
+            on_touch_up: root.ftp_transfer()
             on_value: root.addpoop(slider_id.value)
         Label:
             text: str(round(slider_id.value, 0))
@@ -146,6 +151,9 @@ Builder.load_string("""
 
 ###     Screen Declaration     ####    
 
+# create the screen manager
+sm = ScreenManager()
+
 class ResultScreen(Screen):
 
     gps_location = StringProperty()
@@ -181,11 +189,61 @@ class HangScreen(Screen):
         """
 		Button pressed handler
         """
+        global num_hang
+        num_hang = value
         instance.grid.clear_widgets()
         for x in range(0, int(value)):
             wimg = Image(source='poop.png')
             instance.grid.add_widget(wimg)
-    pass
+
+    def ftp_transfer(Screen):
+            """
+		    Button pressed handler
+            """
+
+            filename = "schlukniktable.csv"
+            schlukniktable = pd.DataFrame(columns=['timestamp', 'location', 'beer', 'hang'])
+
+            # File FTP transfer
+		    # domain name or server ip:
+            ftp = FTP('singing-wires.de')
+		    # how to encrypt this?
+            ftp.login(user='web784', passwd = 'Holz0815')
+            ftp.cwd('/html/schluknik')
+            
+            try:
+                gFile = open(filename, "wb")
+                ftp.retrbinary("RETR " + filename ,gFile.write)
+                ftp.quit()
+                gFile.close()
+                schlukniktable = pd.read_csv(filename, encoding='utf-8', header=None, sep=';')
+            except:
+                tb = traceback.format_exc()
+            else:
+                tb = "No error"
+            finally:
+                print tb
+            
+
+            print(schlukniktable)
+
+            # portfolio
+            print(num_beer)
+            print(num_hang)
+            timestamp = time.strftime('%d%m%y_%H%M%S', time.localtime())
+            print(timestamp)
+            # apppend data frames
+            
+
+            ftp.login(user='web784', passwd = 'Holz0815')
+            ftp.cwd('/html/schluknik')
+		    # todo: store as .csv file
+            with open(filename,"a+") as f:		
+                ftp.storlines("STOR " + filename, open(filename, 'r'))
+                ftp.quit()
+
+            sm.current = 'result'
+    pass 
 
 class BeerScreen(Screen):
 
@@ -193,33 +251,17 @@ class BeerScreen(Screen):
         """
 		Button pressed handler
         """
+        global num_beer
+        num_beer = value
         instance.grid.clear_widgets()
         for x in range(0, int(value)):
             wimg = Image(source='beerchen.jpg')
             instance.grid.add_widget(wimg)
     pass
 
-    def callback(instance, event):
-        """
-		Button pressed handler
-        """
-        # File FTP transfer
-		# domain name or server ip:
-        ftp = FTP('singing-wires.de')
-		# how to encrypt this?
-        ftp.login(user='web784', passwd = 'Holz0815')
-        ftp.cwd('/html/schluknik')
-        filename = event.text + ".txt"
-		# todo: store as .csv file
-        with open(filename,"a+") as f:		
-            ftp.storlines("STOR " + filename, open(filename, 'r'))
-            ftp.quit()
-            print('sucessfully created file'+ filename)
-        instance.disabled = True
-    pass
+    
 
-# create the screen manager
-sm = ScreenManager()
+
 sm.add_widget(BeerScreen(name='beer'))
 sm.add_widget(ResultScreen(name='result'))
 sm.add_widget(HangScreen(name='hang'))
