@@ -44,6 +44,7 @@ import datetime
 import pandas as pd
 import csv
 import traceback
+import io
 
 ###     kv integration     ###
 
@@ -201,6 +202,28 @@ class HangScreen(Screen):
 		    Button pressed handler
             """
 
+            # portfolio
+            
+
+            print(num_beer)
+            print(num_hang)
+            timestamp =  datetime.datetime.now()
+            print(timestamp)
+
+            data_set = {'timestamp': num_beer,
+                                  'location' :num_beer,
+                                  'beer': num_beer,
+                                  'hang': num_hang}
+
+            try:
+                schlukniktable_app = pd.DataFrame(data_set, columns=['timestamp', 'location', 'beer', 'hang'], index=[0])
+            except:
+                tb = traceback.format_exc()
+            else:
+                tb = "No error"
+            finally:
+                print tb
+
             filename = "schlukniktable.csv"
             schlukniktable = pd.DataFrame(columns=['timestamp', 'location', 'beer', 'hang'])
 
@@ -216,35 +239,48 @@ class HangScreen(Screen):
                 ftp.retrbinary("RETR " + filename ,gFile.write)
                 ftp.quit()
                 gFile.close()
-                schlukniktable = pd.read_csv(filename, encoding='utf-8', header=None, sep=';')
+                schlukniktable = pd.read_csv(filename, encoding='utf-8', sep=';')
+                # apppend data frames
+                #schlukniktable_app.append(schlukniktable, ignore_index=True)
             except:
                 tb = traceback.format_exc()
             else:
                 tb = "No error"
             finally:
                 print tb
-            
 
-            print(schlukniktable)
+            try:
+                frames = [schlukniktable,  schlukniktable_app]
+                results = pd.concat(frames)
+                print(schlukniktable_app)
+                print(schlukniktable)
+                print(results)
+                results.to_csv(filename, sep=';', encoding='utf-8')
 
-            # portfolio
-            print(num_beer)
-            print(num_hang)
-            timestamp = time.strftime('%d%m%y_%H%M%S', time.localtime())
-            print(timestamp)
-            # apppend data frames
-            
+            except:
+                tb = traceback.format_exc()
+            else:
+                tb = "No error"
+            finally:
+                print tb
 
+            # store data as csv file 
+            # up load to ftp
+            # File FTP transfer
+		    # domain name or server ip:
+            ftp = FTP('singing-wires.de')
+		    # how to encrypt this?
             ftp.login(user='web784', passwd = 'Holz0815')
             ftp.cwd('/html/schluknik')
+
 		    # todo: store as .csv file
             with open(filename,"a+") as f:		
                 ftp.storlines("STOR " + filename, open(filename, 'r'))
                 ftp.quit()
 
             sm.current = 'result'
-    pass 
 
+    pass 
 class BeerScreen(Screen):
 
     def addbeer(instance, value):
