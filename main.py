@@ -123,14 +123,14 @@ Builder.load_string("""
             rows: 1
 <ResultScreen>:
     MapView:
-        lat: 50.6394
-        lon: 3.057
+        lat: root.lati
+        lon: root.longi
         zoom: 13
         map_source: MapSource(sys.argv[1], attribution="") if len(sys.argv) > 1 else "osm"
 
         MapMarkerPopup:
-            lat: 50.6394
-            lon: 3.057
+            lat: root.lati
+            lon: root.longi
             popup_size: dp(230), dp(130)
 
             Bubble:
@@ -159,11 +159,18 @@ sm = ScreenManager()
 
 class ResultScreen(Screen):
 
+#    global lati
+#    global longi
+    lati = 52.5192
+    longi = 13.4061 
+
     gps_location = StringProperty()
     gps_status = StringProperty('Click Start to get GPS location updates')
 
     def build(self):
         self.gps = gps
+        self.lati = 0
+        self.longi = 0
         try:
             self.gps.configure(on_location=self.on_location,
                                on_status=self.on_status)
@@ -171,7 +178,6 @@ class ResultScreen(Screen):
             import traceback
             traceback.print_exc()
             self.gps_status = 'GPS is not implemented for your platform'
-
         return Builder.load_string(kv)
 
     @mainthread
@@ -179,6 +185,9 @@ class ResultScreen(Screen):
         self.gps_location = '\n'.join([
             '{}={}'.format(k, v) for k, v in kwargs.items()])
         print(self.gps_location)
+        print 'lat: {lat}, lon: {lon}'.format(**kwargs)
+        lati = lat
+        longi = lon
 
     @mainthread
     def on_status(self, stype, status):
@@ -201,7 +210,6 @@ class HangScreen(Screen):
 
     def ftp_transfer(Screen):
 
-            
             """
 		    Button pressed handler
             """
@@ -211,7 +219,7 @@ class HangScreen(Screen):
 
                 # portfolio
                 data_set = {'timestamp': timestamp,
-                                      'location' :num_beer,
+                                      'location' :  str(ResultScreen.lati) + ':' + str(ResultScreen.longi),
                                       'beer': num_beer,
                                       'hang': num_hang}
                 try:
@@ -303,6 +311,9 @@ class Myapp(App):
     """
     Main class
     """
+    
+
+
     def build(self):
         """
 		Layout builder of main window
