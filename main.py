@@ -47,7 +47,6 @@ import traceback
 import io
 
 ###     kv integration     ###
-
 Builder.load_string("""
 #:import sys sys
 #:import MapSource mapview.MapSource
@@ -150,8 +149,11 @@ Builder.load_string("""
                     
 """)
 
-###     Screen Declaration     ####    
+###     globals     ####   
+global avoid_double_execution
+avoid_double_execution = True;
 
+###     Screen Declaration     ####    
 # create the screen manager
 sm = ScreenManager()
 
@@ -198,88 +200,82 @@ class HangScreen(Screen):
             instance.grid.add_widget(wimg)
 
     def ftp_transfer(Screen):
+
+            
             """
 		    Button pressed handler
             """
+            global avoid_double_execution
+            if(bool(avoid_double_execution)):
+                timestamp =  datetime.datetime.now()
 
-            # portfolio
+                # portfolio
+                data_set = {'timestamp': timestamp,
+                                      'location' :num_beer,
+                                      'beer': num_beer,
+                                      'hang': num_hang}
+                try:
+                    schlukniktable_app = pd.DataFrame(data_set, columns=['timestamp', 'location', 'beer', 'hang'], index=[0])
+                except:
+                    tb = traceback.format_exc()
+                else:
+                    tb = "No error"
+                finally:
+                    print tb
+
+                filename = "schlukniktable.csv"
+                schlukniktable = pd.DataFrame(columns=['timestamp', 'location', 'beer', 'hang'])
+
+                # File FTP transfer
+		        # domain name or server ip:
+                ftp = FTP('singing-wires.de')
+		        # how to encrypt this?
+                ftp.login(user='web784', passwd = 'Holz0815')
+                ftp.cwd('/html/schluknik')
             
+                try:
+                    gFile = open(filename, "wb")
+                    ftp.retrbinary("RETR " + filename ,gFile.write)
+                    ftp.quit()
+                    gFile.close()
+                    schlukniktable = pd.read_csv(filename, encoding='utf-8', sep=';')
+                    # apppend data frames
+                    #schlukniktable_app.append(schlukniktable, ignore_index=True)
+                except:
+                    tb = traceback.format_exc()
+                else:
+                    tb = "No error"
+                finally:
+                    print tb
 
-            print(num_beer)
-            print(num_hang)
-            timestamp =  datetime.datetime.now()
-            print(timestamp)
+                try:
+                    frames = [schlukniktable,  schlukniktable_app]
+                    results = pd.concat(frames)
+                    results.to_csv(filename, sep=';', encoding='utf-8', index=False)
 
-            data_set = {'timestamp': num_beer,
-                                  'location' :num_beer,
-                                  'beer': num_beer,
-                                  'hang': num_hang}
+                except:
+                    tb = traceback.format_exc()
+                else:
+                    tb = "No error"
+                finally:
+                    print tb
 
-            try:
-                schlukniktable_app = pd.DataFrame(data_set, columns=['timestamp', 'location', 'beer', 'hang'], index=[0])
-            except:
-                tb = traceback.format_exc()
-            else:
-                tb = "No error"
-            finally:
-                print tb
+                # store data as csv file 
+                # up load to ftp
+                # File FTP transfer
+		        # domain name or server ip:
+                ftp = FTP('singing-wires.de')
+		        # how to encrypt this?
+                ftp.login(user='web784', passwd = 'Holz0815')
+                ftp.cwd('/html/schluknik')
 
-            filename = "schlukniktable.csv"
-            schlukniktable = pd.DataFrame(columns=['timestamp', 'location', 'beer', 'hang'])
+		        # todo: store as .csv file
+                with open(filename,"a+") as f:		
+                    ftp.storlines("STOR " + filename, open(filename, 'r'))
+                    ftp.quit()
 
-            # File FTP transfer
-		    # domain name or server ip:
-            ftp = FTP('singing-wires.de')
-		    # how to encrypt this?
-            ftp.login(user='web784', passwd = 'Holz0815')
-            ftp.cwd('/html/schluknik')
-            
-            try:
-                gFile = open(filename, "wb")
-                ftp.retrbinary("RETR " + filename ,gFile.write)
-                ftp.quit()
-                gFile.close()
-                schlukniktable = pd.read_csv(filename, encoding='utf-8', sep=';')
-                # apppend data frames
-                #schlukniktable_app.append(schlukniktable, ignore_index=True)
-            except:
-                tb = traceback.format_exc()
-            else:
-                tb = "No error"
-            finally:
-                print tb
-
-            try:
-                frames = [schlukniktable,  schlukniktable_app]
-                results = pd.concat(frames)
-                print(schlukniktable_app)
-                print(schlukniktable)
-                print(results)
-                results.to_csv(filename, sep=';', encoding='utf-8')
-
-            except:
-                tb = traceback.format_exc()
-            else:
-                tb = "No error"
-            finally:
-                print tb
-
-            # store data as csv file 
-            # up load to ftp
-            # File FTP transfer
-		    # domain name or server ip:
-            ftp = FTP('singing-wires.de')
-		    # how to encrypt this?
-            ftp.login(user='web784', passwd = 'Holz0815')
-            ftp.cwd('/html/schluknik')
-
-		    # todo: store as .csv file
-            with open(filename,"a+") as f:		
-                ftp.storlines("STOR " + filename, open(filename, 'r'))
-                ftp.quit()
-
-            sm.current = 'result'
-
+                sm.current = 'result'
+                avoid_double_execution = False
     pass 
 class BeerScreen(Screen):
 
