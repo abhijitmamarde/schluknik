@@ -39,6 +39,8 @@ from kivy.uix.slider import Slider
 from plyer import gps
 from kivy.clock import Clock, mainthread
 from kivy.properties import StringProperty
+from plyer import notification
+
 # for date and time stamp
 import datetime
 import pandas as pd
@@ -150,6 +152,7 @@ Builder.load_string("""
 """)
 
 ###     globals     ####   
+# todo: check what is wrong here
 global avoid_double_execution
 avoid_double_execution = True;
 
@@ -158,9 +161,10 @@ avoid_double_execution = True;
 sm = ScreenManager()
 
 class ResultScreen(Screen):
-
-#    global lati
-#    global longi
+    """
+    Shows map of all the schlukniks
+    """
+    #  gps default values for Berlin
     lati = 52.5192
     longi = 13.4061 
 
@@ -180,6 +184,7 @@ class ResultScreen(Screen):
             self.gps_status = 'GPS is not implemented for your platform'
         return Builder.load_string(kv)
 
+    # copied from internet; don't really understand 
     @mainthread
     def on_location(self, **kwargs):
         self.gps_location = '\n'.join([
@@ -192,14 +197,15 @@ class ResultScreen(Screen):
     @mainthread
     def on_status(self, stype, status):
         self.gps_status = 'type={}\n{}'.format(stype, status)
-
     pass
 
 class HangScreen(Screen):
-
+    """
+    Evaluating the hangover
+    """
     def addpoop(instance, value):
         """
-		Button pressed handler
+		adding the shitty picture
         """
         global num_hang
         num_hang = value
@@ -209,16 +215,18 @@ class HangScreen(Screen):
             instance.grid.add_widget(wimg)
 
     def ftp_transfer(Screen):
-
             """
-		    Button pressed handler
+		    accessing the global performance data
             """
+            # todo: what is going wrong here?
             global avoid_double_execution
             if(bool(avoid_double_execution)):
+                # get timestamp
                 timestamp =  datetime.datetime.now()
 
-                # portfolio
-                data_set = {'timestamp': timestamp,
+                # portfolio pandas datastructure
+                # todo: add cigarettes; wine; shots
+                data_set = {          'timestamp': timestamp,
                                       'location' :  str(ResultScreen.lati) + ':' + str(ResultScreen.longi),
                                       'beer': num_beer,
                                       'hang': num_hang}
@@ -226,49 +234,39 @@ class HangScreen(Screen):
                     schlukniktable_app = pd.DataFrame(data_set, columns=['timestamp', 'location', 'beer', 'hang'], index=[0])
                 except:
                     tb = traceback.format_exc()
-                else:
-                    tb = "No error"
-                finally:
                     print tb
-
+                
+                # filename of global performance data
                 filename = "schlukniktable.csv"
                 schlukniktable = pd.DataFrame(columns=['timestamp', 'location', 'beer', 'hang'])
 
                 # File FTP transfer
 		        # domain name or server ip:
                 ftp = FTP('singing-wires.de')
-		        # how to encrypt this?
+		        # todo: how to encrypt this?
                 ftp.login(user='web784', passwd = 'Holz0815')
                 ftp.cwd('/html/schluknik')
-            
-                try:
+                # gets the file from the server and stores it locally
+                try:  
                     gFile = open(filename, "wb")
                     ftp.retrbinary("RETR " + filename ,gFile.write)
                     ftp.quit()
                     gFile.close()
                     schlukniktable = pd.read_csv(filename, encoding='utf-8', sep=';')
-                    # apppend data frames
-                    #schlukniktable_app.append(schlukniktable, ignore_index=True)
                 except:
                     tb = traceback.format_exc()
-                else:
-                    tb = "No error"
-                finally:
                     print tb
-
+                
+                # combine global and local table
                 try:
                     frames = [schlukniktable,  schlukniktable_app]
                     results = pd.concat(frames)
+                    # store data as a local csv file 
                     results.to_csv(filename, sep=';', encoding='utf-8', index=False)
-
                 except:
                     tb = traceback.format_exc()
-                else:
-                    tb = "No error"
-                finally:
                     print tb
 
-                # store data as csv file 
                 # up load to ftp
                 # File FTP transfer
 		        # domain name or server ip:
@@ -281,15 +279,18 @@ class HangScreen(Screen):
                 with open(filename,"a+") as f:		
                     ftp.storlines("STOR " + filename, open(filename, 'r'))
                     ftp.quit()
-
+                # goto result screen
                 sm.current = 'result'
                 avoid_double_execution = False
+
     pass 
 class BeerScreen(Screen):
-
+    """
+    Evaluating your performance
+    """
     def addbeer(instance, value):
         """
-		Button pressed handler
+		Adding the beer picture
         """
         global num_beer
         num_beer = value
@@ -299,9 +300,7 @@ class BeerScreen(Screen):
             instance.grid.add_widget(wimg)
     pass
 
-    
-
-
+# adding all the sub screens to the screen handler
 sm.add_widget(BeerScreen(name='beer'))
 sm.add_widget(ResultScreen(name='result'))
 sm.add_widget(HangScreen(name='hang'))
@@ -311,14 +310,12 @@ class Myapp(App):
     """
     Main class
     """
-    
-
-
     def build(self):
         """
 		Layout builder of main window
         """
         # set bg color to white
+        notification.notify('test tiltle','scanning started')
         Window.clearcolor = (1, 1, 1, 0)
         return sm 
 
