@@ -43,7 +43,7 @@ from plyer import notification
 
 # for date and time stamp
 import datetime
-import pandas as pd
+import numpy as numpy
 import csv
 import traceback
 import io
@@ -225,21 +225,15 @@ class HangScreen(Screen):
                 timestamp =  datetime.datetime.now()
 
                 # portfolio pandas datastructure
-                # todo: add cigarettes; wine; shots
-                data_set = {          'timestamp': timestamp,
-                                      'location' :  str(ResultScreen.lati) + ':' + str(ResultScreen.longi),
-                                      'beer': num_beer,
-                                      'hang': num_hang}
+                # timestamp | latitude | longitude | number of beer | number of hang 
                 try:
-                    schlukniktable_app = pd.DataFrame(data_set, columns=['timestamp', 'location', 'beer', 'hang'], index=[0])
+                    new_table = numpy.array([timestamp,str(ResultScreen.lati),str(ResultScreen.longi),num_beer,num_hang  ], dtype='string')
                 except:
                     tb = traceback.format_exc()
                     print tb
                 
                 # filename of global performance data
                 filename = "schlukniktable.csv"
-                schlukniktable = pd.DataFrame(columns=['timestamp', 'location', 'beer', 'hang'])
-
                 # File FTP transfer
 		        # domain name or server ip:
                 ftp = FTP('singing-wires.de')
@@ -252,17 +246,17 @@ class HangScreen(Screen):
                     ftp.retrbinary("RETR " + filename ,gFile.write)
                     ftp.quit()
                     gFile.close()
-                    schlukniktable = pd.read_csv(filename, encoding='utf-8', sep=';')
+                    old_table = numpy.genfromtxt(filename, delimiter=';', dtype='string')
                 except:
                     tb = traceback.format_exc()
                     print tb
                 
                 # combine global and local table
                 try:
-                    frames = [schlukniktable,  schlukniktable_app]
-                    results = pd.concat(frames)
+                    # append old table to new table
+                    results = numpy.append(new_table,old_table)
                     # store data as a local csv file 
-                    results.to_csv(filename, sep=';', encoding='utf-8', index=False)
+                    numpy.savetxt(filename, results.reshape((len(results)/5,5)), delimiter=';', fmt=('%s', '%s', '%s', '%s','%s'))
                 except:
                     tb = traceback.format_exc()
                     print tb
