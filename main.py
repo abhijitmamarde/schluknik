@@ -39,6 +39,7 @@ from kivy.uix.slider import Slider
 from plyer import gps
 from kivy.clock import Clock, mainthread
 from kivy.properties import StringProperty
+from kivy.properties import ObjectProperty
 from plyer import notification
 
 # for date and time stamp
@@ -139,15 +140,9 @@ Builder.load_string("""
                 BoxLayout:
                     orientation: "horizontal"
                     padding: "5dp"
-                    AsyncImage:
-                        source: "http://upload.wikimedia.org/wikipedia/commons/9/9d/France-Lille-VieilleBourse-FacadeGrandPlace.jpg"
-                        mipmap: True
                     Label:
-                        text: "[b]Lille[/b]\\n1 154 861 hab\\n5 759 hab./km2"
-                        markup: True
-                        halign: "center"
-                    Label:
-                        text: root.gps_location
+                        text: app.global_location
+
                     
 """)
 
@@ -157,47 +152,18 @@ global avoid_double_execution
 avoid_double_execution = True;
 
 ###     Screen Declaration     ####    
-# create the screen manager
-sm = ScreenManager()
+
 
 class ResultScreen(Screen):
     """
     Shows map of all the schlukniks
     """
+
     #  gps default values for Berlin
     lati = 52.5192
-    longi = 13.4061 
+    longi = 13.4061
 
-    gps_location = StringProperty()
-    gps_status = StringProperty('Click Start to get GPS location updates')
 
-    def build(self):
-        self.gps = gps
-        self.lati = 0
-        self.longi = 0
-        try:
-            self.gps.configure(on_location=self.on_location,
-                               on_status=self.on_status)
-        except NotImplementedError:
-            import traceback
-            traceback.print_exc()
-            self.gps_status = 'GPS is not implemented for your platform'
-        return Builder.load_string(kv)
-
-    # copied from internet; don't really understand 
-    @mainthread
-    def on_location(self, **kwargs):
-        self.gps_location = '\n'.join([
-            '{}={}'.format(k, v) for k, v in kwargs.items()])
-        print(self.gps_location)
-        print 'lat: {lat}, lon: {lon}'.format(**kwargs)
-        lati = lat
-        longi = lon
-
-    @mainthread
-    def on_status(self, stype, status):
-        self.gps_status = 'type={}\n{}'.format(stype, status)
-    pass
 
 class HangScreen(Screen):
     """
@@ -230,7 +196,7 @@ class HangScreen(Screen):
                     new_table = numpy.array([timestamp,str(ResultScreen.lati),str(ResultScreen.longi),num_beer,num_hang  ], dtype='string')
                 except:
                     tb = traceback.format_exc()
-                    print tb
+                    print (tb)
                 
                 # filename of global performance data
                 filename = "schlukniktable.csv"
@@ -249,7 +215,7 @@ class HangScreen(Screen):
                     old_table = numpy.genfromtxt(filename, delimiter=';', dtype='string')
                 except:
                     tb = traceback.format_exc()
-                    print tb
+                    print (tb)
                 
                 # combine global and local table
                 try:
@@ -259,8 +225,7 @@ class HangScreen(Screen):
                     numpy.savetxt(filename, results.reshape((len(results)/5,5)), delimiter=';', fmt=('%s', '%s', '%s', '%s','%s'))
                 except:
                     tb = traceback.format_exc()
-                    print tb
-
+                    print (tb)
                 # up load to ftp
                 # File FTP transfer
 		        # domain name or server ip:
@@ -274,7 +239,7 @@ class HangScreen(Screen):
                     ftp.storlines("STOR " + filename, open(filename, 'r'))
                     ftp.quit()
                 # goto result screen
-                sm.current = 'result'
+                Screen.manager.current = 'result'
                 avoid_double_execution = False
 
     pass 
@@ -294,16 +259,25 @@ class BeerScreen(Screen):
             instance.grid.add_widget(wimg)
     pass
 
-# adding all the sub screens to the screen handler
-sm.add_widget(BeerScreen(name='beer'))
-sm.add_widget(ResultScreen(name='result'))
-sm.add_widget(HangScreen(name='hang'))
+
 
 ###     Body        ###
 class Myapp(App):
+    global_location = StringProperty()
+    lat = StringProperty()
+    gps_status = StringProperty('Click Start to get GPS location updates')
     """
     Main class
     """
+    @mainthread
+    def on_location(self, **kwargs):
+        self.global_location = '\n'.join([
+            '{}={}'.format(k, v) for k, v in kwargs.items()])
+
+    @mainthread
+    def on_status(self, stype, status):
+        self.gps_status = 'type={}\n{}'.format(stype, status)
+
     def build(self):
         """
 		Layout builder of main window
@@ -311,7 +285,22 @@ class Myapp(App):
         # set bg color to white
         notification.notify('test tiltle','scanning started')
         Window.clearcolor = (1, 1, 1, 0)
-        return sm 
+        self.gps = gps
+        try:
+            self.gps.configure(on_location=self.on_location,
+                               on_status=self.on_status)
+        except NotImplementedError:
+            import traceback
+            traceback.print_exc()
+            self.gps_status = 'GPS is not implemented for your platform'
+        self.gps.start()
+        # adding all the sub screens to the screen handler
+        # create the screen manager
+        self.sm = ScreenManager()
+        self.sm.add_widget(BeerScreen(name='beer'))
+        self.sm.add_widget(ResultScreen(name='result'))
+        self.sm.add_widget(HangScreen(name='hang'))
+        return self.sm
 
 ###    entry point      ####
 if __name__ == "__main__":
