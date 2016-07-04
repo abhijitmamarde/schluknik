@@ -126,14 +126,14 @@ Builder.load_string("""
             rows: 1
 <ResultScreen>:
     MapView:
-        lat: root.lati
-        lon: root.longi
+        lat: app.lat
+        lon: app.lon
         zoom: 13
         map_source: MapSource(sys.argv[1], attribution="") if len(sys.argv) > 1 else "osm"
 
         MapMarkerPopup:
-            lat: root.lati
-            lon: root.longi
+            lat: app.lat
+            lon: app.lon
             popup_size: dp(230), dp(130)
 
             Bubble:
@@ -141,7 +141,9 @@ Builder.load_string("""
                     orientation: "horizontal"
                     padding: "5dp"
                     Label:
-                        text: app.global_location
+                        text: app.lat
+                    Label:
+                        text: app.lon
 
                     
 """)
@@ -193,7 +195,7 @@ class HangScreen(Screen):
                 # portfolio pandas datastructure
                 # timestamp | latitude | longitude | number of beer | number of hang 
                 try:
-                    new_table = numpy.array([timestamp,str(ResultScreen.lati),str(ResultScreen.longi),num_beer,num_hang  ], dtype='string')
+                    new_table = numpy.array([timestamp,app.lat,app.lon,num_beer,num_hang  ], dtype='string')
                 except:
                     tb = traceback.format_exc()
                     print (tb)
@@ -265,7 +267,11 @@ class BeerScreen(Screen):
 class Myapp(App):
     global_location = StringProperty()
     lat = StringProperty()
+    #lat= '0.0'
+    lon = StringProperty()
+    #lon = '0.0'
     gps_status = StringProperty('Click Start to get GPS location updates')
+
     """
     Main class
     """
@@ -273,6 +279,9 @@ class Myapp(App):
     def on_location(self, **kwargs):
         self.global_location = '\n'.join([
             '{}={}'.format(k, v) for k, v in kwargs.items()])
+        self.lat = '{lat}'.format(**kwargs)
+        self.lon = '{lon}'.format(**kwargs)
+
 
     @mainthread
     def on_status(self, stype, status):
@@ -289,11 +298,12 @@ class Myapp(App):
         try:
             self.gps.configure(on_location=self.on_location,
                                on_status=self.on_status)
+            self.gps.start()
         except NotImplementedError:
             import traceback
             traceback.print_exc()
             self.gps_status = 'GPS is not implemented for your platform'
-        self.gps.start()
+
         # adding all the sub screens to the screen handler
         # create the screen manager
         self.sm = ScreenManager()
