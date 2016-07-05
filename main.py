@@ -126,27 +126,25 @@ Builder.load_string("""
             rows: 1
 <ResultScreen>:
     MapView:
-        lat: app.lat
-        lon: app.lon
+        lat: root.lati
+        lon: root.longi
         zoom: 13
         map_source: MapSource(sys.argv[1], attribution="") if len(sys.argv) > 1 else "osm"
 
         MapMarkerPopup:
-            lat: app.lat
-            lon: app.lon
+            lat: root.lati
+            lon: root.longi
             popup_size: dp(230), dp(130)
 
             Bubble:
                 BoxLayout:
                     orientation: "horizontal"
                     padding: "5dp"
-                    Label:
-                        text: app.lat
-                    Label:
-                        text: app.lon
 
-                    
+
 """)
+
+
 
 ###     globals     ####   
 # todo: check what is wrong here
@@ -160,10 +158,9 @@ class ResultScreen(Screen):
     """
     Shows map of all the schlukniks
     """
-
     #  gps default values for Berlin
-    lati = 52.5192
-    longi = 13.4061
+    lati = 52.5462703731
+    longi = 13.4060335524
 
 
 
@@ -199,7 +196,8 @@ class HangScreen(Screen):
                 except:
                     tb = traceback.format_exc()
                     print (tb)
-                
+
+                print ('!!!!!!!!!!!!!!!!!!!!!!!!!!')
                 # filename of global performance data
                 filename = "schlukniktable.csv"
                 # File FTP transfer
@@ -240,11 +238,17 @@ class HangScreen(Screen):
                 with open(filename,"a+") as f:		
                     ftp.storlines("STOR " + filename, open(filename, 'r'))
                     ftp.quit()
-                # goto result screen
+
+                print (results)
+                # finished ftp connection now fill
+                #ResultScreen.lati = str(results[0][1])
+                #ResultScreen.longi = str(results[0][2])
+
+                app.sm.add_widget(ResultScreen(name='result'))
                 Screen.manager.current = 'result'
                 avoid_double_execution = False
 
-    pass 
+    pass
 class BeerScreen(Screen):
     """
     Evaluating your performance
@@ -267,9 +271,7 @@ class BeerScreen(Screen):
 class Myapp(App):
     global_location = StringProperty()
     lat = StringProperty()
-    #lat= '0.0'
     lon = StringProperty()
-    #lon = '0.0'
     gps_status = StringProperty('Click Start to get GPS location updates')
 
     """
@@ -279,8 +281,8 @@ class Myapp(App):
     def on_location(self, **kwargs):
         self.global_location = '\n'.join([
             '{}={}'.format(k, v) for k, v in kwargs.items()])
-        self.lat = '{lat}'.format(**kwargs)
-        self.lon = '{lon}'.format(**kwargs)
+        self.lat = str('{lat}'.format(**kwargs))
+        self.lon = str('{lon}'.format(**kwargs))
 
 
     @mainthread
@@ -308,7 +310,7 @@ class Myapp(App):
         # create the screen manager
         self.sm = ScreenManager()
         self.sm.add_widget(BeerScreen(name='beer'))
-        self.sm.add_widget(ResultScreen(name='result'))
+
         self.sm.add_widget(HangScreen(name='hang'))
         return self.sm
 
