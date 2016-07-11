@@ -126,14 +126,14 @@ Builder.load_string("""
             rows: 1
 <ResultScreen>:
     MapView:
-        lat: root.lati
-        lon: root.longi
+        lat: app.lat
+        lon: app.lon
         zoom: 13
         map_source: MapSource(sys.argv[1], attribution="") if len(sys.argv) > 1 else "osm"
 
         MapMarkerPopup:
-            lat: root.lati
-            lon: root.longi
+            lat: app.lat
+            lon: app.lon
             popup_size: dp(230), dp(130)
 
             Bubble:
@@ -144,24 +144,17 @@ Builder.load_string("""
 
 """)
 
-
-
 ###     globals     ####   
 # todo: check what is wrong here
 global avoid_double_execution
 avoid_double_execution = True;
 
-###     Screen Declaration     ####    
-
-
+###     Screen Declaration     ####
 class ResultScreen(Screen):
     """
     Shows map of all the schlukniks
     """
     #  gps default values for Berlin
-    lati = 52.5462703731
-    longi = 13.4060335524
-
 
 
 class HangScreen(Screen):
@@ -270,8 +263,8 @@ class BeerScreen(Screen):
 ###     Body        ###
 class Myapp(App):
     global_location = StringProperty()
-    lat = StringProperty()
-    lon = StringProperty()
+    lat = 19.0
+    lon = 72.48
     gps_status = StringProperty('Click Start to get GPS location updates')
 
     """
@@ -281,8 +274,8 @@ class Myapp(App):
     def on_location(self, **kwargs):
         self.global_location = '\n'.join([
             '{}={}'.format(k, v) for k, v in kwargs.items()])
-        self.lat = str('{lat}'.format(**kwargs))
-        self.lon = str('{lon}'.format(**kwargs))
+        self.lat = float('{lat}'.format(**kwargs))
+        self.lon = float('{lon}'.format(**kwargs))
 
 
     @mainthread
