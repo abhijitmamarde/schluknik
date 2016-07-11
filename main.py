@@ -42,6 +42,7 @@ from kivy.properties import StringProperty
 from kivy.properties import ObjectProperty
 from plyer import notification
 from kivy.uix.anchorlayout import AnchorLayout
+from kivy.uix.bubble import Bubble
 
 # for date and time stamp
 import datetime
@@ -78,7 +79,8 @@ Builder.load_string("""
     scale: 6.0
 
 <BeerScreen>:
-    grid: Grid
+    grid1: Grid1
+    grid2: Grid2
     MyBoxLayout:
         AnchorLayout:
             anchor_x: 'right'
@@ -94,21 +96,48 @@ Builder.load_string("""
             HeaderImage:
                 source: 'icon.png'
             HeaderLabel:
-                text: 'Lets face it! You have been a schluknik again! Remember how many beer?'
-        Slider:
-            id: slider_id
-            min: 0
-            step: 0.01
-            max: 10
-            on_touch_up: root.manager.current = 'hang'
-            on_value: root.addbeer(slider_id.value)
-        Label:
-            text: str(round(slider_id.value, 1))
-            color: 0,0,0,1
+                text: 'Lets face it! You have been a schluknik again!'
         GridLayout:
-            id: Grid
+            cols: 2
+            rows: 1
+            Slider:
+                id: slider_id1
+                min: 0
+                step: 0.5
+                max: 10
+                on_value: root.addbeer(slider_id1.value)
+            Label:
+                text:  str(round(slider_id1.value, 1)) + ' x Beer'
+                color: 0,0,0,1
+        GridLayout:
+            id: Grid1
             cols: 10
             rows: 1
+        GridLayout:
+            cols: 2
+            rows: 1
+            Slider:
+                id: slider_id2
+                min: 0
+                step: 0.5
+                max: 10
+                on_value: root.addwine(slider_id2.value)
+            Label:
+                text:  str(round(slider_id2.value, 1)) + ' x Wine'
+                color: 0,0,0,1
+        GridLayout:
+            id: Grid2
+            cols: 10
+            rows: 1
+        AnchorLayout:
+            anchor_x: 'right'
+            anchor_y: 'bottom'
+            BoxLayout:
+                orientation: 'horizontal'
+                size_hint: .3, .3
+                Button:
+                    text: 'OK'
+                    on_press: root.manager.current = 'hang'
 <HangScreen>:
     grid: Grid
     MyBoxLayout:
@@ -261,11 +290,23 @@ class BeerScreen(Screen):
         """
         global num_beer
         num_beer = value
-        instance.grid.clear_widgets()
+        instance.grid1.clear_widgets()
         for x in range(0, int(value)):
             wimg = Image(source='beerchen.jpg')
-            instance.grid.add_widget(wimg)
+            instance.grid1.add_widget(wimg)
+
+    def addwine(instance, value):
+        """
+        Adding the beer picture
+        """
+        global num_wine
+        num_wine = value
+        instance.grid2.clear_widgets()
+        for x in range(0, int(value)):
+            wimg = Image(source='wine.png')
+            instance.grid2.add_widget(wimg)
     pass
+
 
 
 
