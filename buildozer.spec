@@ -46,7 +46,7 @@ requirements = plyer,kivy,openssl,futures,requests,numpy
 #garden_requirements =
 
 # (str) Presplash of the application
-#presplash.filename = %(source.dir)s/data/presplash.png
+presplash.filename = %(source.dir)s/stable.png
 
 # (str) Icon of the application
 icon.filename = %(source.dir)s/icon.png
