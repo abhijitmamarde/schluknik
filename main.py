@@ -41,6 +41,7 @@ from kivy.clock import Clock, mainthread
 from kivy.properties import StringProperty
 from kivy.properties import ObjectProperty
 from plyer import notification
+from kivy.uix.anchorlayout import AnchorLayout
 
 # for date and time stamp
 import datetime
@@ -79,6 +80,14 @@ Builder.load_string("""
 <BeerScreen>:
     grid: Grid
     MyBoxLayout:
+        AnchorLayout:
+            anchor_x: 'right'
+            anchor_y: 'top'
+            BoxLayout:
+                orientation: 'horizontal'
+                size_hint: .3, .3
+                Button:
+                    text: 'Settings'
         GridLayout:
             cols: 2
             rows: 1
