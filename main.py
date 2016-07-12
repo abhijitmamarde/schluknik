@@ -35,6 +35,7 @@ from kivy.uix.boxlayout import BoxLayout
 from kivy.lang import Builder
 from kivy.uix.screenmanager import ScreenManager, Screen
 from kivy.uix.slider import Slider
+
 # for gps access 
 from plyer import gps
 from kivy.clock import Clock, mainthread
@@ -43,6 +44,7 @@ from kivy.properties import ObjectProperty
 from plyer import notification
 from kivy.uix.anchorlayout import AnchorLayout
 from kivy.uix.bubble import Bubble
+from kivy.garden.mapview import *
 
 # for date and time stamp
 import datetime
@@ -55,7 +57,7 @@ import io
 Builder.load_string("""
 #:import sys sys
 #:import MapSource mapview.MapSource
-
+#:import MapMarkerPopup kivy.garden.mapview.MapMarkerPopup
     
 <FTPButton@Button>:
     color: 1,1,1,1
@@ -164,22 +166,11 @@ Builder.load_string("""
             rows: 1
 <ResultScreen>:
     MapView:
+        id: map
         lat: app.lat
         lon: app.lon
         zoom: 13
         map_source: MapSource(sys.argv[1], attribution="") if len(sys.argv) > 1 else "osm"
-
-        MapMarkerPopup:
-            lat: app.lat
-            lon: app.lon
-            popup_size: dp(230), dp(130)
-
-            Bubble:
-                BoxLayout:
-                    orientation: "horizontal"
-                    padding: "5dp"
-
-
 """)
 
 ###     globals     ####   
@@ -192,7 +183,6 @@ class ResultScreen(Screen):
     """
     Shows map of all the schlukniks
     """
-    #  gps default values for Berlin
 
 
 class HangScreen(Screen):
@@ -252,8 +242,10 @@ class HangScreen(Screen):
                 try:
                     # append old table to new table
                     results = numpy.append(new_table,old_table)
+                    results = results.reshape((len(results)/5,5))
                     # store data as a local csv file 
-                    numpy.savetxt(filename, results.reshape((len(results)/5,5)), delimiter=';', fmt=('%s', '%s', '%s', '%s','%s'))
+                    numpy.savetxt(filename, results, delimiter=';', fmt=('%s', '%s', '%s', '%s','%s'))
+                    
                 except:
                     tb = traceback.format_exc()
                     print (tb)
@@ -270,14 +262,25 @@ class HangScreen(Screen):
                     ftp.storlines("STOR " + filename, open(filename, 'r'))
                     ftp.quit()
 
-                print (results)
                 # finished ftp connection now fill
-                #ResultScreen.lati = str(results[0][1])
-                #ResultScreen.longi = str(results[0][2])
+                lat = numpy.array(results)[:,1].tolist()
+                lon = numpy.array(results)[:,2].tolist()
 
-                app.sm.add_widget(ResultScreen(name='result'))
+                res = ResultScreen(name='result')
+                try:
+                    i = 0
+                    for item in lat: 
+                        m = MapMarker(lon=float(lon[i]), lat=float(lat[i]))
+                        res.ids.map.add_marker(m)
+                        i = i + 1
+                    app.sm.add_widget(res)
+                except:
+                    tb = traceback.format_exc()
+                    print (tb)
+
                 Screen.manager.current = 'result'
-                avoid_double_execution = False
+                avoid_double_execution = False;
+                return
 
     pass
 class BeerScreen(Screen):
@@ -348,12 +351,13 @@ class Myapp(App):
             import traceback
             traceback.print_exc()
             self.gps_status = 'GPS is not implemented for your platform'
+            self.lat = 19.0
+            self.lon = 72.48
 
         # adding all the sub screens to the screen handler
         # create the screen manager
         self.sm = ScreenManager()
         self.sm.add_widget(BeerScreen(name='beer'))
-
         self.sm.add_widget(HangScreen(name='hang'))
         return self.sm
 
