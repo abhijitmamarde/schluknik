@@ -23,45 +23,39 @@ __status__ = "development"
 import kivy
 kivy.require('1.8.7')
 
-## framework
 import kivy
 from kivy.app import App
-
-## uix
 from kivy.uix.button import Button
 from kivy.uix.label import Label
 from kivy.uix.boxlayout import BoxLayout
+from ftplib import FTP
+from kivy.core.window import Window
 from kivy.uix.screenmanager import ScreenManager, Screen, FadeTransition
+from kivy.core.image import Image
 from kivy.uix.label import Label
 from kivy.uix.widget import Widget
 from kivy.uix.image import Image
 from kivy.uix.boxlayout import BoxLayout
+from kivy.lang import Builder
 from kivy.uix.screenmanager import ScreenManager, Screen
 from kivy.uix.slider import Slider
+
+# for gps access 
+from plyer import gps
+from kivy.clock import Clock, mainthread
+from kivy.properties import StringProperty
+from kivy.properties import ObjectProperty
+from plyer import notification
 from kivy.uix.anchorlayout import AnchorLayout
 from kivy.uix.bubble import Bubble
-
-## feature
-from ftplib import FTP
 from kivy.garden.mapview import *
+
 # for date and time stamp
 import datetime
 import numpy as numpy
 import csv
 import traceback
 import io
-# for gps access 
-from plyer import gps
-from kivy.clock import Clock, mainthread
-from kivy.properties import StringProperty
-from kivy.properties import ObjectProperty
-# notifications
-from plyer import notification
-
-## gui
-from kivy.core.window import Window
-from kivy.core.image import Image
-from kivy.lang import Builder
 
 ################################################################################################
 
