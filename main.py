@@ -89,6 +89,7 @@ Builder.load_string("""
 <BeerScreen>:
     grid1: Grid1
     grid2: Grid2
+    grid3: Grid3
     MyBoxLayout:
         AnchorLayout:
             anchor_x: 'right'
@@ -98,6 +99,7 @@ Builder.load_string("""
                 size_hint: .3, .3
                 Button:
                     text: 'Settings'
+                    on_press: root.manager.current = 'setting'
         GridLayout:
             cols: 2
             rows: 1
@@ -105,6 +107,7 @@ Builder.load_string("""
                 source: 'icon.png'
             HeaderLabel:
                 text: 'Lets face it! You have been a schluknik again!'
+
         GridLayout:
             cols: 2
             rows: 1
@@ -137,6 +140,24 @@ Builder.load_string("""
             id: Grid2
             cols: 10
             rows: 1
+
+        GridLayout:
+            cols: 2
+            rows: 1
+            Slider:
+                id: slider_id3
+                min: 0
+                step: 1
+                max: 10
+                on_value: root.addshot(slider_id3.value)
+            Label:
+                text:  str(round(slider_id3.value, 1)) + ' x Shot'
+                color: 0,0,0,1
+        GridLayout:
+            id: Grid3
+            cols: 10
+            rows: 1
+
         AnchorLayout:
             anchor_x: 'right'
             anchor_y: 'bottom'
@@ -171,13 +192,30 @@ Builder.load_string("""
             cols: 10
             rows: 1
 
-<ResultScreen>:
+<MapScreen>:
     MapView:
         id: map
         lat: app.lat
         lon: app.lon
         zoom: 13
         map_source: MapSource(sys.argv[1], attribution="") if len(sys.argv) > 1 else "osm"
+
+<SettingsScreen>:
+    MyBoxLayout: 
+        AnchorLayout:
+            anchor_x: 'right'
+            anchor_y: 'bottom'
+            BoxLayout:
+                orientation: 'horizontal'
+                size_hint: .3, .3
+                Button:
+                    text: 'Back'
+                    on_press: root.manager.current = 'beer'
+
+<ResultScreen>:
+    Button: 
+        text: 'Result'
+        on_press: root.manager.current = 'map'
 """)
 
 ###     globals     ####   
@@ -185,15 +223,34 @@ Builder.load_string("""
 global avoid_double_execution
 avoid_double_execution = True;
 
+###     Screen Declarations     ####
+
 ################################################################################################
 
-###     Screen Declaration     ####
-class ResultScreen(Screen):
+class MapScreen(Screen):
     """
     Shows map of all the schlukniks
     """
 ################################################################################################
 
+class ResultScreen(Screen):
+    """
+    Show overall hangover result
+    """
+################################################################################################
+
+class SettingsScreen(Screen):
+    """
+    Set personal settings
+    """
+    # todo: add boy or girl 
+    # todo: add smoker 
+    # todo: add body size 
+    # todo: add body weight 
+
+
+
+################################################################################################
 class HangScreen(Screen):
     """
     Evaluating the hangover
@@ -275,7 +332,7 @@ class HangScreen(Screen):
                 lon = numpy.array(results)[:,2].tolist()
                 
                 # create result screen widget
-                res = ResultScreen(name='result')
+                map = MapScreen(name='map')
                 try:
                     # todo: can this be more pythonic?
                     i = 0
@@ -283,9 +340,9 @@ class HangScreen(Screen):
                     for item in lat:
                         # change this to pop up marker 
                         m = MapMarker(lon=float(lon[i]), lat=float(lat[i]))
-                        res.ids.map.add_marker(m)
+                        map.ids.map.add_marker(m)
                         i = i + 1
-                    app.sm.add_widget(res)
+                    app.sm.add_widget(map)
                 except:
                     tb = traceback.format_exc()
                     print (tb)
@@ -293,7 +350,6 @@ class HangScreen(Screen):
                 Screen.manager.current = 'result'
                 avoid_double_execution = False
                 return
-    pass
 
 ################################################################################################
 
@@ -322,7 +378,17 @@ class BeerScreen(Screen):
         for x in range(0, int(value)):
             wimg = Image(source='wine.png')
             instance.grid2.add_widget(wimg)
-    pass
+
+    def addshot(instance, value):
+        """
+        Adding the beer picture
+        """
+        global num_wine
+        num_wine = value
+        instance.grid3.clear_widgets()
+        for x in range(0, int(value)):
+            wimg = Image(source='shot.jpg')
+            instance.grid3.add_widget(wimg)
 
 ################################################################################################
 
@@ -375,6 +441,8 @@ class Myapp(App):
         self.sm = ScreenManager()
         self.sm.add_widget(BeerScreen(name='beer'))
         self.sm.add_widget(HangScreen(name='hang'))
+        self.sm.add_widget(SettingsScreen(name='setting'))
+        self.sm.add_widget(ResultScreen(name='result'))
         return self.sm
 
 ################################################################################################
