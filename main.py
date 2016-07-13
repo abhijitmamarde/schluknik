@@ -4,6 +4,8 @@
 		run with python 2.7.6
 """
 
+################################################################################################
+
 ####    Author Information      ####
 
 __author__ = "Elias Kardel"
@@ -14,44 +16,54 @@ __maintainer__ = "Elias Kardel"
 __email__ = "elias.kardel@u-blox.com"
 __status__ = "development"
 
+################################################################################################
+
 ###     Imports     ###
 
 import kivy
 kivy.require('1.8.7')
 
+## framework
 import kivy
 from kivy.app import App
+
+## uix
 from kivy.uix.button import Button
 from kivy.uix.label import Label
 from kivy.uix.boxlayout import BoxLayout
-from ftplib import FTP
-from kivy.core.window import Window
 from kivy.uix.screenmanager import ScreenManager, Screen, FadeTransition
-from kivy.core.image import Image
 from kivy.uix.label import Label
 from kivy.uix.widget import Widget
 from kivy.uix.image import Image
 from kivy.uix.boxlayout import BoxLayout
-from kivy.lang import Builder
 from kivy.uix.screenmanager import ScreenManager, Screen
 from kivy.uix.slider import Slider
-
-# for gps access 
-from plyer import gps
-from kivy.clock import Clock, mainthread
-from kivy.properties import StringProperty
-from kivy.properties import ObjectProperty
-from plyer import notification
 from kivy.uix.anchorlayout import AnchorLayout
 from kivy.uix.bubble import Bubble
-from kivy.garden.mapview import *
 
+## feature
+from ftplib import FTP
+from kivy.garden.mapview import *
 # for date and time stamp
 import datetime
 import numpy as numpy
 import csv
 import traceback
 import io
+# for gps access 
+from plyer import gps
+from kivy.clock import Clock, mainthread
+from kivy.properties import StringProperty
+from kivy.properties import ObjectProperty
+# notifications
+from plyer import notification
+
+## gui
+from kivy.core.window import Window
+from kivy.core.image import Image
+from kivy.lang import Builder
+
+################################################################################################
 
 ###     kv integration     ###
 Builder.load_string("""
@@ -164,6 +176,7 @@ Builder.load_string("""
             id: Grid
             cols: 10
             rows: 1
+
 <ResultScreen>:
     MapView:
         id: map
@@ -178,12 +191,14 @@ Builder.load_string("""
 global avoid_double_execution
 avoid_double_execution = True;
 
+################################################################################################
+
 ###     Screen Declaration     ####
 class ResultScreen(Screen):
     """
     Shows map of all the schlukniks
     """
-
+################################################################################################
 
 class HangScreen(Screen):
     """
@@ -211,14 +226,13 @@ class HangScreen(Screen):
                 timestamp =  datetime.datetime.now()
 
                 # portfolio pandas datastructure
+                # todo: extend
                 # timestamp | latitude | longitude | number of beer | number of hang 
                 try:
                     new_table = numpy.array([timestamp,app.lat,app.lon,num_beer,num_hang  ], dtype='string')
                 except:
                     tb = traceback.format_exc()
                     print (tb)
-
-                print ('!!!!!!!!!!!!!!!!!!!!!!!!!!')
                 # filename of global performance data
                 filename = "schlukniktable.csv"
                 # File FTP transfer
@@ -265,11 +279,15 @@ class HangScreen(Screen):
                 # finished ftp connection now fill
                 lat = numpy.array(results)[:,1].tolist()
                 lon = numpy.array(results)[:,2].tolist()
-
+                
+                # create result screen widget
                 res = ResultScreen(name='result')
                 try:
+                    # todo: can this be more pythonic?
                     i = 0
-                    for item in lat: 
+                    # set marker for every entry in table
+                    for item in lat:
+                        # change this to pop up marker 
                         m = MapMarker(lon=float(lon[i]), lat=float(lat[i]))
                         res.ids.map.add_marker(m)
                         i = i + 1
@@ -277,12 +295,14 @@ class HangScreen(Screen):
                 except:
                     tb = traceback.format_exc()
                     print (tb)
-
+                # switch to the result screen 
                 Screen.manager.current = 'result'
-                avoid_double_execution = False;
+                avoid_double_execution = False
                 return
-
     pass
+
+################################################################################################
+
 class BeerScreen(Screen):
     """
     Evaluating your performance
@@ -310,26 +330,26 @@ class BeerScreen(Screen):
             instance.grid2.add_widget(wimg)
     pass
 
-
-
+################################################################################################
 
 ###     Body        ###
 class Myapp(App):
+    """
+    Main class
+    """
+
     global_location = StringProperty()
+    # some random intitial location
     lat = 19.0
     lon = 72.48
     gps_status = StringProperty('Click Start to get GPS location updates')
 
-    """
-    Main class
-    """
     @mainthread
     def on_location(self, **kwargs):
         self.global_location = '\n'.join([
             '{}={}'.format(k, v) for k, v in kwargs.items()])
         self.lat = float('{lat}'.format(**kwargs))
         self.lon = float('{lon}'.format(**kwargs))
-
 
     @mainthread
     def on_status(self, stype, status):
@@ -344,15 +364,17 @@ class Myapp(App):
         Window.clearcolor = (1, 1, 1, 0)
         self.gps = gps
         try:
+            # get gps coordinates
             self.gps.configure(on_location=self.on_location,
                                on_status=self.on_status)
             self.gps.start()
         except NotImplementedError:
+            # if running on PC
             import traceback
             traceback.print_exc()
             self.gps_status = 'GPS is not implemented for your platform'
-            self.lat = 19.0
-            self.lon = 72.48
+            self.lat = float(19.0)
+            self.lon = float(72.48)
 
         # adding all the sub screens to the screen handler
         # create the screen manager
@@ -360,6 +382,8 @@ class Myapp(App):
         self.sm.add_widget(BeerScreen(name='beer'))
         self.sm.add_widget(HangScreen(name='hang'))
         return self.sm
+
+################################################################################################
 
 ###    entry point      ####
 if __name__ == "__main__":
