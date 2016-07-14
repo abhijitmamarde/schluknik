@@ -43,7 +43,7 @@ requirements = plyer,kivy,openssl,futures,requests,numpy
 # requirements.source.kivy = ../../kivy
 
 # (list) Garden requirements
-#garden_requirements =
+garden_requirements = graph,mapview
 
 # (str) Presplash of the application
 presplash.filename = %(source.dir)s/stable.png
