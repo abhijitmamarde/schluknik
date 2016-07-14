@@ -57,6 +57,11 @@ import csv
 import traceback
 import io
 
+# for graph 
+from math import sin
+#from kivy.garden.graph import *
+from graph import *
+
 ################################################################################################
 
 ###     kv integration     ###
@@ -213,9 +218,19 @@ Builder.load_string("""
                     on_press: root.manager.current = 'beer'
 
 <ResultScreen>:
-    Button: 
-        text: 'Result'
-        on_press: root.manager.current = 'map'
+    grid: Grid
+    MyBoxLayout:
+        GridLayout:
+            id: Grid
+            cols: 1
+            rows: 2
+            Button: 
+                text: 'Result'
+                on_press: root.manager.current = 'graph'
+            Button: 
+                text: 'Map'
+                on_press: root.manager.current = 'map'
+        
 """)
 
 ###     globals     ####   
@@ -224,6 +239,24 @@ global avoid_double_execution
 avoid_double_execution = True;
 
 ###     Screen Declarations     ####
+
+################################################################################################
+
+class GraphScreen(Screen):
+    """
+    Shows map of all the schlukniks
+    """
+    def __init__(self, **kwargs):
+        super(GraphScreen, self).__init__(**kwargs)
+
+        graph = Graph(background_color = [0,0,0,1], xlabel='X', ylabel='Y', x_ticks_minor=5,
+        x_ticks_major=25, y_ticks_major=1,
+        y_grid_label=True, x_grid_label=True, padding=5,
+        x_grid=True, y_grid=True, xmin=-0, xmax=100, ymin=-1, ymax=1)
+        plot = MeshLinePlot(color=[0, 0, 1, 1])
+        plot.points = [(x, sin(x / 10.)) for x in range(0, 101)]
+        graph.add_plot(plot)
+        self.add_widget(graph)
 
 ################################################################################################
 
@@ -237,6 +270,7 @@ class ResultScreen(Screen):
     """
     Show overall hangover result
     """
+       
 ################################################################################################
 
 class SettingsScreen(Screen):
@@ -439,10 +473,12 @@ class Myapp(App):
         # adding all the sub screens to the screen handler
         # create the screen manager
         self.sm = ScreenManager()
+        
         self.sm.add_widget(BeerScreen(name='beer'))
         self.sm.add_widget(HangScreen(name='hang'))
         self.sm.add_widget(SettingsScreen(name='setting'))
         self.sm.add_widget(ResultScreen(name='result'))
+        self.sm.add_widget(GraphScreen(name='graph'))
         return self.sm
 
 ################################################################################################
