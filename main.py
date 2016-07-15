@@ -91,6 +91,23 @@ Builder.load_string("""
 <HeaderImage@Image>
     scale: 6.0
 
+<NavigationBar@AnchorLayout>
+    AnchorLayout:
+        anchor_x: 'center'
+        anchor_y: 'bottom'
+        GridLayout:
+            cols: 3
+            rows: 1
+            Button:
+                text: '<'
+                on_press: root.manager.next()
+            Button:
+                text: 'X'
+                on_press: root.manager.current = 'setting'
+            Button:
+                text: '>'
+                on_press: root.manager.previous()
+
 <BeerScreen>:
     grid1: Grid1
     grid2: Grid2
@@ -112,7 +129,8 @@ Builder.load_string("""
                 source: 'icon.png'
             HeaderLabel:
                 text: 'Lets face it! You have been a schluknik again!'
-
+        
+        # Beer
         GridLayout:
             cols: 2
             rows: 1
@@ -129,6 +147,8 @@ Builder.load_string("""
             id: Grid1
             cols: 10
             rows: 1
+
+        # Wine
         GridLayout:
             cols: 2
             rows: 1
@@ -145,7 +165,8 @@ Builder.load_string("""
             id: Grid2
             cols: 10
             rows: 1
-
+        
+        # Shots
         GridLayout:
             cols: 2
             rows: 1
@@ -162,16 +183,24 @@ Builder.load_string("""
             id: Grid3
             cols: 10
             rows: 1
-
+        
+        # Navigation Bar
         AnchorLayout:
-            anchor_x: 'right'
+            anchor_x: 'center'
             anchor_y: 'bottom'
-            BoxLayout:
-                orientation: 'horizontal'
-                size_hint: .3, .3
+            GridLayout:
+                cols: 3
+                rows: 1
                 Button:
-                    text: 'OK'
+                    text: 'exit'
+                    on_press: app.get_running_app().stop()
+                Button:
+                    text: 'X'
+                    on_press: root.manager.current = 'beer'
+                Button:
+                    text: '>'
                     on_press: root.manager.current = 'hang'
+
 <HangScreen>:
     grid: Grid
     MyBoxLayout:
@@ -182,12 +211,13 @@ Builder.load_string("""
                 source: 'icon.png'
             HeaderLabel:
                 text: 'Yuck...And how do you feel today?'
+
+        # Feel shit slider
         Slider:
             id: slider_id
             min: 0
             step: 0.01
             max: 10
-            on_touch_up: root.ftp_transfer()
             on_value: root.addpoop(slider_id.value)
         Label:
             text: str(round(slider_id.value, 0))
@@ -197,25 +227,22 @@ Builder.load_string("""
             cols: 10
             rows: 1
 
-<MapScreen>:
-    MapView:
-        id: map
-        lat: app.lat
-        lon: app.lon
-        zoom: 13
-        map_source: MapSource(sys.argv[1], attribution="") if len(sys.argv) > 1 else "osm"
-
-<SettingsScreen>:
-    MyBoxLayout: 
+        # Navigation Bar
         AnchorLayout:
-            anchor_x: 'right'
+            anchor_x: 'center'
             anchor_y: 'bottom'
-            BoxLayout:
-                orientation: 'horizontal'
-                size_hint: .3, .3
+            GridLayout:
+                cols: 3
+                rows: 1
                 Button:
-                    text: 'Back'
+                    text: '<'
                     on_press: root.manager.current = 'beer'
+                Button:
+                    text: 'X'
+                    on_press: root.manager.current = 'beer'
+                Button:
+                    text: '>'
+                    on_press: root.ftp_transfer()
 
 <ResultScreen>:
     grid: Grid
@@ -230,6 +257,87 @@ Builder.load_string("""
             Button: 
                 text: 'Map'
                 on_press: root.manager.current = 'map'
+
+        # Navigation Bar
+        AnchorLayout:
+            anchor_x: 'center'
+            anchor_y: 'bottom'
+            GridLayout:
+                cols: 3
+                rows: 1
+                Button:
+                    text: '<'
+                    on_press: root.manager.current = 'hang'
+                Button:
+                    text: 'X'
+                    on_press: root.manager.current = 'beer'
+                Button:
+                    text: 'exit'
+                    on_press: app.get_running_app().stop()
+
+<MapScreen>:
+    MyBoxLayout:
+        GridLayout:
+            cols: 1
+            rows: 2
+            MapView:
+                id: map
+                lat: app.lat
+                lon: app.lon
+                zoom: 13
+                map_source: MapSource(sys.argv[1], attribution="") if len(sys.argv) > 1 else "osm"
+
+            # Navigation Bar
+            AnchorLayout:
+                anchor_x: 'center'
+                anchor_y: 'bottom'
+                GridLayout:
+                    cols: 3
+                    rows: 1
+                    Button:
+                        text: '<'
+                        on_press: root.manager.current = 'hang'
+                    Button:
+                        text: 'X'
+                        on_press: root.manager.current = 'beer'
+                    Button:
+                        text: 'exit'
+                        on_press: app.get_running_app().stop()
+
+<SettingsScreen>:
+    MyBoxLayout: 
+        AnchorLayout:
+            anchor_x: 'right'
+            anchor_y: 'bottom'
+            BoxLayout:
+                orientation: 'horizontal'
+                size_hint: .3, .3
+                Button:
+                    text: 'Back'
+                    on_press: root.manager.current = 'beer'
+
+<GraphScreen>:
+    grid: Grid
+    GridLayout:
+        id:Grid
+        cols: 1
+        rows: 2
+        # Navigation Bar
+        AnchorLayout:
+            anchor_x: 'center'
+            anchor_y: 'bottom'
+            GridLayout:
+                cols: 3
+                rows: 1
+                Button:
+                    text: '<'
+                    on_press: root.manager.current = 'hang'
+                Button:
+                    text: 'X'
+                    on_press: root.manager.current = 'beer'
+                Button:
+                    text: 'exit'
+                    on_press: app.get_running_app().stop()
         
 """)
 
@@ -256,7 +364,7 @@ class GraphScreen(Screen):
         plot = MeshLinePlot(color=[0, 0, 1, 1])
         plot.points = [(x, sin(x / 10.)) for x in range(0, 101)]
         graph.add_plot(plot)
-        self.add_widget(graph)
+        self.grid.add_widget(graph)
 
 ################################################################################################
 
