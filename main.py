@@ -201,6 +201,9 @@ Builder.load_string("""
 <HangScreen>:
     grid: Grid
     grid2: Grid2
+    grid3: Grid3
+    foodranking: foodranking
+
     MyBoxLayout:
         GridLayout:
             cols: 2
@@ -245,6 +248,25 @@ Builder.load_string("""
         GridLayout:
             id: Grid
             cols: 12
+            rows: 1
+
+        # Food 
+        GridLayout:
+            cols: 2
+            rows: 1
+            Slider:
+                id: slider_id3
+                min: 0
+                step: 1
+                max: 10
+                on_value: root.addfood(slider_id3.value)
+            Label:
+                id: foodranking
+                text: 'Food?'
+                color: 0,0,0,1
+        GridLayout:
+            id: Grid3
+            cols: 10
             rows: 1
 
         # Navigation Bar
@@ -430,8 +452,9 @@ class SettingsScreen(Screen):
 
 class HangScreen(Screen):
     """
-    Evaluating the hangover
+    Evaluating the non-drinkable influences
     """
+
     def addsleep(instance, value):
         """
 		adding the shitty picture
@@ -453,6 +476,33 @@ class HangScreen(Screen):
         for x in range(0, int(value)):
             wimg = Image(source='cigarette.png')
             instance.grid2.add_widget(wimg)
+
+    def addfood(instance, value):
+        """
+		adding the cigarette picture
+        """
+        global num_hang
+        num_hang = value
+
+        switcher = {
+        0: "nothing",
+        1: "almost nothing",
+        2: "snack",
+        3: "small lunch",
+        4: "lunch",
+        5: "medium",
+        6: "more than usually",
+        7: "proper drinking preparation : )",
+        8: "too much : ( !",
+        9: "way too much!!",
+        10: "lethal!!!"
+        }
+
+        instance.foodranking.text = switcher.get(value, "Food??")
+        instance.grid3.clear_widgets()
+        for x in range(0, int(value)):
+            wimg = Image(source='cigarette.png')
+            instance.grid3.add_widget(wimg)
 
     def ftp_transfer(Screen):
             """
