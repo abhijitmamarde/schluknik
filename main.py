@@ -8,6 +8,8 @@
 
 ####    Author Information      ####
 
+###############################################################################################
+
 __author__ = "Elias Kardel"
 __copyright__ = "Copyright 2016t"
 __credits__ = ["Elias Kardel"]
@@ -18,7 +20,9 @@ __status__ = "development"
 
 ################################################################################################
 
-###     Imports     ###
+###    Imports    ####
+
+###############################################################################################
 
 import kivy
 kivy.require('1.8.7')
@@ -64,21 +68,24 @@ from graph import *
 
 ################################################################################################
 
-###     kv integration     ###
+###    KV Integration    ####
+
+################################################################################################
+
 Builder.load_string("""
 #:import sys sys
 #:import MapSource mapview.MapSource
 #:import MapMarkerPopup kivy.garden.mapview.MapMarkerPopup
+
+## inheried classes 
     
-<FTPButton@Button>:
-    color: 1,1,1,1
-    font_size: 32
- 
 <MyBoxLayout@BoxLayout>:
     orientation: 'vertical'
     padding: 60,60,30,30
     spacing: 5
-               
+
+# header text
+# todo: make text bubble             
 <HeaderLabel@Label>:
     color: 0,0,0,1
     text_size: root.width, None
@@ -88,9 +95,13 @@ Builder.load_string("""
     halign: 'left'
     valign: 'middle'
 
+# header image
 <HeaderImage@Image>
     scale: 6.0
 
+################################################################################################
+
+# Screen for adding the drinks record
 <BeerScreen>:
     grid1: Grid1
     grid2: Grid2
@@ -112,7 +123,8 @@ Builder.load_string("""
                 source: 'icon.png'
             HeaderLabel:
                 text: 'Lets face it! You have been a schluknik again!'
-
+        
+        # Beer
         GridLayout:
             cols: 2
             rows: 1
@@ -129,6 +141,8 @@ Builder.load_string("""
             id: Grid1
             cols: 10
             rows: 1
+
+        # Wine
         GridLayout:
             cols: 2
             rows: 1
@@ -145,7 +159,8 @@ Builder.load_string("""
             id: Grid2
             cols: 10
             rows: 1
-
+        
+        # Shots
         GridLayout:
             cols: 2
             rows: 1
@@ -162,18 +177,33 @@ Builder.load_string("""
             id: Grid3
             cols: 10
             rows: 1
-
+        
+        # Navigation Bar
         AnchorLayout:
-            anchor_x: 'right'
+            anchor_x: 'center'
             anchor_y: 'bottom'
-            BoxLayout:
-                orientation: 'horizontal'
-                size_hint: .3, .3
+            GridLayout:
+                cols: 3
+                rows: 1
                 Button:
-                    text: 'OK'
+                    text: 'exit'
+                    on_press: app.get_running_app().stop()
+                Button:
+                    text: 'X'
+                    on_press: root.manager.current = 'beer'
+                Button:
+                    text: '>'
                     on_press: root.manager.current = 'hang'
+
+################################################################################################
+# Screen for adding the non-drinkable record 
+# todo: add food and stress
 <HangScreen>:
     grid: Grid
+    grid2: Grid2
+    grid3: Grid3
+    foodranking: foodranking
+
     MyBoxLayout:
         GridLayout:
             cols: 2
@@ -182,40 +212,82 @@ Builder.load_string("""
                 source: 'icon.png'
             HeaderLabel:
                 text: 'Yuck...And how do you feel today?'
-        Slider:
-            id: slider_id
-            min: 0
-            step: 0.01
-            max: 10
-            on_touch_up: root.ftp_transfer()
-            on_value: root.addpoop(slider_id.value)
-        Label:
-            text: str(round(slider_id.value, 0))
-            color: 0,0,0,1
+
+        # Cigarette slider
+        GridLayout:
+            cols: 2
+            rows: 1
+            Slider:
+                id: slider_id2
+                min: 0
+                step: 1
+                max: 30
+                on_value: root.addcigarette(slider_id2.value)
+            Label:
+                text: str(round(slider_id2.value, 0)) + ' x cigarettes'
+                color: 0,0,0,1
+        GridLayout:
+            id: Grid2
+            cols: 30
+            rows: 1 
+
+
+        # Sleep 
+        GridLayout:
+            cols: 2
+            rows: 1
+            Slider:
+                id: slider_id
+                min: 0
+                step: 0.5
+                max: 12
+                on_value: root.addsleep(slider_id.value)
+            Label:
+                text: str(round(slider_id.value, 1))+ ' hours of sleep'
+                color: 0,0,0,1
         GridLayout:
             id: Grid
+            cols: 12
+            rows: 1
+
+        # Food 
+        GridLayout:
+            cols: 2
+            rows: 1
+            Slider:
+                id: slider_id3
+                min: 0
+                step: 1
+                max: 10
+                on_value: root.addfood(slider_id3.value)
+            Label:
+                id: foodranking
+                text: 'Food?'
+                color: 0,0,0,1
+        GridLayout:
+            id: Grid3
             cols: 10
             rows: 1
 
-<MapScreen>:
-    MapView:
-        id: map
-        lat: app.lat
-        lon: app.lon
-        zoom: 13
-        map_source: MapSource(sys.argv[1], attribution="") if len(sys.argv) > 1 else "osm"
-
-<SettingsScreen>:
-    MyBoxLayout: 
+        # Navigation Bar
         AnchorLayout:
-            anchor_x: 'right'
+            anchor_x: 'center'
             anchor_y: 'bottom'
-            BoxLayout:
-                orientation: 'horizontal'
-                size_hint: .3, .3
+            GridLayout:
+                cols: 3
+                rows: 1
                 Button:
-                    text: 'Back'
+                    text: '<'
                     on_press: root.manager.current = 'beer'
+                Button:
+                    text: 'X'
+                    on_press: root.manager.current = 'beer'
+                Button:
+                    text: '>'
+                    on_press: root.ftp_transfer()
+
+################################################################################################
+# Navigation page for going to the presented results 
 
 <ResultScreen>:
     grid: Grid
@@ -230,6 +302,98 @@ Builder.load_string("""
             Button: 
                 text: 'Map'
                 on_press: root.manager.current = 'map'
+
+        # Navigation Bar
+        AnchorLayout:
+            anchor_x: 'center'
+            anchor_y: 'bottom'
+            GridLayout:
+                cols: 3
+                rows: 1
+                Button:
+                    text: '<'
+                    on_press: root.manager.current = 'hang'
+                Button:
+                    text: 'X'
+                    on_press: root.manager.current = 'beer'
+                Button:
+                    text: 'exit'
+                    on_press: app.get_running_app().stop()
+
+################################################################################################
+# map of schlukniks
+
+<MapScreen>:
+    MyBoxLayout:
+        GridLayout:
+            cols: 1
+            rows: 2
+            MapView:
+                id: map
+                lat: app.lat
+                lon: app.lon
+                zoom: 13
+                map_source: MapSource(sys.argv[1], attribution="") if len(sys.argv) > 1 else "osm"
+
+            # Navigation Bar
+            AnchorLayout:
+                anchor_x: 'center'
+                anchor_y: 'bottom'
+                GridLayout:
+                    cols: 3
+                    rows: 1
+                    Button:
+                        text: '<'
+                        on_press: root.manager.current = 'hang'
+                    Button:
+                        text: 'X'
+                        on_press: root.manager.current = 'beer'
+                    Button:
+                        text: 'exit'
+                        on_press: app.get_running_app().stop()
+
+################################################################################################
+# settings page
+# todo: add mandatory first time configuration -> stored as .json; smoker? size? weight? boy/girl?
+
+<SettingsScreen>:
+    MyBoxLayout: 
+        AnchorLayout:
+            anchor_x: 'right'
+            anchor_y: 'bottom'
+            BoxLayout:
+                orientation: 'horizontal'
+                size_hint: .3, .3
+                Button:
+                    text: 'Back'
+                    on_press: root.manager.current = 'beer'
+
+################################################################################################
+# hangover transient screen 
+# add meaningul computation depending on the input variables
+
+<GraphScreen>:
+    grid: Grid
+    GridLayout:
+        id:Grid
+        cols: 1
+        rows: 2
+        # Navigation Bar
+        AnchorLayout:
+            anchor_x: 'center'
+            anchor_y: 'bottom'
+            GridLayout:
+                cols: 3
+                rows: 1
+                Button:
+                    text: '<'
+                    on_press: root.manager.current = 'hang'
+                Button:
+                    text: 'X'
+                    on_press: root.manager.current = 'beer'
+                Button:
+                    text: 'exit'
+                    on_press: app.get_running_app().stop()
         
 """)
 
@@ -238,7 +402,9 @@ Builder.load_string("""
 global avoid_double_execution
 avoid_double_execution = True;
 
-###     Screen Declarations     ####
+################################################################################################
+
+###     Screen Classes     ####
 
 ################################################################################################
 
@@ -256,7 +422,7 @@ class GraphScreen(Screen):
         plot = MeshLinePlot(color=[0, 0, 1, 1])
         plot.points = [(x, sin(x / 10.)) for x in range(0, 101)]
         graph.add_plot(plot)
-        self.add_widget(graph)
+        self.grid.add_widget(graph)
 
 ################################################################################################
 
@@ -282,14 +448,14 @@ class SettingsScreen(Screen):
     # todo: add body size 
     # todo: add body weight 
 
-
-
 ################################################################################################
+
 class HangScreen(Screen):
     """
-    Evaluating the hangover
+    Evaluating the non-drinkable influences
     """
-    def addpoop(instance, value):
+
+    def addsleep(instance, value):
         """
 		adding the shitty picture
         """
@@ -297,8 +463,46 @@ class HangScreen(Screen):
         num_hang = value
         instance.grid.clear_widgets()
         for x in range(0, int(value)):
-            wimg = Image(source='poop.png')
+            wimg = Image(source='sleep.jpg')
             instance.grid.add_widget(wimg)
+
+    def addcigarette(instance, value):
+        """
+		adding the cigarette picture
+        """
+        global num_hang
+        num_hang = value
+        instance.grid2.clear_widgets()
+        for x in range(0, int(value)):
+            wimg = Image(source='cigarette.png')
+            instance.grid2.add_widget(wimg)
+
+    def addfood(instance, value):
+        """
+		adding the cigarette picture
+        """
+        global num_hang
+        num_hang = value
+
+        switcher = {
+        0: "nothing",
+        1: "almost nothing",
+        2: "snack",
+        3: "small lunch",
+        4: "lunch",
+        5: "medium",
+        6: "more than usually",
+        7: "proper drinking preparation : )",
+        8: "too much : ( !",
+        9: "way too much!!",
+        10: "lethal!!!"
+        }
+
+        instance.foodranking.text = switcher.get(value, "Food??")
+        instance.grid3.clear_widgets()
+        for x in range(0, int(value)):
+            wimg = Image(source='cigarette.png')
+            instance.grid3.add_widget(wimg)
 
     def ftp_transfer(Screen):
             """
@@ -426,7 +630,10 @@ class BeerScreen(Screen):
 
 ################################################################################################
 
-###     Body        ###
+###    Body     ####
+
+################################################################################################
+
 class Myapp(App):
     """
     Main class
@@ -483,7 +690,10 @@ class Myapp(App):
 
 ################################################################################################
 
-###    entry point      ####
+###    Entry point     ####
+
+################################################################################################
+
 if __name__ == "__main__":
     """
 		Entry point for the application
