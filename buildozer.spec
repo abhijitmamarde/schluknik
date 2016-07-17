@@ -52,7 +52,7 @@ presplash.filename = %(source.dir)s/stable.png
 icon.filename = %(source.dir)s/icon.png
 
 # (str) Supported orientation (one of landscape, portrait or all)
-orientation = all
+orientation = portrait
 
 # (list) List of service to declare
 #services = NAME:ENTRYPOINT_TO_PY,NAME2:ENTRYPOINT2_TO_PY
@@ -167,7 +167,7 @@ android.ndk = 9d
 #
 
 # (str) Path to a custom kivy-ios folder
-#ios.kivy_ios_dir = ../kivy-ios
+ios.kivy_ios_dir = ../kivy-ios
 
 # (str) Name of the certificate to use for signing the debug version
 # Get a list of available identities: buildozer ios list_identities
