@@ -132,7 +132,9 @@ class HangScreen(Screen):
     """
     Evaluating the non-drinkable influences
     """
-
+    global num_hang
+    num_hang = 0.0
+    
     def addsleep(instance, value):
         """
 		adding the shitty picture
@@ -273,6 +275,12 @@ class BeerScreen(Screen):
     """
     Evaluating your performance
     """
+    global num_beer
+    num_beer = 0.0
+
+    global num_wine
+    num_wine = 0.0
+
     def addbeer(instance, value):
         """
 		Adding the beer picture
