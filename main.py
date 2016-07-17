@@ -52,7 +52,9 @@ from kivy.properties import ObjectProperty
 from plyer import notification
 from kivy.uix.anchorlayout import AnchorLayout
 from kivy.uix.bubble import Bubble
-from kivy.garden.mapview import *
+#from kivy.garden.mapview import *
+
+from mapview import *
 
 # for date and time stamp
 import datetime
@@ -134,7 +136,7 @@ class HangScreen(Screen):
     """
     global num_hang
     num_hang = 0.0
-    
+
     def addsleep(instance, value):
         """
 		adding the shitty picture
@@ -248,6 +250,7 @@ class HangScreen(Screen):
                 # finished ftp connection now fill
                 lat = numpy.array(results)[:,1].tolist()
                 lon = numpy.array(results)[:,2].tolist()
+                info_box_beer = numpy.array(results)[:,3].tolist()
                 
                 # create result screen widget
                 map = MapScreen(name='map')
@@ -256,8 +259,10 @@ class HangScreen(Screen):
                     i = 0
                     # set marker for every entry in table
                     for item in lat:
-                        # change this to pop up marker 
-                        m = MapMarker(lon=float(lon[i]), lat=float(lat[i]))
+                        # change this to pop up marker
+                        a = Bubble(size= (400, 400))
+                        a.add_widget(Label(text=str(info_box_beer[i])))
+                        m = MapMarkerPopup(lon=float(lon[i]), lat=float(lat[i]), placeholder= a)
                         map.ids.map.add_marker(m)
                         i = i + 1
                     app.sm.add_widget(map)

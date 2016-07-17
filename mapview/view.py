@@ -220,10 +220,14 @@ class MarkerMapLayer(MapLayer):
         x, y = mapview.get_window_xy_from(marker.lat, marker.lon, mapview.zoom)
         marker.x = int(x - marker.width * marker.anchor_x)
         marker.y = int(y - marker.height * marker.anchor_y)
+        if isinstance(marker, MapMarkerPopup):
+            marker.placeholder.x = marker.x - marker.width / 2
+            marker.placeholder.y = marker.y + marker.height
 
     def unload(self):
         self.clear_widgets()
         del self.markers[:]
+
 
 
 class MapViewScatter(Scatter):
