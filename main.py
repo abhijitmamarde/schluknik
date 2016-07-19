@@ -63,6 +63,8 @@ import csv
 import traceback
 import io
 
+import math_engine
+
 # for graph 
 from math import sin
 #from kivy.garden.graph import *
@@ -130,41 +132,46 @@ class SettingsScreen(Screen):
 
 ################################################################################################
 
-class HangScreen(Screen):
+class HealScreen(Screen):
     """
-    Evaluating the non-drinkable influences
+    positive counter measures
     """
-    global num_hang
-    num_hang = 0.0
+
+    global num_water
+    num_water = 0.0
+    global num_sleep
+    num_sleep = 0.0
+    global num_food
+    num_food = 0.0
+
+    def addwater(instance, value):
+        """
+        adding the glass of water count
+        """
+        global num_water
+        num_water = value
+        instance.grid.clear_widgets()
+        for x in range(0, int(value)):
+            wimg = Image(source='water.png')
+            instance.grid.add_widget(wimg)
 
     def addsleep(instance, value):
         """
-		adding the shitty picture
+        adding the sleep read
         """
-        global num_hang
-        num_hang = value
-        instance.grid.clear_widgets()
-        for x in range(0, int(value)):
-            wimg = Image(source='sleep.jpg')
-            instance.grid.add_widget(wimg)
-
-    def addcigarette(instance, value):
-        """
-		adding the cigarette picture
-        """
-        global num_hang
-        num_hang = value
+        global num_sleep
+        num_sleep = value
         instance.grid2.clear_widgets()
         for x in range(0, int(value)):
-            wimg = Image(source='cigarette.png')
+            wimg = Image(source='sleep.jpg')
             instance.grid2.add_widget(wimg)
 
     def addfood(instance, value):
         """
-		adding the cigarette picture
+		adding what was eaten before
         """
-        global num_hang
-        num_hang = value
+        global num_food
+        num_food = value
 
         switcher = {
         0: "nothing",
@@ -180,11 +187,29 @@ class HangScreen(Screen):
         10: "lethal!!!"
         }
 
+        switcher_pic = {
+        0: "banana.jpg",
+        1: "banana.jpg",
+        2: "banana.jpg",
+        3: "sushi.png",
+        4: "sushi.png",
+        5: "sushi.png",
+        6: "burger.png",
+        7: "burger.png",
+        8: "burger.png",
+        9: "skull.png",
+        10: "skull.png"
+        }
+
         instance.foodranking.text = switcher.get(value, "Food??")
+
+        pic = switcher_pic.get(value, "banana.jpg")
+
         instance.grid3.clear_widgets()
         for x in range(0, int(value)):
-            wimg = Image(source='cigarette.png')
+            wimg = Image(source=pic)
             instance.grid3.add_widget(wimg)
+
 
     def ftp_transfer(Screen):
             """
@@ -198,9 +223,9 @@ class HangScreen(Screen):
 
                 # portfolio pandas datastructure
                 # todo: extend
-                # timestamp | latitude | longitude | number of beer | number of hang 
+                # timestamp | latitude | longitude | number of beer | number of wine | number of shots |  number of cigarettes | XX | XX | number of water | number of sleep | number of food
                 try:
-                    new_table = numpy.array([timestamp,app.lat,app.lon,num_beer,num_hang  ], dtype='string')
+                    new_table = numpy.array([timestamp,app.lat,app.lon, num_beer,num_wine,num_shot,num_cig,num_water,num_sleep,num_food], dtype='string')
                 except:
                     tb = traceback.format_exc()
                     print (tb)
@@ -247,15 +272,16 @@ class HangScreen(Screen):
                     ftp.storlines("STOR " + filename, open(filename, 'r'))
                     ftp.quit()
 
-                # finished ftp connection now fill
+                # finished ftp connection now fill result computer
                 lat = numpy.array(results)[:,1].tolist()
                 lon = numpy.array(results)[:,2].tolist()
+
                 info_box_beer = numpy.array(results)[:,3].tolist()
                 
                 # create result screen widget
                 map = MapScreen(name='map')
                 try:
-                    # todo: can this be more pythonic?
+                    # todo: can this be more pythonic?BeerScreen
                     i = 0
                     # set marker for every entry in table
                     for item in lat:
@@ -272,18 +298,47 @@ class HangScreen(Screen):
                 # switch to the result screen 
                 Screen.manager.current = 'result'
                 avoid_double_execution = False
-                return
+                return   
 
 ################################################################################################
 
-class BeerScreen(Screen):
+class DestroyScreen(Screen):
+    """
+    Evaluating the non-drinkable influences
+    """
+    global num_cig
+    num_cig = 0.0
+
+    def addcigarette(instance, value):
+        """
+		adding the cigarette picture
+        """
+        global num_cig
+        num_cig = value
+        instance.grid.clear_widgets()
+        for x in range(0, int(value)):
+            wimg = Image(source='cigarette.png')
+            instance.grid.add_widget(wimg)
+
+    # todo: add stress
+    # todo: add cocktail
+
+    
+################################################################################################
+
+class DrinkScreen(Screen):
     """
     Evaluating your performance
     """
+    # set zero global variables
+    # todo: is there a better OOP approach for this??
     global num_beer
     num_beer = 0.0
 
     global num_wine
+    num_wine = 0.0
+
+    global num_shot
     num_wine = 0.0
 
     def addbeer(instance, value):
@@ -292,6 +347,7 @@ class BeerScreen(Screen):
         """
         global num_beer
         num_beer = value
+
         instance.grid1.clear_widgets()
         for x in range(0, int(value)):
             wimg = Image(source='beerchen.jpg')
@@ -303,6 +359,7 @@ class BeerScreen(Screen):
         """
         global num_wine
         num_wine = value
+
         instance.grid2.clear_widgets()
         for x in range(0, int(value)):
             wimg = Image(source='wine.png')
@@ -312,8 +369,9 @@ class BeerScreen(Screen):
         """
         Adding the beer picture
         """
-        global num_wine
-        num_wine = value
+        global num_shot
+        num_shot = value
+
         instance.grid3.clear_widgets()
         for x in range(0, int(value)):
             wimg = Image(source='shot.jpg')
@@ -372,11 +430,15 @@ class Myapp(App):
         # create the screen manager
         self.sm = ScreenManager()
         
-        self.sm.add_widget(BeerScreen(name='beer'))
-        self.sm.add_widget(HangScreen(name='hang'))
+        
+        self.sm.add_widget(DrinkScreen(name='drink'))
+        self.sm.add_widget(DestroyScreen(name='destroy'))
+        self.sm.add_widget(HealScreen(name='heal'))
         self.sm.add_widget(SettingsScreen(name='setting'))
         self.sm.add_widget(ResultScreen(name='result'))
         self.sm.add_widget(GraphScreen(name='graph'))
+        
+
         return self.sm
 
 ################################################################################################
