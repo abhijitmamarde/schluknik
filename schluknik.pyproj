@@ -41,6 +41,9 @@
     <Compile Include="math_engine.py">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="setcard.py">
+      <SubType>Code</SubType>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Folder Include=".buildozer\" />

@@ -125,6 +125,10 @@
 # todo: add food and stress
 <DestroyScreen>:
     grid: Grid
+	grid2: Grid2
+	grid3: Grid3
+	tiredranking: tiredranking
+	stressranking: stressranking
 
     MyBoxLayout:
         GridLayout:
@@ -151,6 +155,44 @@
         GridLayout:
             id: Grid
             cols: 30
+            rows: 1
+
+		# Tired
+        GridLayout:
+            cols: 2
+            rows: 1
+            Slider:
+                id: slider_id2
+                min: 0
+                step: 1
+                max: 10
+                on_value: root.addtired(slider_id2.value)
+            Label:
+                id: tiredranking
+                text: 'tired?'
+                color: 0,0,0,1
+        GridLayout:
+            id: Grid2
+            cols: 10
+            rows: 1
+
+		# Stress
+        GridLayout:
+            cols: 2
+            rows: 1
+            Slider:
+                id: slider_id3
+                min: 0
+                step: 1
+                max: 10
+                on_value: root.addstress(slider_id3.value)
+            Label:
+                id: stressranking
+                text: 'Stress?'
+                color: 0,0,0,1
+        GridLayout:
+            id: Grid3
+            cols: 10
             rows: 1
 
 

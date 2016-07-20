@@ -64,6 +64,7 @@ import traceback
 import io
 
 import math_engine
+from setcard import setcard
 
 # for graph 
 from math import sin
@@ -78,6 +79,10 @@ from graph import *
 
 # load style file
 Builder.load_file('style.kv')
+
+################################################################################################
+setc = setcard();
+
 
 ###     globals     ####   
 # todo: check what is wrong here
@@ -136,20 +141,11 @@ class HealScreen(Screen):
     """
     positive counter measures
     """
-
-    global num_water
-    num_water = 0.0
-    global num_sleep
-    num_sleep = 0.0
-    global num_food
-    num_food = 0.0
-
     def addwater(instance, value):
         """
         adding the glass of water count
         """
-        global num_water
-        num_water = value
+        setc.num_water = value
         instance.grid.clear_widgets()
         for x in range(0, int(value)):
             wimg = Image(source='water.png')
@@ -159,8 +155,7 @@ class HealScreen(Screen):
         """
         adding the sleep read
         """
-        global num_sleep
-        num_sleep = value
+        setc.num_sleep = value
         instance.grid2.clear_widgets()
         for x in range(0, int(value)):
             wimg = Image(source='sleep.jpg')
@@ -170,8 +165,7 @@ class HealScreen(Screen):
         """
 		adding what was eaten before
         """
-        global num_food
-        num_food = value
+        setc.num_food = value
 
         switcher = {
         0: "nothing",
@@ -223,9 +217,11 @@ class HealScreen(Screen):
 
                 # portfolio pandas datastructure
                 # todo: extend
-                # timestamp | latitude | longitude | number of beer | number of wine | number of shots |  number of cigarettes | XX | XX | number of water | number of sleep | number of food
+                # table format
+                # |timestamp | latitude | longitude | beer | wine | shots | cigarettes | tired | stressed | water | sleep | food | 
                 try:
-                    new_table = numpy.array([timestamp,app.lat,app.lon, num_beer,num_wine,num_shot,num_cig,num_water,num_sleep,num_food], dtype='string')
+                    # global table to be stored on server
+                    new_table = numpy.array([timestamp, app.lat, app.lon, setc.num_beer, setc.num_wine, setc.num_shot, setc.num_cig, setc.num_tired, setc.num_stress, setc.num_water, setc.num_sleep, setc.num_food], dtype='string')
                 except:
                     tb = traceback.format_exc()
                     print (tb)
@@ -252,9 +248,9 @@ class HealScreen(Screen):
                 try:
                     # append old table to new table
                     results = numpy.append(new_table,old_table)
-                    results = results.reshape((len(results)/5,5))
+                    results = results.reshape((len(results)/12,12))
                     # store data as a local csv file 
-                    numpy.savetxt(filename, results, delimiter=';', fmt=('%s', '%s', '%s', '%s','%s'))
+                    numpy.savetxt(filename, results, delimiter=';', fmt=('%s', '%s', '%s', '%s','%s','%s', '%s', '%s', '%s','%s', '%s','%s'))
                     
                 except:
                     tb = traceback.format_exc()
@@ -306,22 +302,102 @@ class DestroyScreen(Screen):
     """
     Evaluating the non-drinkable influences
     """
-    global num_cig
-    num_cig = 0.0
-
     def addcigarette(instance, value):
         """
 		adding the cigarette picture
         """
-        global num_cig
-        num_cig = value
+        setc.num_cig = value
+
         instance.grid.clear_widgets()
         for x in range(0, int(value)):
             wimg = Image(source='cigarette.png')
             instance.grid.add_widget(wimg)
 
-    # todo: add stress
-    # todo: add cocktail
+    def addtired(instance, value):
+        """
+	    adding tiredness
+        """
+        setc.num_tired = value
+
+        switcher = {
+        0: "stress",
+        1: "stress",
+        2: "stress",
+        3: "stress",
+        4: "stress",
+        5: "stress",
+        6: "stress",
+        7: "stress",
+        8: "stress",
+        9: "stress",
+        10: "lethal!!!"
+        }
+
+        switcher_pic = {
+        0: "banana.jpg",
+        1: "banana.jpg",
+        2: "banana.jpg",
+        3: "sushi.png",
+        4: "sushi.png",
+        5: "sushi.png",
+        6: "burger.png",
+        7: "burger.png",
+        8: "burger.png",
+        9: "skull.png",
+        10: "skull.png"
+        }
+
+        instance.tiredranking.text = switcher.get(value, "Tired?")
+
+        pic = switcher_pic.get(value, "banana.jpg")
+
+        instance.grid2.clear_widgets()
+        for x in range(0, int(value)):
+            wimg = Image(source=pic)
+            instance.grid2.add_widget(wimg)
+
+    def addstress(instance, value):
+        """
+		adding stress
+        """
+        setc.num_stress = value
+
+        switcher = {
+        0: "stress",
+        1: "stress",
+        2: "stress",
+        3: "stress",
+        4: "stress",
+        5: "stress",
+        6: "stress",
+        7: "stress",
+        8: "stress",
+        9: "stress",
+        10: "lethal!!!"
+        }
+
+        switcher_pic = {
+        0: "banana.jpg",
+        1: "banana.jpg",
+        2: "banana.jpg",
+        3: "sushi.png",
+        4: "sushi.png",
+        5: "sushi.png",
+        6: "burger.png",
+        7: "burger.png",
+        8: "burger.png",
+        9: "skull.png",
+        10: "skull.png"
+        }
+
+        instance.stressranking.text = switcher.get(value, "Food??")
+
+        pic = switcher_pic.get(value, "banana.jpg")
+
+        instance.grid3.clear_widgets()
+        for x in range(0, int(value)):
+            wimg = Image(source=pic)
+            instance.grid3.add_widget(wimg)
 
     
 ################################################################################################
@@ -332,21 +408,12 @@ class DrinkScreen(Screen):
     """
     # set zero global variables
     # todo: is there a better OOP approach for this??
-    global num_beer
-    num_beer = 0.0
-
-    global num_wine
-    num_wine = 0.0
-
-    global num_shot
-    num_wine = 0.0
 
     def addbeer(instance, value):
         """
 		Adding the beer picture
         """
-        global num_beer
-        num_beer = value
+        setc.num_beer = value
 
         instance.grid1.clear_widgets()
         for x in range(0, int(value)):
@@ -355,10 +422,9 @@ class DrinkScreen(Screen):
 
     def addwine(instance, value):
         """
-        Adding the beer picture
+        Adding the wine picture
         """
-        global num_wine
-        num_wine = value
+        setc.num_wine = value
 
         instance.grid2.clear_widgets()
         for x in range(0, int(value)):
@@ -367,10 +433,9 @@ class DrinkScreen(Screen):
 
     def addshot(instance, value):
         """
-        Adding the beer picture
+        Adding the shot picture
         """
-        global num_shot
-        num_shot = value
+        setc.num_shot = value
 
         instance.grid3.clear_widgets()
         for x in range(0, int(value)):
@@ -429,16 +494,14 @@ class Myapp(App):
         # adding all the sub screens to the screen handler
         # create the screen manager
         self.sm = ScreenManager()
-        
-        
+
         self.sm.add_widget(DrinkScreen(name='drink'))
         self.sm.add_widget(DestroyScreen(name='destroy'))
         self.sm.add_widget(HealScreen(name='heal'))
         self.sm.add_widget(SettingsScreen(name='setting'))
         self.sm.add_widget(ResultScreen(name='result'))
         self.sm.add_widget(GraphScreen(name='graph'))
-        
-
+       
         return self.sm
 
 ################################################################################################
