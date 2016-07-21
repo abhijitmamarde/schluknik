@@ -43,6 +43,7 @@ from kivy.uix.boxlayout import BoxLayout
 from kivy.lang import Builder
 from kivy.uix.screenmanager import ScreenManager, Screen
 from kivy.uix.slider import Slider
+from geartick import *
 
 # for gps access 
 from plyer import gps

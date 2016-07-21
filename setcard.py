@@ -4,11 +4,17 @@
 
             ## todo: personal settings
             # smoker
+            self.smoker = True
             # gender
+            self.boy = True
+            self.girl = False
              
             # age 
+            self.age = 18
             # height
+            self.height = 150 # [cm]
             # weight
+            self.weight = 50 # [kg]
 
             # drink
             self.num_beer = 0.0
