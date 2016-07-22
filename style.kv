@@ -1,6 +1,6 @@
 #:import sys sys
 #:import MapSource mapview.MapSource
-#:import MapMarkerPopup kivy.garden.mapview.MapMarkerPopup
+#:import MapMarkerPopup mapview.MapMarkerPopup
 
 ## inheried classes
 
@@ -369,19 +369,19 @@
 			HeaderLabel:
 				text: 'smoker?'
 			Switch:
-
-		GearTick:
-			id: gear_tick
-			zoom_factor: 2
-			# uncomment the following to use non default values
-			min: 18
-			max: 99
-			#background_image: 'background.png'
-			#overlay_image: 'gear.png'
-			on_release:
-				Animation.stop_all(self)
-		HeaderLabel:
-			text: ('age: {}').format(gear_tick.value)
+		GridLayout:
+            cols: 1
+            rows: 2
+			GearTick:
+				id: gear_tick
+				zoom_factor: 2
+				# uncomment the following to use non default values
+				min: 18
+				max: 99
+				#background_image: 'background.png'
+				#overlay_image: 'gear.png'
+			HeaderLabel:
+				text: ('age: {}').format(gear_tick.value)
 			 
         AnchorLayout:
             anchor_x: 'right'
@@ -391,7 +391,7 @@
                 size_hint: .3, .3
                 Button:
                     text: 'Back'
-                    on_press: root.manager.current = 'drink'
+                    on_press: root.storetojson()
 
 ################################################################################################
 # hangover transient screen

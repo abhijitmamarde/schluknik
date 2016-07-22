@@ -63,6 +63,7 @@ import numpy as numpy
 import csv
 import traceback
 import io
+import json
 
 import math_engine
 from setcard import setcard
@@ -131,10 +132,23 @@ class SettingsScreen(Screen):
     """
     Set personal settings
     """
-    # todo: add boy or girl 
-    # todo: add smoker 
-    # todo: add body size 
-    # todo: add body weight 
+    def storetojson(Screen):
+        """
+        store settings as json
+        """
+        # create dictionary
+        data = {}
+
+        data['smoker'] = setc.smoker
+        data['boy'] = setc.boy
+        data['girl'] = setc.girl
+        data['age']  = setc.age
+        data['height'] = setc.height 
+        data['weight'] = setc.weight
+        with open('data.json', 'w') as fp:
+            json.dump(data, fp)
+        Screen.manager.current = 'drink'
+        return
 
 ################################################################################################
 
@@ -492,14 +506,35 @@ class Myapp(App):
             self.lat = float(19.0)
             self.lon = float(72.48)
 
-        # adding all the sub screens to the screen handler
         # create the screen manager
         self.sm = ScreenManager()
 
-        self.sm.add_widget(DrinkScreen(name='drink'))
+        try: 
+            # check the seetings config
+            with open('data.json', 'r') as fp:
+                data = json.load(fp)
+                self.smoker = data['smoker']  
+                self.boy = data['boy'] 
+                self.girl = data['girl'] 
+                self.age = str(data['age'])  
+                self.height = data['height'] 
+                self.weight = data['weight']
+
+                self.sm.add_widget(DrinkScreen(name='drink'))
+                setting = SettingsScreen(name='setting')
+                setting.ids.gear_tick.value = float(data['age'])
+                self.sm.add_widget(setting)
+
+        except:
+               setting = SettingsScreen(name='setting')
+               self.sm.add_widget(setting)
+               self.sm.add_widget(DrinkScreen(name='drink'))
+                
+
+
+        # adding all the sub screens to the screen handler
         self.sm.add_widget(DestroyScreen(name='destroy'))
         self.sm.add_widget(HealScreen(name='heal'))
-        self.sm.add_widget(SettingsScreen(name='setting'))
         self.sm.add_widget(ResultScreen(name='result'))
         self.sm.add_widget(GraphScreen(name='graph'))
        
