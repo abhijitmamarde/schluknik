@@ -2,6 +2,7 @@
 #:import MapSource mapview.MapSource
 #:import MapMarkerPopup mapview.MapMarkerPopup
 
+
 ## inheried classes
 
 <MyBoxLayout@BoxLayout>:
@@ -37,10 +38,19 @@
             anchor_y: 'top'
             BoxLayout:
                 orientation: 'horizontal'
-                size_hint: .3, .3
+                size_hint: .3, .4
                 Button:
+					background_normal: str(False)
+					on_press: root.manager.current = 'setting'
                     text: 'Settings'
-                    on_press: root.manager.current = 'setting'
+					background_down: 'pics/app/settings.png'
+					Image:
+						source: 'pics/app/settings.png'
+						y: self.parent.y + 5
+						x: self.parent.x + 100
+					    size: 25,25
+						allow_stretch: True
+                    
         GridLayout:
             cols: 2
             rows: 1
@@ -194,9 +204,6 @@
             id: Grid3
             cols: 10
             rows: 1
-
-
-       
 
         # Navigation Bar
         AnchorLayout:

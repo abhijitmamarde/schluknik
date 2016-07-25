@@ -27,7 +27,10 @@ __status__ = "development"
 import kivy
 kivy.require('1.8.7')
 
+
+
 import kivy
+
 from kivy.app import App
 from kivy.uix.button import Button
 from kivy.uix.label import Label
