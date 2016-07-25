@@ -22,6 +22,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Content Include=".designer\config.ini" />
+    <Content Include="buildozer.spec" />
     <Content Include="pics\1_stable.png" />
     <Content Include="pics\1_stable.svg" />
     <Content Include="pics\app_pics\mipmap-hdpi\ic_launcher.png" />

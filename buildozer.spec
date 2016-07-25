@@ -46,10 +46,10 @@ requirements = plyer,kivy,openssl,futures,requests,numpy
 garden_requirements = graph,mapview
 
 # (str) Presplash of the application
-presplash.filename = %(source.dir)s/stable.png
+presplash.filename = %(source.dir)s/pics/app/stable.png
 
 # (str) Icon of the application
-icon.filename = %(source.dir)s/icon.png
+icon.filename = %(source.dir)s/pics/app/icon.png
 
 # (str) Supported orientation (one of landscape, portrait or all)
 orientation = portrait

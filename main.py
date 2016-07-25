@@ -91,6 +91,10 @@ setc = setcard();
 global avoid_double_execution
 avoid_double_execution = True;
 
+# global path to pictures 
+
+picpath = 'pics/app/'
+
 ################################################################################################
 
 ###     Screen Classes     ####
@@ -163,7 +167,7 @@ class HealScreen(Screen):
         setc.num_water = value
         instance.grid.clear_widgets()
         for x in range(0, int(value)):
-            wimg = Image(source='water.png')
+            wimg = Image(source= picpath + 'water.png')
             instance.grid.add_widget(wimg)
 
     def addsleep(instance, value):
@@ -173,7 +177,7 @@ class HealScreen(Screen):
         setc.num_sleep = value
         instance.grid2.clear_widgets()
         for x in range(0, int(value)):
-            wimg = Image(source='sleep.jpg')
+            wimg = Image(source= picpath + 'sleep.jpg')
             instance.grid2.add_widget(wimg)
 
     def addfood(instance, value):
@@ -216,7 +220,7 @@ class HealScreen(Screen):
 
         instance.grid3.clear_widgets()
         for x in range(0, int(value)):
-            wimg = Image(source=pic)
+            wimg = Image(source=picpath + pic)
             instance.grid3.add_widget(wimg)
 
 
@@ -325,7 +329,7 @@ class DestroyScreen(Screen):
 
         instance.grid.clear_widgets()
         for x in range(0, int(value)):
-            wimg = Image(source='cigarette.png')
+            wimg = Image(source=picpath + 'cigarette.png')
             instance.grid.add_widget(wimg)
 
     def addtired(instance, value):
@@ -368,7 +372,7 @@ class DestroyScreen(Screen):
 
         instance.grid2.clear_widgets()
         for x in range(0, int(value)):
-            wimg = Image(source=pic)
+            wimg = Image(source=picpath + pic)
             instance.grid2.add_widget(wimg)
 
     def addstress(instance, value):
@@ -411,7 +415,7 @@ class DestroyScreen(Screen):
 
         instance.grid3.clear_widgets()
         for x in range(0, int(value)):
-            wimg = Image(source=pic)
+            wimg = Image(source=picpath + pic)
             instance.grid3.add_widget(wimg)
 
     
@@ -432,7 +436,7 @@ class DrinkScreen(Screen):
 
         instance.grid1.clear_widgets()
         for x in range(0, int(value)):
-            wimg = Image(source='beerchen.jpg')
+            wimg = Image(source=picpath + 'beerchen.jpg')
             instance.grid1.add_widget(wimg)
 
     def addwine(instance, value):
@@ -443,7 +447,7 @@ class DrinkScreen(Screen):
 
         instance.grid2.clear_widgets()
         for x in range(0, int(value)):
-            wimg = Image(source='wine.png')
+            wimg = Image(source=picpath + 'wine.png')
             instance.grid2.add_widget(wimg)
 
     def addshot(instance, value):
@@ -454,7 +458,7 @@ class DrinkScreen(Screen):
 
         instance.grid3.clear_widgets()
         for x in range(0, int(value)):
-            wimg = Image(source='shot.jpg')
+            wimg = Image(source=picpath + 'shot.jpg')
             instance.grid3.add_widget(wimg)
 
 ################################################################################################
