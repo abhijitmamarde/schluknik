@@ -72,9 +72,8 @@ import math_engine
 from setcard import setcard
 
 # for graph 
-from math import sin
-#from kivy.garden.graph import *
 from graph import *
+from kivy.utils import get_color_from_hex as rgb
 
 ################################################################################################
 
@@ -87,7 +86,6 @@ Builder.load_file('style.kv')
 
 ################################################################################################
 setc = setcard();
-
 
 ###     globals     ####   
 # todo: check what is wrong here
@@ -108,17 +106,10 @@ class GraphScreen(Screen):
     """
     Shows map of all the schlukniks
     """
-    def __init__(self, **kwargs):
-        super(GraphScreen, self).__init__(**kwargs)
+        
 
-        graph = Graph(background_color = [0,0,0,1], xlabel='X', ylabel='Y', x_ticks_minor=5,
-        x_ticks_major=25, y_ticks_major=1,
-        y_grid_label=True, x_grid_label=True, padding=5,
-        x_grid=True, y_grid=True, xmin=-0, xmax=100, ymin=-1, ymax=1)
-        plot = MeshLinePlot(color=[0, 0, 1, 1])
-        plot.points = [(x, sin(x / 10.)) for x in range(0, 101)]
-        graph.add_plot(plot)
-        self.grid.add_widget(graph)
+
+
 
 ################################################################################################
 
@@ -132,6 +123,47 @@ class ResultScreen(Screen):
     """
     Show overall hangover result
     """
+
+    def prepareGraphs(Screen):
+        """
+        prepare graphical evaluation
+        """
+        # layout of the plot
+        graph_theme = {
+                'label_options': {
+                'color': rgb('444444'),  # color of tick labels and titles
+                'bold': True},
+                'background_color': rgb('f8f8f2'),  # back ground color of canvas
+                'tick_color': rgb('808080'),  # ticks and grid
+                'border_color': rgb('808080')} # border drawn around each graph
+
+        # prepare the hangover forecast
+        graphscreen = GraphScreen(name='graph')
+        app.sm.add_widget(graphscreen)
+        graph = Graph( xlabel='time', ylabel='hangover', x_ticks_minor=5,
+        x_ticks_major=1, y_ticks_major=2,
+        y_grid_label=True, x_grid_label=True, padding=1,
+        x_grid=True, y_grid=True, xmin=-0, xmax=12, ymin=0, ymax=10, **graph_theme)
+        plot = MeshLinePlot(color=[0, 0, 1, 1])
+
+        ## add points to plot
+        plot.points = [(x, Screen.hang_forecast(x)) for x in range(0, 12)]
+        graph.add_plot(plot)
+        graphscreen.grid.add_widget(graph)
+        Screen.manager.current = 'graph'
+
+    def hang_forecast(instance, x):
+        """
+        math part
+        """
+        n = setc.num_beer
+        m = -1
+        y = m*x + n
+        # no negative hangover
+        if y < 0:
+            y = 0
+        return y
+
        
 ################################################################################################
 
@@ -543,7 +575,7 @@ class Myapp(App):
         self.sm.add_widget(DestroyScreen(name='destroy'))
         self.sm.add_widget(HealScreen(name='heal'))
         self.sm.add_widget(ResultScreen(name='result'))
-        self.sm.add_widget(GraphScreen(name='graph'))
+        #self.sm.add_widget(GraphScreen(name='graph'))
        
         return self.sm
 
