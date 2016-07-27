@@ -67,8 +67,6 @@ import csv
 import traceback
 import io
 import json
-
-import math_engine
 from setcard import setcard
 
 # for graph 
@@ -156,9 +154,11 @@ class ResultScreen(Screen):
         """
         math part
         """
-        n = setc.num_beer
-        m = -1
-        y = m*x + n
+        # fall time defenitly depends on smoker or not
+        # also the n must depend on the number of cigarettes
+        m = -0.7
+        y = m*x + setc.num_beer
+
         # no negative hangover
         if y < 0:
             y = 0
