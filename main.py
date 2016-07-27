@@ -94,6 +94,8 @@ avoid_double_execution = True;
 
 picpath = 'pics/app/'
 
+
+
 ################################################################################################
 
 ###     Screen Classes     ####
@@ -121,6 +123,9 @@ class ResultScreen(Screen):
     """
     Show overall hangover result
     """
+    # global alki score
+    global alki_mean
+    alki_mean = numpy.array([0])
 
     def prepareGraphs(Screen):
         """
@@ -148,6 +153,10 @@ class ResultScreen(Screen):
         plot.points = [(x, Screen.hang_forecast(x)) for x in range(0, 12)]
         graph.add_plot(plot)
         graphscreen.grid.add_widget(graph)
+        
+        # calculate alki score from numpy array
+        global alki_score
+        alki_score = str(round(numpy.mean(alki_mean, axis=0),2))
         Screen.manager.current = 'graph'
 
     def hang_forecast(instance, x):
@@ -162,6 +171,14 @@ class ResultScreen(Screen):
         # no negative hangover
         if y < 0:
             y = 0
+
+        # average calculator 
+        try:
+            global alki_mean
+            alki_mean = numpy.append(alki_mean,y)
+        except:
+                tb = traceback.format_exc()
+                print (tb)
         return y
 
        
@@ -506,7 +523,6 @@ class Myapp(App):
     """
     Main class
     """
-
     global_location = StringProperty()
     # some random intitial location
     lat = 19.0

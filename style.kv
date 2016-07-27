@@ -411,9 +411,12 @@
         cols: 1
         rows: 2
         # Navigation Bar
+		HeaderLabel:
+			id: alki_score
+			text: 'test'
         AnchorLayout:
-            anchor_x: 'center'
-            anchor_y: 'bottom'
+            anchor_x: 'left'
+            anchor_y: 'top'
             GridLayout:
                 cols: 2
                 rows: 1
@@ -424,3 +427,4 @@
                 Button:
                     text: 'exit'
                     on_press: app.get_running_app().stop()
+		
