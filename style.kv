@@ -324,7 +324,7 @@
             rows: 2
             Button:
                 text: 'Result'
-                on_press: root.prepareGraphs()
+                on_press: root.manager.current = 'graph'
             Button:
                 text: 'Map'
                 on_press: root.manager.current = 'map'
@@ -406,6 +406,19 @@
 
 <GraphScreen>:
     grid: Grid
+	AnchorLayout:
+		anchor_x: 'left'
+		anchor_y: 'top'
+		GridLayout:
+			cols: 2
+			rows: 1
+			size_hint: .2, .2
+			Button:
+				text: '<'
+				on_press: root.manager.current = 'result'
+			Button:
+				text: 'exit'
+				on_press: app.get_running_app().stop()
     GridLayout:
         id:Grid
         cols: 1
@@ -413,18 +426,5 @@
         # Navigation Bar
 		HeaderLabel:
 			id: alki_score
-			text: 'test'
-        AnchorLayout:
-            anchor_x: 'left'
-            anchor_y: 'top'
-            GridLayout:
-                cols: 2
-                rows: 1
-                size_hint: .2, .2
-                Button:
-                    text: '<'
-                    on_press: root.manager.current = 'result'
-                Button:
-                    text: 'exit'
-                    on_press: app.get_running_app().stop()
+
 		

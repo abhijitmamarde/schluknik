@@ -106,11 +106,7 @@ class GraphScreen(Screen):
     """
     Shows map of all the schlukniks
     """
-        
-
-
-
-
+  
 ################################################################################################
 
 class MapScreen(Screen):
@@ -123,41 +119,45 @@ class ResultScreen(Screen):
     """
     Show overall hangover result
     """
-    # global alki score
-    global alki_mean
-    alki_mean = numpy.array([0])
+    ## global alki score
+    #global alki_mean
+    #alki_mean = numpy.array([0])
 
-    def prepareGraphs(Screen):
-        """
-        prepare graphical evaluation
-        """
-        # layout of the plot
-        graph_theme = {
-                'label_options': {
-                'color': rgb('444444'),  # color of tick labels and titles
-                'bold': True},
-                'background_color': rgb('f8f8f2'),  # back ground color of canvas
-                'tick_color': rgb('808080'),  # ticks and grid
-                'border_color': rgb('808080')} # border drawn around each graph
+    #def prepareGraphs(Screen):
+    #    """
+    #    prepare graphical evaluation
+    #    """
+    #    # layout of the plot
+    #    graph_theme = {
+    #            'label_options': {
+    #            'color': rgb('444444'),  # color of tick labels and titles
+    #            'bold': True},
+    #            'background_color': rgb('f8f8f2'),  # back ground color of canvas
+    #            'tick_color': rgb('808080'),  # ticks and grid
+    #            'border_color': rgb('808080')} # border drawn around each graph
 
-        # prepare the hangover forecast
-        graphscreen = GraphScreen(name='graph')
-        app.sm.add_widget(graphscreen)
-        graph = Graph( xlabel='time', ylabel='hangover', x_ticks_minor=5,
-        x_ticks_major=1, y_ticks_major=2,
-        y_grid_label=True, x_grid_label=True, padding=1,
-        x_grid=True, y_grid=True, xmin=-0, xmax=12, ymin=0, ymax=10, **graph_theme)
-        plot = MeshLinePlot(color=[0, 0, 1, 1])
+    #    # prepare the hangover forecast
+    #    graphscreen = GraphScreen(name='graph')
+    #    app.sm.add_widget(graphscreen)
+    #    graph = Graph( xlabel='time', ylabel='hangover', x_ticks_minor=5,
+    #    x_ticks_major=1, y_ticks_major=2,
+    #    y_grid_label=True, x_grid_label=True, padding=1,
+    #    x_grid=True, y_grid=True, xmin=-0, xmax=12, ymin=0, ymax=10, **graph_theme)
+    #    plot = MeshLinePlot(color=[0, 0, 1, 1])
 
-        ## add points to plot
-        plot.points = [(x, Screen.hang_forecast(x)) for x in range(0, 12)]
-        graph.add_plot(plot)
-        graphscreen.grid.add_widget(graph)
+    #    ## add points to plot
+    #    plot.points = [(x, Screen.hang_forecast(x)) for x in range(0, 12)]
+    #    graph.add_plot(plot)
+    #    graphscreen.grid.add_widget(graph)
         
-        # calculate alki score from numpy array
-        global alki_score
-        alki_score = str(round(numpy.mean(alki_mean, axis=0),2))
-        Screen.manager.current = 'graph'
+    #    # calculate alki score from numpy array
+    #    global alki_score
+    #    alki_score = str(round(numpy.mean(alki_mean, axis=0),2))
+    #    setc.hangover_level = alki_score
+    #    graphscreen.ids.alki_score.text = 'hangover level: ' + str(alki_score)
+
+    #    # change to graph screen        
+    #    Screen.manager.current = 'graph'
 
     def hang_forecast(instance, x):
         """
@@ -212,6 +212,65 @@ class HealScreen(Screen):
     """
     positive counter measures
     """
+    # global alki score
+    global alki_mean
+    alki_mean = numpy.array([0])
+
+    def prepareGraphs(Screen,event):
+        """
+        prepare graphical evaluation
+        """
+        # layout of the plot
+        graph_theme = {
+                'label_options': {
+                'color': rgb('444444'),  # color of tick labels and titles
+                'bold': True},
+                'background_color': rgb('f8f8f2'),  # back ground color of canvas
+                'tick_color': rgb('808080'),  # ticks and grid
+                'border_color': rgb('808080')} # border drawn around each graph
+
+        # prepare the hangover forecast
+        graphscreen = GraphScreen(name='graph')
+        app.sm.add_widget(graphscreen)
+        graph = Graph( xlabel='time', ylabel='hangover', x_ticks_minor=5,
+        x_ticks_major=1, y_ticks_major=2,
+        y_grid_label=True, x_grid_label=True, padding=1,
+        x_grid=True, y_grid=True, xmin=-0, xmax=12, ymin=0, ymax=10, **graph_theme)
+        plot = SmoothLinePlot(color=[0, 0, 1, 1])
+
+        ## add points to plot
+        plot.points = [(x, Screen.hang_forecast(x)) for x in range(0, 12)]
+        graph.add_plot(plot)
+        graphscreen.grid.add_widget(graph)
+        
+        # calculate alki score from numpy array
+        global alki_score
+        alki_score = str(round(numpy.mean(alki_mean, axis=0),2))
+        setc.hangover_level = alki_score
+        graphscreen.ids.alki_score.text = 'hangover level: ' + str(alki_score)
+
+    def hang_forecast(instance, x):
+        """
+        math part
+        """
+        # fall time defenitly depends on smoker or not
+        # also the n must depend on the number of cigarettes
+        m = -0.7
+        y = m*x + setc.num_beer
+
+        # no negative hangover
+        if y < 0:
+            y = 0
+
+        # average calculator 
+        try:
+            global alki_mean
+            alki_mean = numpy.append(alki_mean,y)
+        except:
+                tb = traceback.format_exc()
+                print (tb)
+        return y
+
     def addwater(instance, value):
         """
         adding the glass of water count
@@ -275,7 +334,6 @@ class HealScreen(Screen):
             wimg = Image(source=picpath + pic)
             instance.grid3.add_widget(wimg)
 
-
     def ftp_transfer(Screen):
             """
 		    accessing the global performance data
@@ -289,10 +347,12 @@ class HealScreen(Screen):
                 # portfolio pandas datastructure
                 # todo: extend
                 # table format
-                # |timestamp | latitude | longitude | beer | wine | shots | cigarettes | tired | stressed | water | sleep | food | 
+                # 13 pcs
+                # |timestamp | latitude | longitude | beer | wine | shots | cigarettes | tired | stressed | water | sleep | food | hang_level
                 try:
+                    Screen.prepareGraphs(Screen)
                     # global table to be stored on server
-                    new_table = numpy.array([timestamp, app.lat, app.lon, setc.num_beer, setc.num_wine, setc.num_shot, setc.num_cig, setc.num_tired, setc.num_stress, setc.num_water, setc.num_sleep, setc.num_food], dtype='string')
+                    new_table = numpy.array([timestamp, app.lat, app.lon, setc.num_beer, setc.num_wine, setc.num_shot, setc.num_cig, setc.num_tired, setc.num_stress, setc.num_water, setc.num_sleep, setc.num_food, setc.hangover_level], dtype='string')
                 except:
                     tb = traceback.format_exc()
                     print (tb)
@@ -319,9 +379,9 @@ class HealScreen(Screen):
                 try:
                     # append old table to new table
                     results = numpy.append(new_table,old_table)
-                    results = results.reshape((len(results)/12,12))
+                    results = results.reshape((len(results)/13,13))
                     # store data as a local csv file 
-                    numpy.savetxt(filename, results, delimiter=';', fmt=('%s', '%s', '%s', '%s','%s','%s', '%s', '%s', '%s','%s', '%s','%s'))
+                    numpy.savetxt(filename, results, delimiter=';', fmt=('%s', '%s', '%s', '%s','%s','%s', '%s', '%s', '%s','%s', '%s','%s','%s'))
                     
                 except:
                     tb = traceback.format_exc()
@@ -342,8 +402,7 @@ class HealScreen(Screen):
                 # finished ftp connection now fill result computer
                 lat = numpy.array(results)[:,1].tolist()
                 lon = numpy.array(results)[:,2].tolist()
-
-                info_box_beer = numpy.array(results)[:,3].tolist()
+                info_box_beer = numpy.array(results)[:,12].tolist()
                 
                 # create result screen widget
                 map = MapScreen(name='map')
@@ -354,7 +413,7 @@ class HealScreen(Screen):
                     for item in lat:
                         # change this to pop up marker
                         a = Bubble(size= (400, 400))
-                        a.add_widget(Label(text=str(info_box_beer[i])))
+                        a.add_widget(Label(text='hangover level ' + str(info_box_beer[i])))
                         m = MapMarkerPopup(lon=float(lon[i]), lat=float(lat[i]), placeholder= a)
                         map.ids.map.add_marker(m)
                         i = i + 1
@@ -560,6 +619,7 @@ class Myapp(App):
             self.gps_status = 'GPS is not implemented for your platform'
             self.lat = float(19.0)
             self.lon = float(72.48)
+            self.alki_score = ""
 
         # create the screen manager
         self.sm = ScreenManager()

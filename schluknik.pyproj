@@ -32,16 +32,12 @@
     <Content Include="pics\app_pics\mipmap-xxxhdpi\ic_launcher.png" />
     <Content Include="pics\draft.svg" />
     <Content Include="pics\logo.png" />
-    <Content Include="stable.png" />
     <Content Include="style.kv" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include=".buildozer\android\app\main.py" />
     <Compile Include=".buildozer\android\app\sitecustomize.py" />
     <Compile Include="main.py" />
-    <Compile Include="math_engine.py">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="setcard.py">
       <SubType>Code</SubType>
     </Compile>

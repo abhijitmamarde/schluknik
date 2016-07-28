@@ -30,3 +30,6 @@
             self.num_water = 0.0
             self.num_sleep = 0.0
             self.num_food = 0.0
+
+            # hangover level 
+            hangover_level = 0.0
