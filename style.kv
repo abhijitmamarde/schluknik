@@ -421,20 +421,6 @@
 				text: 'exit'
 				on_press: app.get_running_app().stop()
 
-	# Hangover slider
-    GridLayout:
-        cols: 2
-        rows: 1
-        Slider:
-            id: slider_id
-            min: 0
-            step: 1
-            max: 10
-            on_value: root.addhang(slider_id.value)
-        Label:
-            text: str(round(slider_id.value, 0)) + ' x hangover compensation'
-            color: 0,0,0,1
-
     # graphs
     GridLayout:
         id:Grid

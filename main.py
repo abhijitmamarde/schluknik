@@ -106,62 +106,6 @@ class GraphScreen(Screen):
     """
     Shows map of all the schlukniks
     """
-    def addhang(instance, value):
-
-        instance.prepareGraphs(value)
-        return
-
-    def prepareGraphs(Screen, value):
-        """
-        prepare graphical evaluation
-        """
-        # layout of the plot
-        graph_theme = {
-            'label_options': {
-                'color': rgb('444444'),  # color of tick labels and titles
-                'bold': True},
-            'background_color': rgb('f8f8f2'),  # back ground color of canvas
-            'tick_color': rgb('808080'),  # ticks and grid
-            'border_color': rgb('808080')}  # border drawn around each graph
-
-        # prepare the hangover forecast
-        Screen.graph.remove_plot(plot)
-        Screen.graph._clear_buffer()
-
-        plot = SmoothLinePlot(color=[0, 0, 1, 1])
-        ## add points to plot
-        plot.points = [(x, Screen.hang_forecast(x)) for x in range(0, 12)]
-        Screen.graph.add_plot(plot)
-
-        #Screen.grid.add_widget(graph)
-
-        # calculate alki score from numpy array
-        global alki_score
-        alki_score = str(round(numpy.mean(alki_mean, axis=0), 2))
-        setc.hangover_level = alki_score
-        Screen.ids.alki_score.text = 'hangover level: ' + str(alki_score)
-
-    def hang_forecast(instance, x):
-        """
-        math part
-        """
-        # fall time defenitly depends on smoker or not
-        # also the n must depend on the number of cigarettes
-        m = -0.7
-        y = m * x + setc.num_beer
-
-        # no negative hangover
-        if y < 0:
-            y = 0
-
-        # average calculator
-        try:
-            global alki_mean
-            alki_mean = numpy.append(alki_mean, y)
-        except:
-            tb = traceback.format_exc()
-            print (tb)
-        return y
 ################################################################################################
 
 class MapScreen(Screen):
