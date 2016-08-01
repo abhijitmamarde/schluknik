@@ -142,6 +142,33 @@ class SettingsScreen(Screen):
         Screen.manager.current = 'drink'
         return
 
+    # setter functions for settings variables
+    def age(instance, value):
+            setc.age = value
+
+    def high(instance, value):
+            setc.height = value
+
+    def weight(instance, value):
+            setc.weight = value
+
+    def girl(instance, value):
+            if(value == 'down'):
+                setc.girl = True
+                setc.boy = False
+
+    def boy(instance, value):
+            if(value == 'down'):
+                setc.boy = True
+                setc.girl = False
+
+    def smoker(instance, value):
+        if(value == 'down'):
+            setc.smoker = True
+        else:
+            setc.smoker = False
+
+
 ################################################################################################
 
 class HealScreen(Screen):
@@ -565,13 +592,10 @@ class Myapp(App):
                self.sm.add_widget(setting)
                self.sm.add_widget(DrinkScreen(name='drink'))
                 
-
-
         # adding all the sub screens to the screen handler
         self.sm.add_widget(DestroyScreen(name='destroy'))
         self.sm.add_widget(HealScreen(name='heal'))
         self.sm.add_widget(ResultScreen(name='result'))
-        #self.sm.add_widget(GraphScreen(name='graph'))
 
         # loading in data from server before starting the app
         # filename of global performance data

@@ -366,19 +366,25 @@
 			text: 'Please tell us something about you!'
 
 		ToggleButton:
+			id: boy
 			text: 'Male'
 			group: 'sex'
+			on_press: root.boy(boy.state)
 
 		ToggleButton:
+			id: girl
 			text: 'Female'
 			group: 'sex'
+			on_press: root.girl(girl.state)
 
 		GridLayout:
             cols: 2
             rows: 1
 			HeaderLabel:
 				text: 'smoker?'
-			Switch:
+			ToggleButton:
+				id: smoker
+				on_press: root.smoker(smoker.state)
 		GridLayout:
             cols: 3
             rows: 2
@@ -391,6 +397,7 @@
 				value: 18
 				#background_image: 'background.png'
 				#overlay_image: 'gear.png'
+				on_value: root.age(age.value)
 			GearTick:
 				id: weight
 				zoom_factor: 2
@@ -401,7 +408,7 @@
 				#background_image: 'background.png'
 				#overlay_image: 'gear.png'
 			GearTick:
-				id: height
+				id: high
 				zoom_factor: 2
 				# uncomment the following to use non default values
 				min: 18
@@ -414,7 +421,7 @@
 			HeaderLabel:
 				text: ('weight: {} kg').format(int(weight.value))
 			HeaderLabel:
-				text: ('height: {} cm').format(int(height.value))
+				text: ('height: {} cm').format(int(high.value))
 			 
         AnchorLayout:
             anchor_x: 'right'
