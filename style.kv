@@ -362,6 +362,9 @@
 <SettingsScreen>:
     MyBoxLayout:
 
+		HeaderLabel:
+			text: 'Please tell us something about you!'
+
 		ToggleButton:
 			text: 'Male'
 			group: 'sex'
@@ -377,18 +380,41 @@
 				text: 'smoker?'
 			Switch:
 		GridLayout:
-            cols: 1
+            cols: 3
             rows: 2
 			GearTick:
-				id: gear_tick
+				id: age
 				zoom_factor: 2
 				# uncomment the following to use non default values
 				min: 18
 				max: 99
+				value: 18
+				#background_image: 'background.png'
+				#overlay_image: 'gear.png'
+			GearTick:
+				id: weight
+				zoom_factor: 2
+				# uncomment the following to use non default values
+				min: 40
+				max: 100
+				value: 70
+				#background_image: 'background.png'
+				#overlay_image: 'gear.png'
+			GearTick:
+				id: height
+				zoom_factor: 2
+				# uncomment the following to use non default values
+				min: 18
+				max: 199
+				value: 185
 				#background_image: 'background.png'
 				#overlay_image: 'gear.png'
 			HeaderLabel:
-				text: ('age: {}').format(gear_tick.value)
+				text: ('age: {} years').format(int(age.value))
+			HeaderLabel:
+				text: ('weight: {} kg').format(int(weight.value))
+			HeaderLabel:
+				text: ('height: {} cm').format(int(height.value))
 			 
         AnchorLayout:
             anchor_x: 'right'

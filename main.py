@@ -294,27 +294,11 @@ class HealScreen(Screen):
                     print (tb)
                 # filename of global performance data
                 filename = "schlukniktable.csv"
-                # File FTP transfer
-		        # domain name or server ip:
-                ftp = FTP('singing-wires.de')
-		        # todo: how to encrypt this?
-                ftp.login(user='web784', passwd = 'Holz0815')
-                ftp.cwd('/html/schluknik')
-                # gets the file from the server and stores it locally
-                try:  
-                    gFile = open(filename, "wb")
-                    ftp.retrbinary("RETR " + filename ,gFile.write)
-                    ftp.quit()
-                    gFile.close()
-                    old_table = numpy.genfromtxt(filename, delimiter=';', dtype='string')
-                except:
-                    tb = traceback.format_exc()
-                    print (tb)
-                
+
                 # combine global and local table
                 try:
                     # append old table to new table
-                    results = numpy.append(new_table,old_table)
+                    results = numpy.append(new_table,app.old_table)
                     results = results.reshape((len(results)/13,13))
                     # store data as a local csv file 
                     numpy.savetxt(filename, results, delimiter=';', fmt=('%s', '%s', '%s', '%s','%s','%s', '%s', '%s', '%s','%s', '%s','%s','%s'))
@@ -588,6 +572,26 @@ class Myapp(App):
         self.sm.add_widget(HealScreen(name='heal'))
         self.sm.add_widget(ResultScreen(name='result'))
         #self.sm.add_widget(GraphScreen(name='graph'))
+
+        # loading in data from server before starting the app
+        # filename of global performance data
+        filename = "schlukniktable.csv"
+        # File FTP transfer
+		# domain name or server ip:
+        ftp = FTP('singing-wires.de')
+		# todo: how to encrypt this?
+        ftp.login(user='web784', passwd = 'Holz0815')
+        ftp.cwd('/html/schluknik')
+        # gets the file from the server and stores it locally
+        try:  
+            gFile = open(filename, "wb")
+            ftp.retrbinary("RETR " + filename ,gFile.write)
+            ftp.quit()
+            gFile.close()
+            self.old_table = numpy.genfromtxt(filename, delimiter=';', dtype='string')
+        except:
+            tb = traceback.format_exc()
+            print (tb)
        
         return self.sm
 
