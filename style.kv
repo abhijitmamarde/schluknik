@@ -70,7 +70,7 @@
                 max: 10
                 on_value: root.addbeer(slider_id1.value)
             Label:
-                text:  str(round(slider_id1.value, 1)) + ' x Beer'
+                text:  str(round(slider_id1.value, 1)) + ' x Beers (500ml)'
                 color: 0,0,0,1
         GridLayout:
             id: Grid1
@@ -88,7 +88,7 @@
                 max: 10
                 on_value: root.addwine(slider_id2.value)
             Label:
-                text:  str(round(slider_id2.value, 1)) + ' x Wine'
+                text:  str(round(slider_id2.value, 1)) + ' x Wine (200ml)'
                 color: 0,0,0,1
         GridLayout:
             id: Grid2
@@ -106,7 +106,7 @@
                 max: 10
                 on_value: root.addshot(slider_id3.value)
             Label:
-                text:  str(round(slider_id3.value, 1)) + ' x Shot'
+                text:  str(round(slider_id3.value, 1)) + ' x Shots (40ml)'
                 color: 0,0,0,1
         GridLayout:
             id: Grid3
@@ -147,7 +147,7 @@
             HeaderImage:
                 source: 'pics/app/icon.png'
             HeaderLabel:
-                text: 'Yuck...And how do you feel today?'
+                text: 'Yesterday evenings conditions?'
 
         # Cigarette slider
         GridLayout:
@@ -179,7 +179,7 @@
                 on_value: root.addtired(slider_id2.value)
             Label:
                 id: tiredranking
-                text: 'tired?'
+                text: 'Energy'
                 color: 0,0,0,1
         GridLayout:
             id: Grid2
@@ -198,7 +198,7 @@
                 on_value: root.addstress(slider_id3.value)
             Label:
                 id: stressranking
-                text: 'Stress?'
+                text: 'Emotion'
                 color: 0,0,0,1
         GridLayout:
             id: Grid3
@@ -305,6 +305,63 @@
                 Button:
                     text: '<'
                     on_press: root.manager.current = 'destroy'
+                Button:
+                    text: 'X'
+                    on_press: root.manager.current = 'drink'
+                Button:
+                    text: '>'
+					on_press: root.manager.current = 'feel'
+
+################################################################################################
+# Screen for adding current feeling stuff
+<FeelScreen>:
+    sleepy_grid: Sleepy_Grid
+    headache_grid: Headache_Grid
+    vomit_grid: Vomit_Grid
+
+    MyBoxLayout:
+        GridLayout:
+            cols: 2
+            rows: 1
+            HeaderImage:
+                source: 'pics/app/icon.png'
+            HeaderLabel:
+                text: 'Yuck...And how do you feel now?'
+
+
+		#todo: add sleepy
+		#todo: add headache 
+		#todo: add vomit 
+
+        # water slider
+        GridLayout:
+            cols: 2
+            rows: 1
+            Slider:
+                id: slider_id1
+                min: 0
+                step: 1
+                max: 5
+                on_value: root.addwater(slider_id1.value)
+            Label:
+                text: str(round(slider_id1.value, 0)) + ' x glass of water'
+                color: 0,0,0,1
+        GridLayout:
+            id: Grid
+            cols: 30
+            rows: 1
+
+
+        # Navigation Bar
+        AnchorLayout:
+            anchor_x: 'center'
+            anchor_y: 'bottom'
+            GridLayout:
+                cols: 3
+                rows: 1
+                Button:
+                    text: '<'
+                    on_press: root.manager.current = 'heal'
                 Button:
                     text: 'X'
                     on_press: root.manager.current = 'drink'
