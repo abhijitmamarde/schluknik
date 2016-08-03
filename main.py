@@ -48,6 +48,8 @@ from kivy.uix.screenmanager import ScreenManager, Screen
 from kivy.uix.slider import Slider
 from geartick import *
 
+import os.path
+
 # for gps access 
 from plyer import gps
 from kivy.clock import Clock, mainthread
@@ -820,7 +822,14 @@ class Myapp(App):
         except:
             tb = traceback.format_exc()
             print (tb)
-       
+
+        ## loading local history before start up
+        # file name for the history file
+        fname_history = 'history.csv' 
+        # check if it exists
+        if(os.path.isfile(fname_history)):
+             self.history = numpy.genfromtxt(fname_history, delimiter=';', dtype='string') 
+        # create the screen manager instance
         return self.sm
 
 ################################################################################################
