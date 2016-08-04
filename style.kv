@@ -7,8 +7,8 @@
 
 <MyBoxLayout@BoxLayout>:
     orientation: 'vertical'
-    padding: 60,60,30,30
-    spacing: 5
+    padding: 50,50,0,0
+    spacing: 0
 
 # header text
 # todo: make text bubble
@@ -16,49 +16,40 @@
     color: 0,0,0,1
     text_size: root.width, None
     size: self.texture_size
-    font_size: 35
+    font_size: 30
     font_name: 'Roboto'
     halign: 'left'
     valign: 'middle'
 
 # header image
 <HeaderImage@Image>
-    scale: 6.0
+	source: 'pics/app/icon.png'
+	allow_stretch: True
+    keep_ratio: True
+    size_hint_y: 50
+    size_hint_x: None
+
+
+
 
 ################################################################################################
 
 # Screen for adding the drinks record
+
 <DrinkScreen>:
     grid1: Grid1
     grid2: Grid2
     grid3: Grid3
-    MyBoxLayout:
-        AnchorLayout:
-            anchor_x: 'right'
-            anchor_y: 'top'
-            BoxLayout:
-                orientation: 'horizontal'
-                size_hint: .3, .4
-                Button:
-					background_normal: str(False)
-					on_press: root.manager.current = 'setting'
-                    text: 'Settings'
-					background_down: 'pics/app/settings.png'
-					Image:
-						source: 'pics/app/settings.png'
-						y: self.parent.y + 5
-						x: self.parent.x + 100
-					    size: 25,25
-						allow_stretch: True
-                    
+
+    MyBoxLayout:	
         GridLayout:
             cols: 2
             rows: 1
             HeaderImage:
-                source: 'pics/app/icon.png'
-            HeaderLabel:
-                text: 'Lets face it! You have been a schluknik again!'
 
+            HeaderLabel:
+                text: '- Lets face it! You have been a schluknik again!'
+		
         # Beer
         GridLayout:
             cols: 2
@@ -76,8 +67,9 @@
             id: Grid1
             cols: 10
             rows: 1
-
-        # Wine
+		
+        
+		# Wine
         GridLayout:
             cols: 2
             rows: 1
@@ -121,18 +113,41 @@
                 cols: 3
                 rows: 1
                 Button:
-                    text: 'exit'
+					background_normal: str(False)
                     on_press: app.get_running_app().stop()
+					background_down: 'pics/app/exit.png'
+					Image:
+						source: 'pics/app/exit.png'
+						y: self.parent.y + 10
+						x: self.parent.x + 100
+						size: 50,50
+						allow_stretch: False
                 Button:
-                    text: 'X'
-                    on_press: root.manager.current = 'drink'
+					background_normal: str(False)
+					on_press: root.manager.current = 'setting'
+					background_down: 'pics/app/settings.png'
+					Image:
+						source: 'pics/app/settings.png'
+						y: self.parent.y + 10
+						x: self.parent.x + 100
+						size: 50,50
+						allow_stretch: False
                 Button:
-                    text: '>'
+                    background_normal: str(False)
                     on_press: root.manager.current = 'destroy'
+					background_down: 'pics/app/next.png'
+					Image:
+						source: 'pics/app/next.png'
+						y: self.parent.y + 10
+						x: self.parent.x + 100
+						size: 50,50
+						allow_stretch: False
+                    
 
 ################################################################################################
 # Screen for adding the non-drinkable record
 # todo: add food and stress
+
 <DestroyScreen>:
     grid: Grid
 	grid2: Grid2
@@ -147,7 +162,7 @@
             HeaderImage:
                 source: 'pics/app/icon.png'
             HeaderLabel:
-                text: 'Yesterday evenings conditions?'
+                text: '- Yesterday evenings conditions?'
 
         # Cigarette slider
         GridLayout:
@@ -205,7 +220,7 @@
             cols: 10
             rows: 1
 
-        # Navigation Bar
+                # Navigation Bar
         AnchorLayout:
             anchor_x: 'center'
             anchor_y: 'bottom'
@@ -213,17 +228,39 @@
                 cols: 3
                 rows: 1
                 Button:
-                    text: '<'
-                    on_press: root.manager.current = 'drink'
+					background_normal: str(False)
+                    on_press: app.get_running_app().stop()
+					background_down: 'pics/app/exit.png'
+					Image:
+						source: 'pics/app/exit.png'
+						y: self.parent.y + 10
+						x: self.parent.x + 100
+						size: 50,50
+						allow_stretch: False
                 Button:
-                    text: 'X'
-                    on_press: root.manager.current = 'drink'
+					background_normal: str(False)
+					on_press: root.manager.current = 'setting'
+					background_down: 'pics/app/settings.png'
+					Image:
+						source: 'pics/app/settings.png'
+						y: self.parent.y + 10
+						x: self.parent.x + 100
+						size: 50,50
+						allow_stretch: False
                 Button:
-                    text: '>'
+                    background_normal: str(False)
                     on_press: root.manager.current = 'heal'
+					background_down: 'pics/app/next.png'
+					Image:
+						source: 'pics/app/next.png'
+						y: self.parent.y + 10
+						x: self.parent.x + 100
+						size: 50,50
+						allow_stretch: False
 
 ################################################################################################
 # Screen for adding the feeling better stuff
+
 <HealScreen>:
     grid: Grid
     grid2: Grid2
@@ -237,7 +274,7 @@
             HeaderImage:
                 source: 'pics/app/icon.png'
             HeaderLabel:
-                text: 'Tried some countermeasures?'
+                text: '- Tried some countermeasures?'
 
         # water slider
         GridLayout:
@@ -295,7 +332,7 @@
             cols: 10
             rows: 1
 
-        # Navigation Bar
+                # Navigation Bar
         AnchorLayout:
             anchor_x: 'center'
             anchor_y: 'bottom'
@@ -303,17 +340,39 @@
                 cols: 3
                 rows: 1
                 Button:
-                    text: '<'
-                    on_press: root.manager.current = 'destroy'
+					background_normal: str(False)
+                    on_press: app.get_running_app().stop()
+					background_down: 'pics/app/exit.png'
+					Image:
+						source: 'pics/app/exit.png'
+						y: self.parent.y + 10
+						x: self.parent.x + 100
+						size: 50,50
+						allow_stretch: False
                 Button:
-                    text: 'X'
-                    on_press: root.manager.current = 'drink'
+					background_normal: str(False)
+					on_press: root.manager.current = 'setting'
+					background_down: 'pics/app/settings.png'
+					Image:
+						source: 'pics/app/settings.png'
+						y: self.parent.y + 10
+						x: self.parent.x + 100
+						size: 50,50
+						allow_stretch: False
                 Button:
-                    text: '>'
-					on_press: root.manager.current = 'feel'
+                    background_normal: str(False)
+                    on_press: root.manager.current = 'feel'
+					background_down: 'pics/app/next.png'
+					Image:
+						source: 'pics/app/next.png'
+						y: self.parent.y + 10
+						x: self.parent.x + 100
+						size: 50,50
+						allow_stretch: False
 
 ################################################################################################
 # Screen for adding current feeling stuff
+
 <FeelScreen>:
     sleepy_grid: Sleepy_Grid
     headache_grid: Headache_Grid
@@ -330,7 +389,7 @@
             HeaderImage:
                 source: 'pics/app/icon.png'
             HeaderLabel:
-                text: 'Yuck...And how do you feel now?'
+                text: '- Yuck...And how do you feel now?'
 
         # sleep slider
         GridLayout:
@@ -397,14 +456,35 @@
                 cols: 3
                 rows: 1
                 Button:
-                    text: '<'
-                    on_press: root.manager.current = 'heal'
+					background_normal: str(False)
+                    on_press: app.get_running_app().stop()
+					background_down: 'pics/app/exit.png'
+					Image:
+						source: 'pics/app/exit.png'
+						y: self.parent.y + 10
+						x: self.parent.x + 100
+						size: 50,50
+						allow_stretch: False
                 Button:
-                    text: 'X'
-                    on_press: root.manager.current = 'drink'
+					background_normal: str(False)
+					on_press: root.manager.current = 'setting'
+					background_down: 'pics/app/settings.png'
+					Image:
+						source: 'pics/app/settings.png'
+						y: self.parent.y + 10
+						x: self.parent.x + 100
+						size: 50,50
+						allow_stretch: False
                 Button:
-                    text: '>'
+                    background_normal: str(False)
                     on_press: root.ftp_transfer()
+					background_down: 'pics/app/next.png'
+					Image:
+						source: 'pics/app/next.png'
+						y: self.parent.y + 10
+						x: self.parent.x + 100
+						size: 50,50
+						allow_stretch: False
 
 ################################################################################################
 # Navigation page for going to the presented results
@@ -412,17 +492,44 @@
 <ResultScreen>:
     grid: Grid
     MyBoxLayout:
-        GridLayout:
-            id: Grid
+		GridLayout:
             cols: 1
             rows: 2
-            Button:
-                text: 'Result'
-                on_press: root.manager.current = 'graph'
-            Button:
-                text: 'Map'
-                on_press: root.manager.current = 'map'
-
+			GridLayout:
+				cols: 2
+				rows: 1
+				HeaderImage:
+					source: 'pics/app/icon.png'
+				HeaderLabel:
+					text: '- Lets check the results!'
+			GridLayout:
+				id: Grid
+				cols: 1
+				rows: 2
+				Button:
+					background_normal: str(False)
+					on_press: root.manager.current = 'graph'
+					background_down: 'pics/app/sine.png'
+					Image:
+						source: 'pics/app/sine.png'
+						y: self.parent.y 
+						x: self.parent.x 
+						size: 200,200
+						allow_stretch: False
+                
+				Button:
+					background_normal: str(False)
+					on_press: root.manager.current = 'map'
+					background_down: 'pics/app/map.png'
+					Image:
+						source: 'pics/app/map.png'
+						y: self.parent.y 
+						x: self.parent.x 
+						size: 200,200
+						allow_stretch: False
+            
+		
+                
 ################################################################################################
 # map of schlukniks
 
