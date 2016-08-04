@@ -196,16 +196,29 @@ class FeelScreen(Screen):
         # prepare the hangover forecast
         graphscreen = GraphScreen(name='graph')
         app.sm.add_widget(graphscreen)
-        graph = Graph( xlabel='time', ylabel='hangover', x_ticks_minor=5,
+        graph = Graph( xlabel='time', ylabel='today', x_ticks_minor=5,
         x_ticks_major=1, y_ticks_major=2,
         y_grid_label=True, x_grid_label=True, padding=1,
         x_grid=True, y_grid=True, xmin=-0, xmax=12, ymin=0, ymax=10, **graph_theme)
-        plot = SmoothLinePlot(color=[0, 0, 1, 1])
 
+        plot = SmoothLinePlot(color=[0, 0, 1, 1])
         ## add points to plot
         plot.points = [(x, Screen.hang_forecast(x)) for x in range(0, 12)]
         graph.add_plot(plot)
+        
+
+        # prepare graph for personal history
+        history = Graph( xlabel='time', ylabel='history', x_ticks_minor=5,
+        x_ticks_major=1, y_ticks_major=2,
+        y_grid_label=True, x_grid_label=True, padding=1,
+        x_grid=True, y_grid=True, xmin=-0, xmax=12, ymin=0, ymax=10, **graph_theme)
+
+        plot = SmoothLinePlot(color=[0, 1, 1, 1])
+        ## add points to plot
+        plot.points = [(x, Screen.hang_forecast(x)) for x in range(0, 12)]
+        history.add_plot(plot)
         graphscreen.grid.add_widget(graph)
+        graphscreen.grid.add_widget(history)
         
         # calculate alki score from numpy array
         global alki_score

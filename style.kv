@@ -29,9 +29,6 @@
     size_hint_y: 50
     size_hint_x: None
 
-
-
-
 ################################################################################################
 
 # Screen for adding the drinks record
@@ -67,8 +64,7 @@
             id: Grid1
             cols: 10
             rows: 1
-		
-        
+					        
 		# Wine
         GridLayout:
             cols: 2
@@ -640,28 +636,29 @@
 
 <GraphScreen>:
     grid: Grid
+	MyBoxLayout:
 
-    AnchorLayout:
-		anchor_x: 'left'
-		anchor_y: 'top'
+		AnchorLayout:
+			anchor_x: 'left'
+			anchor_y: 'top'
+			GridLayout:
+				cols: 2
+				rows: 1
+				size_hint: .2, .2
+				Button:
+					text: '<'
+					on_press: root.manager.current = 'result'
+				Button:
+					text: 'exit'
+					on_press: app.get_running_app().stop()
+
+		# graphs
 		GridLayout:
-			cols: 2
-			rows: 1
-			size_hint: .2, .2
-			Button:
-				text: '<'
-				on_press: root.manager.current = 'result'
-			Button:
-				text: 'exit'
-				on_press: app.get_running_app().stop()
-
-    # graphs
-    GridLayout:
-        id:Grid
-        cols: 1
-        rows: 2
-        # Navigation Bar
-		HeaderLabel:
-			id: alki_score
+			id:Grid
+			cols: 1
+			rows: 3
+			# Navigation Bar
+			HeaderLabel:
+				id: alki_score
 
 		
