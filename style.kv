@@ -315,9 +315,13 @@
 ################################################################################################
 # Screen for adding current feeling stuff
 <FeelScreen>:
-    #sleepy_grid: Sleepy_Grid
-    #headache_grid: Headache_Grid
-    #vomit_grid: Vomit_Grid
+    sleepy_grid: Sleepy_Grid
+    headache_grid: Headache_Grid
+    vomit_grid: Vomit_Grid
+
+	sleepranking: sleepranking
+	headacheranking: headacheranking
+	vomitranking: vomitranking
 
     MyBoxLayout:
         GridLayout:
@@ -328,29 +332,62 @@
             HeaderLabel:
                 text: 'Yuck...And how do you feel now?'
 
-
-		#todo: add sleepy
-		#todo: add headache 
-		#todo: add vomit 
-
-        # water slider
+        # sleep slider
         GridLayout:
             cols: 2
             rows: 1
             Slider:
-                id: slider_id1
+                id: sleep
                 min: 0
                 step: 1
-                max: 5
-                on_value: root.addwater(slider_id1.value)
+                max: 10
+                on_value: root.addsleepy(sleep.value)
             Label:
-                text: str(round(slider_id1.value, 0)) + ' x glass of water'
-                color: 0,0,0,1
+				id: sleepranking
+				text: 'sleepy?'
+				color: 0,0,0,1
         GridLayout:
-            #id: Grid
+            id: Sleepy_Grid
+            cols: 30
+            rows: 1
+		
+		# headache slider
+        GridLayout:
+            cols: 2
+            rows: 1
+            Slider:
+                id: headache
+                min: 0
+                step: 1
+                max: 10
+                on_value: root.addheadache(headache.value)
+            Label:
+				id: headacheranking
+				text: 'headache?'
+				color: 0,0,0,1
+        GridLayout:
+            id: Headache_Grid
             cols: 30
             rows: 1
 
+		# vomit slider
+        GridLayout:
+            cols: 2
+            rows: 1
+            Slider:
+                id: vomit
+                min: 0
+                step: 1
+                max: 10
+                on_value: root.addvomit(vomit.value)
+            Label:
+				id: vomitranking
+				text: 'vomit?'
+				color: 0,0,0,1
+        GridLayout:
+            id: Vomit_Grid
+            cols: 30
+            rows: 1
 
         # Navigation Bar
         AnchorLayout:

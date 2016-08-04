@@ -235,27 +235,8 @@ class FeelScreen(Screen):
                 print (tb)
         return y
 
-    def addwater(instance, value):
-        """
-        adding the glass of water count
-        """
-        setc.num_water = value
-        instance.grid.clear_widgets()
-        for x in range(0, int(value)):
-            wimg = Image(source= picpath + 'water.png')
-            instance.grid.add_widget(wimg)
 
-    def addsleep(instance, value):
-        """
-        adding the sleep read
-        """
-        setc.num_sleep = value
-        instance.grid2.clear_widgets()
-        for x in range(0, int(value)):
-            wimg = Image(source= picpath + 'sleep.jpg')
-            instance.grid2.add_widget(wimg)
-
-    def addfood(instance, value):
+    def addsleepy(instance, value):
         """
 		adding what was eaten before
         """
@@ -289,14 +270,102 @@ class FeelScreen(Screen):
         10: "skull.png"
         }
 
-        instance.foodranking.text = switcher.get(value, "Food??")
+        instance.sleepranking.text = switcher.get(value, "Food??")
 
         pic = switcher_pic.get(value, "banana.jpg")
 
-        instance.grid3.clear_widgets()
+        instance.sleepy_grid.clear_widgets()
         for x in range(0, int(value)):
             wimg = Image(source=picpath + pic)
-            instance.grid3.add_widget(wimg)
+            instance.sleepy_grid.add_widget(wimg)
+
+
+    def addheadache(instance, value):
+        """
+		adding what was eaten before
+        """
+        setc.num_food = value
+
+        switcher = {
+        0: "nothing",
+        1: "almost nothing",
+        2: "snack",
+        3: "small lunch",
+        4: "lunch",
+        5: "medium",
+        6: "more than usually",
+        7: "proper drinking preparation : )",
+        8: "too much : ( !",
+        9: "way too much!!",
+        10: "lethal!!!"
+        }
+
+        switcher_pic = {
+        0: "banana.jpg",
+        1: "banana.jpg",
+        2: "banana.jpg",
+        3: "sushi.png",
+        4: "sushi.png",
+        5: "sushi.png",
+        6: "burger.png",
+        7: "burger.png",
+        8: "burger.png",
+        9: "skull.png",
+        10: "skull.png"
+        }
+
+        instance.headacheranking.text = switcher.get(value, "Food??")
+
+        pic = switcher_pic.get(value, "banana.jpg")
+
+        instance.headache_grid.clear_widgets()
+        for x in range(0, int(value)):
+            wimg = Image(source=picpath + pic)
+            instance.headache_grid.add_widget(wimg)
+
+
+    def addvomit(instance, value):
+        """
+		adding what was eaten before
+        """
+        setc.num_food = value
+
+        switcher = {
+        0: "nothing",
+        1: "almost nothing",
+        2: "snack",
+        3: "small lunch",
+        4: "lunch",
+        5: "medium",
+        6: "more than usually",
+        7: "proper drinking preparation : )",
+        8: "too much : ( !",
+        9: "way too much!!",
+        10: "lethal!!!"
+        }
+
+        switcher_pic = {
+        0: "banana.jpg",
+        1: "banana.jpg",
+        2: "banana.jpg",
+        3: "sushi.png",
+        4: "sushi.png",
+        5: "sushi.png",
+        6: "burger.png",
+        7: "burger.png",
+        8: "burger.png",
+        9: "skull.png",
+        10: "skull.png"
+        }
+
+        instance.vomitranking.text = switcher.get(value, "Food??")
+
+        pic = switcher_pic.get(value, "banana.jpg")
+
+        instance.vomit_grid.clear_widgets()
+        for x in range(0, int(value)):
+            wimg = Image(source=picpath + pic)
+            instance.vomit_grid.add_widget(wimg)
 
     def ftp_transfer(Screen):
             """
@@ -326,7 +395,7 @@ class FeelScreen(Screen):
                 # combine global and local table
                 try:
                     # append old table to new table
-                    results = numpy.append(new_table,app.old_table)
+                    results = numpy.append(new_table,app.global_history)
                     results = results.reshape((len(results)/13,13))
                     # store data as a local csv file 
                     numpy.savetxt(filename, results, delimiter=';', fmt=('%s', '%s', '%s', '%s','%s','%s', '%s', '%s', '%s','%s', '%s','%s','%s'))
@@ -818,7 +887,7 @@ class Myapp(App):
             ftp.retrbinary("RETR " + filename ,gFile.write)
             ftp.quit()
             gFile.close()
-            self.old_table = numpy.genfromtxt(filename, delimiter=';', dtype='string')
+            self.global_history = numpy.genfromtxt(filename, delimiter=';', dtype='string')
         except:
             tb = traceback.format_exc()
             print (tb)
@@ -828,7 +897,7 @@ class Myapp(App):
         fname_history = 'history.csv' 
         # check if it exists
         if(os.path.isfile(fname_history)):
-             self.history = numpy.genfromtxt(fname_history, delimiter=';', dtype='string') 
+             self.personal_history = numpy.genfromtxt(fname_history, delimiter=';', dtype='string') 
         # create the screen manager instance
         return self.sm
 
