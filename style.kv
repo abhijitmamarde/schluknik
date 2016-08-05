@@ -16,7 +16,7 @@
     color: 0,0,0,1
     text_size: root.width, None
     size: self.texture_size
-    font_size: 30
+    font_size: 25
     font_name: 'Roboto'
     halign: 'left'
     valign: 'middle'
@@ -490,6 +490,8 @@
 		orientation: 'vertical'
 		padding: 200,0,200,50
 		GridLayout:
+			halign: 'center'
+			valign: 'middle'
 			cols: 2
 			rows: 1
 			HeaderImage:
@@ -499,6 +501,8 @@
 
 
 		Button:
+			halign: 'center'
+			valign: 'middle'
 			background_normal: str(False)
 			on_press: root.manager.current = 'graph'
 			background_down: 'pics/app/sine.png'
@@ -510,6 +514,8 @@
 				allow_stretch: False
                 
 		Button:
+			halign: 'center'
+			valign: 'middle'
 			background_normal: str(False)
 			on_press: root.manager.current = 'map'
 			background_down: 'pics/app/map.png'
@@ -655,9 +661,10 @@
 		size_hint: 1, 1
 		id:Grid
 		cols: 1
-		rows: 3
+		rows: 5
 		# Navigation Bar
 		HeaderLabel:
+			size_hint: .1, .1
 			id: alki_score
 
 		

@@ -196,6 +196,10 @@ class FeelScreen(Screen):
         # prepare the hangover forecast
         graphscreen = GraphScreen(name='graph')
         app.sm.add_widget(graphscreen)
+
+        # add graph title
+        graphscreen.grid.add_widget(Label(text = 'hangover forecast', color = [0,0,0,1]))
+
         graph = Graph( xlabel='time', ylabel='today', x_ticks_minor=5,
         x_ticks_major=1, y_ticks_major=2,
         y_grid_label=True, x_grid_label=True, padding=1,
@@ -206,6 +210,8 @@ class FeelScreen(Screen):
         plot.points = [(x, Screen.hang_forecast(x)) for x in range(0, 12)]
         graph.add_plot(plot)
         
+         # add graph title
+        graphscreen.grid.add_widget(Label(text = 'hangover history', color = [0,0,0,1]))
 
         # prepare graph for personal history
         history = Graph( xlabel='time', ylabel='history', x_ticks_minor=5,
