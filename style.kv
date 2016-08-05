@@ -486,43 +486,39 @@
 # Navigation page for going to the presented results
 
 <ResultScreen>:
-    grid: Grid
-    MyBoxLayout:
+	BoxLayout:
+		orientation: 'vertical'
+		padding: 200,0,200,50
 		GridLayout:
-            cols: 1
-            rows: 2
-			GridLayout:
-				cols: 2
-				rows: 1
-				HeaderImage:
-					source: 'pics/app/icon.png'
-				HeaderLabel:
-					text: '- Lets check the results!'
-			GridLayout:
-				id: Grid
-				cols: 1
-				rows: 2
-				Button:
-					background_normal: str(False)
-					on_press: root.manager.current = 'graph'
-					background_down: 'pics/app/sine.png'
-					Image:
-						source: 'pics/app/sine.png'
-						y: self.parent.y 
-						x: self.parent.x 
-						size: 200,200
-						allow_stretch: False
+			cols: 2
+			rows: 1
+			HeaderImage:
+				source: 'pics/app/icon.png'
+			HeaderLabel:
+				text: '- Lets check the results!'
+
+
+		Button:
+			background_normal: str(False)
+			on_press: root.manager.current = 'graph'
+			background_down: 'pics/app/sine.png'
+			Image:
+				source: 'pics/app/sine.png'
+				y: self.parent.y 
+				x: self.parent.x 
+				size: 200,200
+				allow_stretch: False
                 
-				Button:
-					background_normal: str(False)
-					on_press: root.manager.current = 'map'
-					background_down: 'pics/app/map.png'
-					Image:
-						source: 'pics/app/map.png'
-						y: self.parent.y 
-						x: self.parent.x 
-						size: 200,200
-						allow_stretch: False
+		Button:
+			background_normal: str(False)
+			on_press: root.manager.current = 'map'
+			background_down: 'pics/app/map.png'
+			Image:
+				source: 'pics/app/map.png'
+				y: self.parent.y 
+				x: self.parent.x 
+				size: 200,200
+				allow_stretch: False
             
 		
                 
@@ -636,29 +632,32 @@
 
 <GraphScreen>:
     grid: Grid
-	MyBoxLayout:
 
-		AnchorLayout:
-			anchor_x: 'left'
-			anchor_y: 'top'
-			GridLayout:
-				cols: 2
-				rows: 1
-				size_hint: .2, .2
-				Button:
-					text: '<'
-					on_press: root.manager.current = 'result'
-				Button:
-					text: 'exit'
-					on_press: app.get_running_app().stop()
 
-		# graphs
+	AnchorLayout:
+		anchor_x: 'left'
+		anchor_y: 'top'
 		GridLayout:
-			id:Grid
-			cols: 1
-			rows: 3
-			# Navigation Bar
-			HeaderLabel:
-				id: alki_score
+			cols: 2
+			rows: 1
+			size_hint: .1, .1
+			Button:
+				text: '<'
+				on_press: root.manager.current = 'result'
+			Button:
+				text: 'exit'
+				on_press: app.get_running_app().stop()
+
+	# graphs
+	GridLayout:
+		padding: 50,0,50,50
+		spacing: 10
+		size_hint: 1, 1
+		id:Grid
+		cols: 1
+		rows: 3
+		# Navigation Bar
+		HeaderLabel:
+			id: alki_score
 
 		
