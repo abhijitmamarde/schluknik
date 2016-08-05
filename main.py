@@ -209,6 +209,7 @@ class FeelScreen(Screen):
         ## add points to plot
         plot.points = [(x, Screen.hang_forecast(x)) for x in range(0, 12)]
         graph.add_plot(plot)
+        graphscreen.grid.add_widget(graph)
         
          # add graph title
         graphscreen.grid.add_widget(Label(text = 'hangover history', color = [0,0,0,1]))
@@ -223,7 +224,7 @@ class FeelScreen(Screen):
         ## add points to plot
         plot.points = [(x, Screen.hang_forecast(x)) for x in range(0, 12)]
         history.add_plot(plot)
-        graphscreen.grid.add_widget(graph)
+ 
         graphscreen.grid.add_widget(history)
         
         # calculate alki score from numpy array
