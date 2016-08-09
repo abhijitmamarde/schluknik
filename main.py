@@ -591,82 +591,10 @@ class HealScreen(Screen):
             wimg = Image(source=picpath + pic)
             instance.grid3.add_widget(wimg)
 
-    def ftp_transfer(Screen):
-            """
-		    accessing the global performance data
-            """
-            # todo: what is going wrong here?
-            global avoid_double_execution
-            if(bool(avoid_double_execution)):
-                # get timestamp
-                timestamp =  datetime.datetime.now()
 
-                # portfolio pandas datastructure
-                # todo: extend
-                # table format
-                # 13 pcs
-                # |timestamp | latitude | longitude | beer | wine | shots | cigarettes | tired | stressed | water | sleep | food | hang_level
-                try:
-                    Screen.prepareGraphs(Screen)
-                    # global table to be stored on server
-                    new_table = numpy.array([timestamp, app.lat, app.lon, setc.num_beer, setc.num_wine, setc.num_shot, setc.num_cig, setc.num_tired, setc.num_stress, setc.num_water, setc.num_sleep, setc.num_food, setc.hangover_level], dtype='string')
-                except:
-                    tb = traceback.format_exc()
-                    print (tb)
-                # filename of global performance data
-                filename = "schlukniktable.csv"
+        # todo: add computation for the hangover forecast
 
-                # combine global and local table
-                try:
-                    # append old table to new table
-                    results = numpy.append(new_table,app.old_table)
-                    results = results.reshape((len(results)/13,13))
-                    # store data as a local csv file 
-                    numpy.savetxt(filename, results, delimiter=';', fmt=('%s', '%s', '%s', '%s','%s','%s', '%s', '%s', '%s','%s', '%s','%s','%s'))
-                    
-                except:
-                    tb = traceback.format_exc()
-                    print (tb)
-                # up load to ftp
-                # File FTP transfer
-		        # domain name or server ip:
-                ftp = FTP('singing-wires.de')
-		        # how to encrypt this?
-                ftp.login(user='web784', passwd = 'Holz0815')
-                ftp.cwd('/html/schluknik')
-
-		        # todo: store as .csv file
-                with open(filename,"a+") as f:		
-                    ftp.storlines("STOR " + filename, open(filename, 'r'))
-                    ftp.quit()
-
-                # finished ftp connection now fill result computer
-                lat = numpy.array(results)[:,1].tolist()
-                lon = numpy.array(results)[:,2].tolist()
-                info_box_beer = numpy.array(results)[:,12].tolist()
-                
-                # create result screen widget
-                map = MapScreen(name='map')
-                try:
-                    # todo: can this be more pythonic?BeerScreen
-                    i = 0
-                    # set marker for every entry in table
-                    for item in lat:
-                        # change this to pop up marker
-                        a = Bubble(size= (400, 400))
-                        a.add_widget(Label(text='hangover level ' + str(info_box_beer[i])))
-                        m = MapMarkerPopup(lon=float(lon[i]), lat=float(lat[i]), placeholder= a)
-                        map.ids.map.add_marker(m)
-                        i = i + 1
-                    app.sm.add_widget(map)
-                except:
-                    tb = traceback.format_exc()
-                    print (tb)
-                # switch to the result screen 
-                Screen.manager.current = 'result'
-                avoid_double_execution = False
-                return   
-
+    
 ################################################################################################
 
 class DestroyScreen(Screen):
