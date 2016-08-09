@@ -391,16 +391,16 @@
         GridLayout:
             cols: 2
             rows: 1
+			Label:
+				id: sleepranking
+				text: 'sleepy?'
+				color: 0,0,0,1
             Slider:
                 id: sleep
                 min: 0
                 step: 1
                 max: 10
-                on_value: root.addsleepy(sleep.value)
-            Label:
-				id: sleepranking
-				text: 'sleepy?'
-				color: 0,0,0,1
+                on_value: root.addsleepy(sleep.value)  
         GridLayout:
             id: Sleepy_Grid
             cols: 30
@@ -410,16 +410,16 @@
         GridLayout:
             cols: 2
             rows: 1
+			Label:
+				id: headacheranking
+				text: 'headache?'
+				color: 0,0,0,1
             Slider:
                 id: headache
                 min: 0
                 step: 1
                 max: 10
                 on_value: root.addheadache(headache.value)
-            Label:
-				id: headacheranking
-				text: 'headache?'
-				color: 0,0,0,1
         GridLayout:
             id: Headache_Grid
             cols: 30
@@ -429,16 +429,16 @@
         GridLayout:
             cols: 2
             rows: 1
+			Label:
+				id: vomitranking
+				text: 'vomit?'
+				color: 0,0,0,1
             Slider:
                 id: vomit
                 min: 0
                 step: 1
                 max: 10
                 on_value: root.addvomit(vomit.value)
-            Label:
-				id: vomitranking
-				text: 'vomit?'
-				color: 0,0,0,1
         GridLayout:
             id: Vomit_Grid
             cols: 30
