@@ -591,8 +591,22 @@ class HealScreen(Screen):
             wimg = Image(source=picpath + pic)
             instance.grid3.add_widget(wimg)
 
-
+        
         # todo: add computation for the hangover forecast
+        def PrepareHangoverForecast(Screen,event):
+            return
+
+        # todo compute sleepy
+        def CompSleepy(Screen,event):
+            return
+
+        # todo compute weary 
+        def CompWeary(Screen,event):
+            return
+
+        # todo compute vomit
+        def CompVomit(Screen,event):
+            return
 
     
 ################################################################################################
