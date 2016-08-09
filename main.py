@@ -592,23 +592,38 @@ class HealScreen(Screen):
             instance.grid3.add_widget(wimg)
 
         
-        # todo: add computation for the hangover forecast
-        def PrepareHangoverForecast(Screen,event):
-            return
+    # todo: add computation for the hangover forecast
+    def CompHangoverForecast(Screen):
 
-        # todo compute sleepy
-        def CompSleepy(Screen,event):
-            return
+        # switch to feel screen to get correction
+        Screen.manager.current = 'feel'
+        # compute sleepy avg
+        sleepy_avg = Screen.CompSleepy(Screen)
+        # compute weary avg
 
-        # todo compute weary 
-        def CompWeary(Screen,event):
-            return
+        # compute vomit avg
 
-        # todo compute vomit
-        def CompVomit(Screen,event):
-            return
+        return
 
-    
+    # todo compute sleepy
+    def CompSleepy(Screen, event):
+
+        # number of sleep hours 
+        max_sleep_time = 10
+
+        # calculate avg
+        sleepy_avg = max_sleep_time - setc.num_sleep
+
+        return sleepy_avg
+
+    # todo compute weary 
+    def CompWeary(Screen,event):
+        return
+
+    # todo compute vomit
+    def CompVomit(Screen,event):
+        return
+
 ################################################################################################
 
 class DestroyScreen(Screen):
