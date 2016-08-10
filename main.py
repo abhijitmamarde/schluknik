@@ -603,6 +603,8 @@ class HealScreen(Screen):
         feelscreen.ids.sleep.value = sleepy_avg
 
         # compute weary avg
+        weary_avg = Screen.CompWeary(Screen, sleepy_avg)
+        feelscreen.ids.headache.value = weary_avg
 
         # compute vomit avg
 
@@ -629,8 +631,15 @@ class HealScreen(Screen):
         return sleepy_avg
 
     # todo compute weary 
-    def CompWeary(Screen,event):
-        return
+    def CompWeary(Screen,event, sleepy_avg):
+        # weary is caused by sleepyness + alk; can only be improved by food 
+        weary_avg = 0.3*setc.num_beer + 0.2*setc.num_cig +  0.4*setc.num_shot + 0.2*sleepy_avg - 0.5*setc.num_food - 0.5*setc.num_tired
+        # value shouldnt be higher than 10 and not lower than 0
+        if(weary_avg > 10):
+            weary_avg = 10
+        if(weary_avg < 0):
+            weary_avg = 0
+        return weary_avg
 
     # todo compute vomit
     def CompVomit(Screen,event):
