@@ -596,23 +596,35 @@ class HealScreen(Screen):
     def CompHangoverForecast(Screen):
 
         # switch to feel screen to get correction
-        Screen.manager.current = 'feel'
-        # compute sleepy avg
+        feelscreen = FeelScreen(name='feel')
+       
+        # compute sleepy avg and add to slider
         sleepy_avg = Screen.CompSleepy(Screen)
+        feelscreen.ids.sleep.value = sleepy_avg
+
         # compute weary avg
 
         # compute vomit avg
 
-        return
+        # switch over to feelscreen
+        app.sm.add_widget(feelscreen)
+        Screen.manager.current = 'feel'
+
 
     # todo compute sleepy
     def CompSleepy(Screen, event):
-
+        '''
+        The rating for sleepyness depends on the hours slept and on the energy one had before going out
+        '''
         # number of sleep hours 
-        max_sleep_time = 10
-
-        # calculate avg
-        sleepy_avg = max_sleep_time - setc.num_sleep
+        max_sleep_time = 12
+        # calculate avg with weighting factors
+        sleepy_avg = 0.8*(max_sleep_time - setc.num_sleep) - 0.35*(setc.num_tired) - 0.1*(setc.num_stress)
+        # value shouldnt be higher than 10 and not lower than 0
+        if(sleepy_avg > 10):
+            sleepy_avg = 10
+        if(sleepy_avg < 0):
+            sleepy_avg = 0
 
         return sleepy_avg
 
@@ -846,7 +858,6 @@ class Myapp(App):
         # adding all the sub screens to the screen handler
         self.sm.add_widget(DestroyScreen(name='destroy'))
         self.sm.add_widget(HealScreen(name='heal'))
-        self.sm.add_widget(FeelScreen(name='feel'))
         self.sm.add_widget(ResultScreen(name='result'))
 
         # loading in data from server before starting the app
