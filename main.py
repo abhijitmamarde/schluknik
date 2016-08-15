@@ -257,137 +257,25 @@ class FeelScreen(Screen):
                 print (tb)
         return y
 
+    def UpdatePizzaSleep(instance, value):
+        '''
+        update the pizza chart 
+        '''
+        instance.ids.pizza.clear_widgets()
+         # todo get dynamic sizing for the chart to work
 
-    def addsleepy(instance, value):
-        """
-		adding what was eaten before
-        """
-        setc.num_food = value
-
-        switcher = {
-        0: "nothing",
-        1: "almost nothing",
-        2: "snack",
-        3: "small lunch",
-        4: "lunch",
-        5: "medium",
-        6: "more than usually",
-        7: "proper drinking preparation : )",
-        8: "too much : ( !",
-        9: "way too much!!",
-        10: "lethal!!!"
-        }
-
-        switcher_pic = {
-        0: "banana.jpg",
-        1: "banana.jpg",
-        2: "banana.jpg",
-        3: "sushi.png",
-        4: "sushi.png",
-        5: "sushi.png",
-        6: "burger.png",
-        7: "burger.png",
-        8: "burger.png",
-        9: "skull.png",
-        10: "skull.png"
-        }
-
-        instance.sleepranking.text = switcher.get(value, "Food??")
-
-        pic = switcher_pic.get(value, "banana.jpg")
-
-        instance.sleepy_grid.clear_widgets()
-        for x in range(0, int(value)):
-            wimg = Image(source=picpath + pic)
-            instance.sleepy_grid.add_widget(wimg)
-
-
-    def addheadache(instance, value):
-        """
-		adding what was eaten before
-        """
-        setc.num_food = value
-
-        switcher = {
-        0: "nothing",
-        1: "almost nothing",
-        2: "snack",
-        3: "small lunch",
-        4: "lunch",
-        5: "medium",
-        6: "more than usually",
-        7: "proper drinking preparation : )",
-        8: "too much : ( !",
-        9: "way too much!!",
-        10: "lethal!!!"
-        }
-
-        switcher_pic = {
-        0: "banana.jpg",
-        1: "banana.jpg",
-        2: "banana.jpg",
-        3: "sushi.png",
-        4: "sushi.png",
-        5: "sushi.png",
-        6: "burger.png",
-        7: "burger.png",
-        8: "burger.png",
-        9: "skull.png",
-        10: "skull.png"
-        }
-
-        instance.headacheranking.text = switcher.get(value, "Food??")
-
-        pic = switcher_pic.get(value, "banana.jpg")
-
-        instance.headache_grid.clear_widgets()
-        for x in range(0, int(value)):
-            wimg = Image(source=picpath + pic)
-            instance.headache_grid.add_widget(wimg)
-
-
-    def addvomit(instance, value):
-        """
-		adding what was eaten before
-        """
-        setc.num_food = value
-
-        switcher = {
-        0: "nothing",
-        1: "almost nothing",
-        2: "snack",
-        3: "small lunch",
-        4: "lunch",
-        5: "medium",
-        6: "more than usually",
-        7: "proper drinking preparation : )",
-        8: "too much : ( !",
-        9: "way too much!!",
-        10: "lethal!!!"
-        }
-
-        switcher_pic = {
-        0: "banana.jpg",
-        1: "banana.jpg",
-        2: "banana.jpg",
-        3: "sushi.png",
-        4: "sushi.png",
-        5: "sushi.png",
-        6: "burger.png",
-        7: "burger.png",
-        8: "burger.png",
-        9: "skull.png",
-        10: "skull.png"
-        }
-
-        instance.vomitranking.text = switcher.get(value, "Food??")
-
-        pic = switcher_pic.get(value, "banana.jpg")
-
-        instance.vomit_grid.clear_widgets()
-        for x in range(0, int(value)):
-            wimg = Image(source=picpath + pic)
-            instance.vomit_grid.add_widget(wimg)
+        G = value + setc.headache_avg_pie + setc.vomit_avg_pie
+        pie = Pizza(serie=[
+            ["Sleepy",  value, 'a9a9a9'],
+            ["Headache",  setc.headache_avg_pie, '708090'],
+            ["Vomit",  setc.vomit_avg_pie, '808080']],
+            chart_size=G,
+            legend_color='808080',
+            legend_value_rayon=100,
+            legend_title_rayon=160,
+            chart_border=2)
+        instance.ids.pizza.add_widget(pie)
+        return
 
     def ftp_transfer(Screen):
             """
@@ -613,15 +501,15 @@ class HealScreen(Screen):
 
         # prepare pie chart
         G = sleepy_avg + weary_avg + vomit_avg
-        sleepy_avg_pie = (100/G) * sleepy_avg
-        headache_avg_pie = (100/G) * weary_avg
-        vomit_avg_pie = (100/G) * vomit_avg
+        setc.sleepy_avg_pie = (100/G) * sleepy_avg
+        setc.headache_avg_pie = (100/G) * weary_avg
+        setc.vomit_avg_pie = (100/G) * vomit_avg
 
         # todo get dynamic sizing for the chart to work
         pie = Pizza(serie=[
-            ["Sleepy", sleepy_avg_pie, 'a9a9a9'],
-            ["Headache", headache_avg_pie, '708090'],
-            ["Vomit", vomit_avg_pie, '808080']],
+            ["Sleepy",  setc.sleepy_avg_pie, 'a9a9a9'],
+            ["Headache",  setc.headache_avg_pie, '708090'],
+            ["Vomit",  setc.vomit_avg_pie, '808080']],
             chart_size=G*20,
             legend_color='808080',
             legend_value_rayon=100,
