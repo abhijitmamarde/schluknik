@@ -32,7 +32,7 @@
 <Sliderlein@Slider>:
     canvas:
         Color:
-            rgb: 0,1,0
+            rgb: 0.1,0,1
         BorderImage:
             border: (0, 18, 0, 18) if self.orientation == 'horizontal' else (18,0, 18, 0)
             pos: (self.x + self.padding, self.center_y - sp(18)) if self.orientation == 'horizontal' else (self.center_x - 18, self.y + self.padding)
@@ -46,7 +46,21 @@
 <Sliderlein2@Slider>:
     canvas:
         Color:
-            rgb: 1,1,0
+            rgb: 1,0,0
+        BorderImage:
+            border: (0, 18, 0, 18) if self.orientation == 'horizontal' else (18,0, 18, 0)
+            pos: (self.x + self.padding, self.center_y - sp(18)) if self.orientation == 'horizontal' else (self.center_x - 18, self.y + self.padding)
+            size: (max(self.value_pos[0] - self.padding * 2 - sp(16), 0), sp(36)) if self.orientation == 'horizontal' else (sp(36), max(self.value_pos[1] - self.padding * 2 - sp(16), 0))
+            source: 'atlas://data/images/defaulttheme/slider{}_background{}'.format(self.orientation[0], '_disabled' if self.disabled else '')
+        Rectangle:
+            pos: (self.value_pos[0] - 19, self.center_y - 17) if self.orientation == 'horizontal' else (self.center_x - 16, self.value_pos[1] - 16)
+            size: (55, 55)
+            source: 'slider_cursor.png'
+
+<Sliderlein3@Slider>:
+    canvas:
+        Color:
+            rgb: 0,1,0
         BorderImage:
             border: (0, 18, 0, 18) if self.orientation == 'horizontal' else (18,0, 18, 0)
             pos: (self.x + self.padding, self.center_y - sp(18)) if self.orientation == 'horizontal' else (self.center_x - 18, self.y + self.padding)
@@ -398,14 +412,10 @@
 # Screen for adding current feeling stuff
 
 <FeelScreen>:
-    sleepy_grid: Sleepy_Grid
-    headache_grid: Headache_Grid
-    vomit_grid: Vomit_Grid
-
 	sleepranking: sleepranking
 	headacheranking: headacheranking
 	vomitranking: vomitranking
-
+	pizza: pizza
     MyBoxLayout:
         GridLayout:
             cols: 2
@@ -421,18 +431,13 @@
             rows: 1
 			Label:
 				id: sleepranking
-				text: 'sleepy?'
+				text: 'Sleepy'
 				color: 0,0,0,1
             Sliderlein:
                 id: sleep
                 min: 0
                 step: 1
                 max: 10
-                on_value: root.addsleepy(sleep.value)  
-        GridLayout:
-            id: Sleepy_Grid
-            cols: 30
-            rows: 1
 		
 		# headache slider
         GridLayout:
@@ -440,18 +445,13 @@
             rows: 1
 			Label:
 				id: headacheranking
-				text: 'headache?'
+				text: 'Headache'
 				color: 0,0,0,1
             Sliderlein2:
                 id: headache
                 min: 0
                 step: 1
                 max: 10
-                on_value: root.addheadache(headache.value)
-        GridLayout:
-            id: Headache_Grid
-            cols: 30
-            rows: 1
 
 		# vomit slider
         GridLayout:
@@ -459,18 +459,17 @@
             rows: 1
 			Label:
 				id: vomitranking
-				text: 'vomit?'
+				text: 'Sick'
 				color: 0,0,0,1
-            Slider:
+            Sliderlein3:
                 id: vomit
                 min: 0
                 step: 1
                 max: 10
-                on_value: root.addvomit(vomit.value)
-        GridLayout:
-            id: Vomit_Grid
-            cols: 30
-            rows: 1
+		GridLayout:
+			cols: 1
+			rows: 1
+			id: pizza
 
         # Navigation Bar
         AnchorLayout:

@@ -75,6 +75,8 @@ from setcard import setcard
 from graph import *
 from kivy.utils import get_color_from_hex as rgb
 
+from pizza import *
+
 ################################################################################################
 
 ###    KV Integration    ####
@@ -601,17 +603,37 @@ class HealScreen(Screen):
         # compute sleepy avg and add to slider
         sleepy_avg = Screen.CompSleepy(Screen)
         feelscreen.ids.sleep.value = sleepy_avg
-
+        
         # compute weary avg
         weary_avg = Screen.CompWeary(Screen, sleepy_avg)
         feelscreen.ids.headache.value = weary_avg
 
         # compute vomit avg
+        vomit_avg = sleepy_avg
+
+        # prepare pie chart
+        G = sleepy_avg + weary_avg + vomit_avg
+        sleepy_avg_pie = (100/G) * sleepy_avg
+        headache_avg_pie = (100/G) * weary_avg
+        vomit_avg_pie = (100/G) * vomit_avg
+
+        # todo get dynamic sizing for the chart to work
+        pie = Pizza(serie=[
+            ["Sleepy", sleepy_avg_pie, 'a9a9a9'],
+            ["Headache", headache_avg_pie, '708090'],
+            ["Vomit", vomit_avg_pie, '808080']],
+            chart_size=G*20,
+            legend_color='808080',
+            legend_value_rayon=100,
+            legend_title_rayon=160,
+            chart_border=2)
+
+        feelscreen.ids.pizza.add_widget(pie)
 
         # switch over to feelscreen
         app.sm.add_widget(feelscreen)
-        Screen.manager.current = 'feel'
 
+        Screen.manager.current = 'feel'
 
     # todo compute sleepy
     def CompSleepy(Screen, event):
