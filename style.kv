@@ -29,6 +29,48 @@
     size_hint_y: 50
     size_hint_x: None
 
+<Sliderlein@Slider>:
+    canvas:
+        Color:
+            rgb: 0.1,0,1
+        BorderImage:
+            border: (0, 18, 0, 18) if self.orientation == 'horizontal' else (18,0, 18, 0)
+            pos: (self.x + self.padding, self.center_y - sp(18)) if self.orientation == 'horizontal' else (self.center_x - 18, self.y + self.padding)
+            size: (max(self.value_pos[0] - self.padding * 2 - sp(16), 0), sp(36)) if self.orientation == 'horizontal' else (sp(36), max(self.value_pos[1] - self.padding * 2 - sp(16), 0))
+            source: 'atlas://data/images/defaulttheme/slider{}_background{}'.format(self.orientation[0], '_disabled' if self.disabled else '')
+        Rectangle:
+            pos: (self.value_pos[0] - 19, self.center_y - 17) if self.orientation == 'horizontal' else (self.center_x - 16, self.value_pos[1] - 16)
+            size: (55, 55)
+            source: 'slider_cursor.png'
+
+<Sliderlein2@Slider>:
+    canvas:
+        Color:
+            rgb: 1,0,0
+        BorderImage:
+            border: (0, 18, 0, 18) if self.orientation == 'horizontal' else (18,0, 18, 0)
+            pos: (self.x + self.padding, self.center_y - sp(18)) if self.orientation == 'horizontal' else (self.center_x - 18, self.y + self.padding)
+            size: (max(self.value_pos[0] - self.padding * 2 - sp(16), 0), sp(36)) if self.orientation == 'horizontal' else (sp(36), max(self.value_pos[1] - self.padding * 2 - sp(16), 0))
+            source: 'atlas://data/images/defaulttheme/slider{}_background{}'.format(self.orientation[0], '_disabled' if self.disabled else '')
+        Rectangle:
+            pos: (self.value_pos[0] - 19, self.center_y - 17) if self.orientation == 'horizontal' else (self.center_x - 16, self.value_pos[1] - 16)
+            size: (55, 55)
+            source: 'slider_cursor.png'
+
+<Sliderlein3@Slider>:
+    canvas:
+        Color:
+            rgb: 0,1,0
+        BorderImage:
+            border: (0, 18, 0, 18) if self.orientation == 'horizontal' else (18,0, 18, 0)
+            pos: (self.x + self.padding, self.center_y - sp(18)) if self.orientation == 'horizontal' else (self.center_x - 18, self.y + self.padding)
+            size: (max(self.value_pos[0] - self.padding * 2 - sp(16), 0), sp(36)) if self.orientation == 'horizontal' else (sp(36), max(self.value_pos[1] - self.padding * 2 - sp(16), 0))
+            source: 'atlas://data/images/defaulttheme/slider{}_background{}'.format(self.orientation[0], '_disabled' if self.disabled else '')
+        Rectangle:
+            pos: (self.value_pos[0] - 19, self.center_y - 17) if self.orientation == 'horizontal' else (self.center_x - 16, self.value_pos[1] - 16)
+            size: (55, 55)
+            source: 'slider_cursor.png'
+
 ################################################################################################
 
 # Screen for adding the drinks record
@@ -357,7 +399,7 @@
 						allow_stretch: False
                 Button:
                     background_normal: str(False)
-                    on_press: root.manager.current = 'feel'
+                    on_press: root.CompHangoverForecast()
 					background_down: 'pics/app/next.png'
 					Image:
 						source: 'pics/app/next.png'
@@ -370,14 +412,10 @@
 # Screen for adding current feeling stuff
 
 <FeelScreen>:
-    sleepy_grid: Sleepy_Grid
-    headache_grid: Headache_Grid
-    vomit_grid: Vomit_Grid
-
 	sleepranking: sleepranking
 	headacheranking: headacheranking
 	vomitranking: vomitranking
-
+	pizza: pizza
     MyBoxLayout:
         GridLayout:
             cols: 2
@@ -391,58 +429,48 @@
         GridLayout:
             cols: 2
             rows: 1
-            Slider:
+			Label:
+				id: sleepranking
+				text: 'Sleepy'
+				color: 0,0,0,1
+            Sliderlein:
                 id: sleep
                 min: 0
                 step: 1
                 max: 10
-                on_value: root.addsleepy(sleep.value)
-            Label:
-				id: sleepranking
-				text: 'sleepy?'
-				color: 0,0,0,1
-        GridLayout:
-            id: Sleepy_Grid
-            cols: 30
-            rows: 1
+				on_value: root.UpdatePizzaSleep(sleep.value)
 		
 		# headache slider
         GridLayout:
             cols: 2
             rows: 1
-            Slider:
+			Label:
+				id: headacheranking
+				text: 'Headache'
+				color: 0,0,0,1
+            Sliderlein2:
                 id: headache
                 min: 0
                 step: 1
                 max: 10
-                on_value: root.addheadache(headache.value)
-            Label:
-				id: headacheranking
-				text: 'headache?'
-				color: 0,0,0,1
-        GridLayout:
-            id: Headache_Grid
-            cols: 30
-            rows: 1
 
 		# vomit slider
         GridLayout:
             cols: 2
             rows: 1
-            Slider:
+			Label:
+				id: vomitranking
+				text: 'Sick'
+				color: 0,0,0,1
+            Sliderlein3:
                 id: vomit
                 min: 0
                 step: 1
                 max: 10
-                on_value: root.addvomit(vomit.value)
-            Label:
-				id: vomitranking
-				text: 'vomit?'
-				color: 0,0,0,1
-        GridLayout:
-            id: Vomit_Grid
-            cols: 30
-            rows: 1
+		GridLayout:
+			cols: 1
+			rows: 1
+			id: pizza
 
         # Navigation Bar
         AnchorLayout:

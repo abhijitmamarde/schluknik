@@ -32,4 +32,9 @@
             self.num_food = 0.0
 
             # hangover level 
-            hangover_level = 0.0
+            self.hangover_level = 0.0
+
+            # average ratings
+            self.sleepy_avg_pie = 0.0
+            self.headache_avg_pie = 0.0
+            self.vomit_avg_pie = 0.0

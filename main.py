@@ -75,6 +75,8 @@ from setcard import setcard
 from graph import *
 from kivy.utils import get_color_from_hex as rgb
 
+from pizza import *
+
 ################################################################################################
 
 ###    KV Integration    ####
@@ -255,137 +257,25 @@ class FeelScreen(Screen):
                 print (tb)
         return y
 
+    def UpdatePizzaSleep(instance, value):
+        '''
+        update the pizza chart 
+        '''
+        instance.ids.pizza.clear_widgets()
+         # todo get dynamic sizing for the chart to work
 
-    def addsleepy(instance, value):
-        """
-		adding what was eaten before
-        """
-        setc.num_food = value
-
-        switcher = {
-        0: "nothing",
-        1: "almost nothing",
-        2: "snack",
-        3: "small lunch",
-        4: "lunch",
-        5: "medium",
-        6: "more than usually",
-        7: "proper drinking preparation : )",
-        8: "too much : ( !",
-        9: "way too much!!",
-        10: "lethal!!!"
-        }
-
-        switcher_pic = {
-        0: "banana.jpg",
-        1: "banana.jpg",
-        2: "banana.jpg",
-        3: "sushi.png",
-        4: "sushi.png",
-        5: "sushi.png",
-        6: "burger.png",
-        7: "burger.png",
-        8: "burger.png",
-        9: "skull.png",
-        10: "skull.png"
-        }
-
-        instance.sleepranking.text = switcher.get(value, "Food??")
-
-        pic = switcher_pic.get(value, "banana.jpg")
-
-        instance.sleepy_grid.clear_widgets()
-        for x in range(0, int(value)):
-            wimg = Image(source=picpath + pic)
-            instance.sleepy_grid.add_widget(wimg)
-
-
-    def addheadache(instance, value):
-        """
-		adding what was eaten before
-        """
-        setc.num_food = value
-
-        switcher = {
-        0: "nothing",
-        1: "almost nothing",
-        2: "snack",
-        3: "small lunch",
-        4: "lunch",
-        5: "medium",
-        6: "more than usually",
-        7: "proper drinking preparation : )",
-        8: "too much : ( !",
-        9: "way too much!!",
-        10: "lethal!!!"
-        }
-
-        switcher_pic = {
-        0: "banana.jpg",
-        1: "banana.jpg",
-        2: "banana.jpg",
-        3: "sushi.png",
-        4: "sushi.png",
-        5: "sushi.png",
-        6: "burger.png",
-        7: "burger.png",
-        8: "burger.png",
-        9: "skull.png",
-        10: "skull.png"
-        }
-
-        instance.headacheranking.text = switcher.get(value, "Food??")
-
-        pic = switcher_pic.get(value, "banana.jpg")
-
-        instance.headache_grid.clear_widgets()
-        for x in range(0, int(value)):
-            wimg = Image(source=picpath + pic)
-            instance.headache_grid.add_widget(wimg)
-
-
-    def addvomit(instance, value):
-        """
-		adding what was eaten before
-        """
-        setc.num_food = value
-
-        switcher = {
-        0: "nothing",
-        1: "almost nothing",
-        2: "snack",
-        3: "small lunch",
-        4: "lunch",
-        5: "medium",
-        6: "more than usually",
-        7: "proper drinking preparation : )",
-        8: "too much : ( !",
-        9: "way too much!!",
-        10: "lethal!!!"
-        }
-
-        switcher_pic = {
-        0: "banana.jpg",
-        1: "banana.jpg",
-        2: "banana.jpg",
-        3: "sushi.png",
-        4: "sushi.png",
-        5: "sushi.png",
-        6: "burger.png",
-        7: "burger.png",
-        8: "burger.png",
-        9: "skull.png",
-        10: "skull.png"
-        }
-
-        instance.vomitranking.text = switcher.get(value, "Food??")
-
-        pic = switcher_pic.get(value, "banana.jpg")
-
-        instance.vomit_grid.clear_widgets()
-        for x in range(0, int(value)):
-            wimg = Image(source=picpath + pic)
-            instance.vomit_grid.add_widget(wimg)
+        G = value + setc.headache_avg_pie + setc.vomit_avg_pie
+        pie = Pizza(serie=[
+            ["Sleepy",  value, 'a9a9a9'],
+            ["Headache",  setc.headache_avg_pie, '708090'],
+            ["Vomit",  setc.vomit_avg_pie, '808080']],
+            chart_size=G,
+            legend_color='808080',
+            legend_value_rayon=100,
+            legend_title_rayon=160,
+            chart_border=2)
+        instance.ids.pizza.add_widget(pie)
+        return
 
     def ftp_transfer(Screen):
             """
@@ -591,81 +481,79 @@ class HealScreen(Screen):
             wimg = Image(source=picpath + pic)
             instance.grid3.add_widget(wimg)
 
-    def ftp_transfer(Screen):
-            """
-		    accessing the global performance data
-            """
-            # todo: what is going wrong here?
-            global avoid_double_execution
-            if(bool(avoid_double_execution)):
-                # get timestamp
-                timestamp =  datetime.datetime.now()
+        
+    # todo: add computation for the hangover forecast
+    def CompHangoverForecast(Screen):
 
-                # portfolio pandas datastructure
-                # todo: extend
-                # table format
-                # 13 pcs
-                # |timestamp | latitude | longitude | beer | wine | shots | cigarettes | tired | stressed | water | sleep | food | hang_level
-                try:
-                    Screen.prepareGraphs(Screen)
-                    # global table to be stored on server
-                    new_table = numpy.array([timestamp, app.lat, app.lon, setc.num_beer, setc.num_wine, setc.num_shot, setc.num_cig, setc.num_tired, setc.num_stress, setc.num_water, setc.num_sleep, setc.num_food, setc.hangover_level], dtype='string')
-                except:
-                    tb = traceback.format_exc()
-                    print (tb)
-                # filename of global performance data
-                filename = "schlukniktable.csv"
+        # switch to feel screen to get correction
+        feelscreen = FeelScreen(name='feel')
+       
+        # compute sleepy avg and add to slider
+        sleepy_avg = Screen.CompSleepy(Screen)
+        feelscreen.ids.sleep.value = sleepy_avg
+        
+        # compute weary avg
+        weary_avg = Screen.CompWeary(Screen, sleepy_avg)
+        feelscreen.ids.headache.value = weary_avg
 
-                # combine global and local table
-                try:
-                    # append old table to new table
-                    results = numpy.append(new_table,app.old_table)
-                    results = results.reshape((len(results)/13,13))
-                    # store data as a local csv file 
-                    numpy.savetxt(filename, results, delimiter=';', fmt=('%s', '%s', '%s', '%s','%s','%s', '%s', '%s', '%s','%s', '%s','%s','%s'))
-                    
-                except:
-                    tb = traceback.format_exc()
-                    print (tb)
-                # up load to ftp
-                # File FTP transfer
-		        # domain name or server ip:
-                ftp = FTP('singing-wires.de')
-		        # how to encrypt this?
-                ftp.login(user='web784', passwd = 'Holz0815')
-                ftp.cwd('/html/schluknik')
+        # compute vomit avg
+        vomit_avg = sleepy_avg
 
-		        # todo: store as .csv file
-                with open(filename,"a+") as f:		
-                    ftp.storlines("STOR " + filename, open(filename, 'r'))
-                    ftp.quit()
+        # prepare pie chart
+        G = sleepy_avg + weary_avg + vomit_avg
+        setc.sleepy_avg_pie = (100/G) * sleepy_avg
+        setc.headache_avg_pie = (100/G) * weary_avg
+        setc.vomit_avg_pie = (100/G) * vomit_avg
 
-                # finished ftp connection now fill result computer
-                lat = numpy.array(results)[:,1].tolist()
-                lon = numpy.array(results)[:,2].tolist()
-                info_box_beer = numpy.array(results)[:,12].tolist()
-                
-                # create result screen widget
-                map = MapScreen(name='map')
-                try:
-                    # todo: can this be more pythonic?BeerScreen
-                    i = 0
-                    # set marker for every entry in table
-                    for item in lat:
-                        # change this to pop up marker
-                        a = Bubble(size= (400, 400))
-                        a.add_widget(Label(text='hangover level ' + str(info_box_beer[i])))
-                        m = MapMarkerPopup(lon=float(lon[i]), lat=float(lat[i]), placeholder= a)
-                        map.ids.map.add_marker(m)
-                        i = i + 1
-                    app.sm.add_widget(map)
-                except:
-                    tb = traceback.format_exc()
-                    print (tb)
-                # switch to the result screen 
-                Screen.manager.current = 'result'
-                avoid_double_execution = False
-                return   
+        # todo get dynamic sizing for the chart to work
+        pie = Pizza(serie=[
+            ["Sleepy",  setc.sleepy_avg_pie, 'a9a9a9'],
+            ["Headache",  setc.headache_avg_pie, '708090'],
+            ["Vomit",  setc.vomit_avg_pie, '808080']],
+            chart_size=G*20,
+            legend_color='808080',
+            legend_value_rayon=100,
+            legend_title_rayon=160,
+            chart_border=2)
+
+        feelscreen.ids.pizza.add_widget(pie)
+
+        # switch over to feelscreen
+        app.sm.add_widget(feelscreen)
+
+        Screen.manager.current = 'feel'
+
+    # todo compute sleepy
+    def CompSleepy(Screen, event):
+        '''
+        The rating for sleepyness depends on the hours slept and on the energy one had before going out
+        '''
+        # number of sleep hours 
+        max_sleep_time = 12
+        # calculate avg with weighting factors
+        sleepy_avg = 0.8*(max_sleep_time - setc.num_sleep) - 0.35*(setc.num_tired) - 0.1*(setc.num_stress)
+        # value shouldnt be higher than 10 and not lower than 0
+        if(sleepy_avg > 10):
+            sleepy_avg = 10
+        if(sleepy_avg < 0):
+            sleepy_avg = 0
+
+        return sleepy_avg
+
+    # todo compute weary 
+    def CompWeary(Screen,event, sleepy_avg):
+        # weary is caused by sleepyness + alk; can only be improved by food 
+        weary_avg = 0.3*setc.num_beer + 0.2*setc.num_cig +  0.4*setc.num_shot + 0.2*sleepy_avg - 0.5*setc.num_food - 0.5*setc.num_tired
+        # value shouldnt be higher than 10 and not lower than 0
+        if(weary_avg > 10):
+            weary_avg = 10
+        if(weary_avg < 0):
+            weary_avg = 0
+        return weary_avg
+
+    # todo compute vomit
+    def CompVomit(Screen,event):
+        return
 
 ################################################################################################
 
@@ -889,7 +777,6 @@ class Myapp(App):
         # adding all the sub screens to the screen handler
         self.sm.add_widget(DestroyScreen(name='destroy'))
         self.sm.add_widget(HealScreen(name='heal'))
-        self.sm.add_widget(FeelScreen(name='feel'))
         self.sm.add_widget(ResultScreen(name='result'))
 
         # loading in data from server before starting the app
