@@ -69,6 +69,7 @@ import csv
 import traceback
 import io
 import json
+import re
 from setcard import setcard
 
 # for graph 
@@ -77,14 +78,28 @@ from kivy.utils import get_color_from_hex as rgb
 
 from pizza import *
 
+# widget import 
+from widgets import BackgroundScreenManager 
+
 ################################################################################################
 
 ###    KV Integration    ####
+def load_all_kv_files(start="./widgets"):
+    '''
+    sources all files with *.kv ending in ./widget directory
+    '''
+    pattern = re.compile(r".*?\.kv")
+    kv_files = []
+    for root, dirs, files in os.walk(start):
+        kv_files += [root + "/" + file_ for file_ in files if pattern.match(file_)]
+
+    for file_ in kv_files:
+        Builder.load_file(file_)
 
 ################################################################################################
 
 # load style file
-Builder.load_file('style.kv')
+#Builder.load_file('style.kv')
 
 ################################################################################################
 setc = setcard();
@@ -97,6 +112,7 @@ avoid_double_execution = True;
 # global path to pictures 
 
 picpath = 'pics/app/'
+
 
 
 
@@ -732,9 +748,12 @@ class Myapp(App):
         """
 		Layout builder of main window
         """
+        # load all kv files 
+        load_all_kv_files()
+
         # set bg color to white
         notification.notify('test tiltle','scanning started')
-        Window.clearcolor = (1, 1, 1, 0)
+        #Window.clearcolor = (1, 1, 1, 0)
         self.gps = gps
         try:
             # get gps coordinates
@@ -750,10 +769,11 @@ class Myapp(App):
             self.lon = float(72.48)
             self.alki_score = ""
 
-        # create the screen manager
-        self.sm = ScreenManager()
+
 
         try: 
+            # create the screen manager
+            self.sm = BackgroundScreenManager.BackgroundScreenManager()
             # check the seetings config
             with open('data.json', 'r') as fp:
                 data = json.load(fp)
@@ -770,6 +790,8 @@ class Myapp(App):
                 self.sm.add_widget(setting)
 
         except:
+               import traceback
+               traceback.print_exc()
                setting = SettingsScreen(name='setting')
                self.sm.add_widget(setting)
                self.sm.add_widget(DrinkScreen(name='drink'))

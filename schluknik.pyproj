@@ -32,13 +32,20 @@
     <Content Include="pics\app_pics\mipmap-xxxhdpi\ic_launcher.png" />
     <Content Include="pics\draft.svg" />
     <Content Include="pics\logo.png" />
-    <Content Include="style.kv" />
+    <Content Include="widgets\BackgroundScreenManager.kv" />
+    <Content Include="widgets\style.kv" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include=".buildozer\android\app\main.py" />
     <Compile Include=".buildozer\android\app\sitecustomize.py" />
+    <Compile Include="widgets\BackgroundScreenManager.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="main.py" />
     <Compile Include="setcard.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="widgets\__init__.py">
       <SubType>Code</SubType>
     </Compile>
   </ItemGroup>
@@ -47,6 +54,7 @@
     <Folder Include=".buildozer\android\" />
     <Folder Include=".buildozer\android\app" />
     <Folder Include=".designer" />
+    <Folder Include="widgets\" />
     <Folder Include="pics" />
     <Folder Include="pics\app_pics\" />
     <Folder Include="pics\app_pics\mipmap-hdpi" />
