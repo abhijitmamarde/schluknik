@@ -1,0 +1,111 @@
+################################################################################################
+# Screen for adding the feeling better stuff
+
+<HealScreen>:
+    grid: Grid
+    grid2: Grid2
+    grid3: Grid3
+    foodranking: foodranking
+
+    MyBoxLayout:
+        GridLayout:
+            cols: 2
+            rows: 1
+            HeaderImage:
+                source: 'pics/app/icon.png'
+            HeaderLabel:
+                text: '- Tried some countermeasures?'
+
+        # water slider
+        GridLayout:
+            cols: 2
+            rows: 1
+            Slider:
+                id: slider_id1
+                min: 0
+                step: 1
+                max: 5
+                on_value: root.addwater(slider_id1.value)
+            Label:
+                text: str(round(slider_id1.value, 0)) + ' x glass of water'
+                color: 0,0,0,1
+        GridLayout:
+            id: Grid
+            cols: 30
+            rows: 1
+
+
+        # Sleep
+        GridLayout:
+            cols: 2
+            rows: 1
+            Slider:
+                id: slider_id2
+                min: 0
+                step: 0.5
+                max: 12
+                on_value: root.addsleep(slider_id2.value)
+            Label:
+                text: str(round(slider_id2.value, 1))+ ' hours of sleep'
+                color: 0,0,0,1
+        GridLayout:
+            id: Grid2
+            cols: 12
+            rows: 1
+
+        # Food
+        GridLayout:
+            cols: 2
+            rows: 1
+            Slider:
+                id: slider_id3
+                min: 0
+                step: 1
+                max: 10
+                on_value: root.addfood(slider_id3.value)
+            Label:
+                id: foodranking
+                text: 'Food?'
+                color: 0,0,0,1
+        GridLayout:
+            id: Grid3
+            cols: 10
+            rows: 1
+
+                # Navigation Bar
+        AnchorLayout:
+            anchor_x: 'center'
+            anchor_y: 'bottom'
+            GridLayout:
+                cols: 3
+                rows: 1
+                Button:
+					background_normal: str(False)
+                    on_press: app.get_running_app().stop()
+					background_down: 'pics/app/exit.png'
+					Image:
+						source: 'pics/app/exit.png'
+						y: self.parent.y + 10
+						x: self.parent.x + 100
+						size: 50,50
+						allow_stretch: False
+                Button:
+					background_normal: str(False)
+					on_press: root.manager.current = 'setting'
+					background_down: 'pics/app/settings.png'
+					Image:
+						source: 'pics/app/settings.png'
+						y: self.parent.y + 10
+						x: self.parent.x + 100
+						size: 50,50
+						allow_stretch: False
+                Button:
+                    background_normal: str(False)
+                    on_press: root.CompHangoverForecast()
+					background_down: 'pics/app/next.png'
+					Image:
+						source: 'pics/app/next.png'
+						y: self.parent.y + 10
+						x: self.parent.x + 100
+						size: 50,50
+						allow_stretch: False

@@ -1,0 +1,42 @@
+# Navigation page for going to the presented results
+
+<ResultScreen>:
+	BoxLayout:
+		orientation: 'vertical'
+		padding: 200,0,200,50
+		GridLayout:
+			halign: 'center'
+			valign: 'middle'
+			cols: 2
+			rows: 1
+			HeaderImage:
+				source: 'pics/app/icon.png'
+			HeaderLabel:
+				text: '- Lets check the results!'
+
+
+		Button:
+			halign: 'center'
+			valign: 'middle'
+			background_normal: str(False)
+			on_press: root.manager.current = 'graph'
+			background_down: 'pics/app/sine.png'
+			Image:
+				source: 'pics/app/sine.png'
+				y: self.parent.y 
+				x: self.parent.x 
+				size: 200,200
+				allow_stretch: False
+                
+		Button:
+			halign: 'center'
+			valign: 'middle'
+			background_normal: str(False)
+			on_press: root.manager.current = 'map'
+			background_down: 'pics/app/map.png'
+			Image:
+				source: 'pics/app/map.png'
+				y: self.parent.y 
+				x: self.parent.x 
+				size: 200,200
+				allow_stretch: False

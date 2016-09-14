@@ -1,0 +1,138 @@
+# settings page
+# todo: add mandatory first time configuration -> stored as .json; smoker? size? weight? boy/girl?
+
+<-KognitivoSettings>:  
+    interface_cls: 'KognitivoSettingsInterface'
+
+<KognitivoSettingTitle>:  
+    text_size: self.width - 32, None
+    size_hint_y: None
+    height: max(dp(20), self.texture_size[1] + dp(20))
+    font_size: '15sp'
+    bold: True
+    halign: 'center'
+
+<SettingsScreen>:
+    MyBoxLayout:
+		spacing: 30
+		padding: 50,0,50,0
+		GridLayout:
+            cols: 2
+            rows: 1
+            HeaderImage:
+                source: 'pics/app/icon.png'
+            HeaderLabel:
+                text: '-- Please tell us something about you!'
+			
+		GridLayout:
+			cols: 2
+			rows: 1
+			ToggleButton:
+				id: boy
+				group: 'sex'
+				on_press: root.boy(boy.state)
+				background_normal: str(False)
+				background_down: 'pics/app/man.png'
+				Image:
+					source:  'pics/app/man.png'
+					y: self.parent.y + 10
+					x: self.parent.x + 100
+					size: 50,50
+					allow_stretch: False
+				
+			ToggleButton:
+				id: girl
+				group: 'sex'
+				on_press: root.girl(girl.state)
+				background_normal: str(False)
+				background_down: 'pics/app/woman.png'
+				Image:
+					source: 'pics/app/woman.png'
+					y: self.parent.y + 10
+					x: self.parent.x + 100
+					size: 50,50
+					allow_stretch: False
+
+		GridLayout:
+			cols: 2
+			rows: 1
+			ToggleButton:
+				id: smoker
+				group: 'smoker'
+				on_press: root.smoker(smoker.state)
+				background_normal: str(False)
+				background_down: 'pics/app/smoke.png'
+				Image:
+					source:  'pics/app/smoke.png'
+					y: self.parent.y + 10
+					x: self.parent.x + 100
+					size: 50,50
+					allow_stretch: False
+
+			ToggleButton:
+				id: smoker
+				group: 'smoker'
+				on_press: root.smoker(smoker.state)
+				background_normal: str(False)
+				background_down: 'pics/app/nosmoke.png'
+				Image:
+					source:  'pics/app/nosmoke.png'
+					y: self.parent.y + 10
+					x: self.parent.x + 100
+					size: 50,50
+					allow_stretch: False
+				
+		GridLayout:
+            cols: 3
+            rows: 2
+			GearTick:
+				id: age
+				zoom_factor: 2
+				# uncomment the following to use non default values
+				min: 18
+				max: 99
+				value: 18
+				background_image: 'background.png'
+				overlay_image: 'gear.png'
+				on_value: root.age(age.value)
+			GearTick:
+				id: weight
+				zoom_factor: 2
+				# uncomment the following to use non default values
+				min: 40
+				max: 100
+				value: 70
+				#background_image: 'background.png'
+				#overlay_image: 'gear.png'
+			GearTick:
+				id: high
+				zoom_factor: 2
+				# uncomment the following to use non default values
+				min: 18
+				max: 199
+				value: 185
+				#background_image: 'background.png'
+				#overlay_image: 'gear.png'
+			HeaderLabel:
+				text: ('age: {} years').format(int(age.value))
+			HeaderLabel:
+				text: ('weight: {} kg').format(int(weight.value))
+			HeaderLabel:
+				text: ('height: {} cm').format(int(high.value))
+			 
+        AnchorLayout:
+            anchor_x: 'left'
+            anchor_y: 'bottom'
+            BoxLayout:
+                orientation: 'horizontal'
+                size_hint: .3, .3
+                Button:
+                    on_press: root.storetojson()
+					background_normal: str(False)
+					background_down: 'pics/app/back.png'
+					Image:
+						source:  'pics/app/back.png'
+						y: self.parent.y + 10
+						x: self.parent.x + 10
+						size: 50,50
+						allow_stretch: False

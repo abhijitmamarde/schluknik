@@ -1,0 +1,108 @@
+# Screen for adding the drinks record
+
+<DrinkScreen>:
+    grid1: Grid1
+    grid2: Grid2
+    grid3: Grid3
+
+    MyBoxLayout:	
+        GridLayout:
+            cols: 2
+            rows: 1
+            HeaderImage:
+
+            HeaderLabel:
+                text: '- Lets face it! You have been a schluknik again!'
+		
+        # Beer
+        GridLayout:
+            cols: 2
+            rows: 1
+            Slider:
+                id: slider_id1
+                min: 0
+                step: 0.5
+                max: 10
+                on_value: root.addbeer(slider_id1.value)
+            Label:
+                text:  str(round(slider_id1.value, 1)) + ' x Beers (500ml)'
+                color: 0,0,0,1
+        GridLayout:
+            id: Grid1
+            cols: 10
+            rows: 1
+					        
+		# Wine
+        GridLayout:
+            cols: 2
+            rows: 1
+            Slider:
+                id: slider_id2
+                min: 0
+                step: 0.5
+                max: 10
+                on_value: root.addwine(slider_id2.value)
+            Label:
+                text:  str(round(slider_id2.value, 1)) + ' x Wine (200ml)'
+                color: 0,0,0,1
+        GridLayout:
+            id: Grid2
+            cols: 10
+            rows: 1
+
+        # Shots
+        GridLayout:
+            cols: 2
+            rows: 1
+            Slider:
+                id: slider_id3
+                min: 0
+                step: 1
+                max: 10
+                on_value: root.addshot(slider_id3.value)
+            Label:
+                text:  str(round(slider_id3.value, 1)) + ' x Shots (40ml)'
+                color: 0,0,0,1
+        GridLayout:
+            id: Grid3
+            cols: 10
+            rows: 1
+
+        # Navigation Bar
+        AnchorLayout:
+            anchor_x: 'center'
+            anchor_y: 'bottom'
+            GridLayout:
+                cols: 3
+                rows: 1
+                Button:
+					background_normal: str(False)
+                    on_press: app.get_running_app().stop()
+					background_down: 'pics/app/exit.png'
+					Image:
+						source: 'pics/app/exit.png'
+						y: self.parent.y + 10
+						x: self.parent.x + 100
+						size: 50,50
+						allow_stretch: False
+                Button:
+					background_normal: str(False)
+					on_press: app.open_settings()
+					background_down: 'pics/app/settings.png'
+					Image:
+						source: 'pics/app/settings.png'
+						y: self.parent.y + 10
+						x: self.parent.x + 100
+						size: 50,50
+						allow_stretch: False
+                Button:
+                    background_normal: str(False)
+                    on_press: root.manager.current = 'destroy'
+					background_down: 'pics/app/next.png'
+					Image:
+						source: 'pics/app/next.png'
+						y: self.parent.y + 10
+						x: self.parent.x + 100
+						size: 50,50
+						allow_stretch: False
+                    
