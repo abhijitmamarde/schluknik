@@ -1,4 +1,10 @@
 ﻿from kivy.uix.screenmanager import ScreenManager, Screen
+from setcard import setcard
+from kivy.uix.image import Image
+
+setc = setcard();
+# global path to pictures 
+picpath = 'pics/app/'
 
 class DrinkScreen(Screen):
     """

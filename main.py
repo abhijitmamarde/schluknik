@@ -43,9 +43,9 @@ from widgets import SettingsScreen
 from widgets import DestroyScreen
 from widgets import HealScreen
 from widgets import ResultScreen
-
-# imports from external class
 from setcard import setcard
+from widgets import settings
+
 from widgets.settingsjson import settings_json
 
 # kivy importd
@@ -73,6 +73,8 @@ from kivy.uix.anchorlayout import AnchorLayout
 from kivy.uix.bubble import Bubble
 from kivy.utils import get_color_from_hex as rgb
 
+from kivy.uix.settings import Settings, SettingItem, SettingsPanel, SettingTitle
+
 # import other stuff
 import os.path
 
@@ -85,6 +87,28 @@ import traceback
 import io
 import json
 import re
+import ConfigParser
+
+# 
+from glob import glob 
+from os.path import dirname, join, basename
+from kivy.core.text import Label
+from kivy.core.text import LabelBase
+from kivy.core.text import LabelBase
+
+# font integration
+KIVY_FONTS = [
+    {
+        "name": "RobotoCondensed",
+        "fn_regular": "data/fonts/RobotoCondensed-Light.ttf",
+        "fn_bold": "data/fonts/RobotoCondensed-Regular.ttf",
+        "fn_italic": "data/fonts/RobotoCondensed-LightItalic.ttf",
+        "fn_bolditalic": "data/fonts/RobotoCondensed-Italic.ttf"
+    }
+]
+
+for font in KIVY_FONTS:
+    LabelBase.register(**font)
 ################################################################################################
 
 ###    KV Integration    ####
@@ -106,12 +130,10 @@ def load_all_kv_files(start="./widgets"):
 ###     globals     ####  
 
 setc = setcard();
+
 # todo: check what is wrong here
 global avoid_double_execution
 avoid_double_execution = True;
-
-# global path to pictures 
-picpath = 'pics/app/'
 
 ################################################################################################
 
@@ -727,6 +749,8 @@ class Myapp(App):
     """
     Main class
     """
+    KIVY_DEFAULT_FONT = "RobotoCondensed"
+
     #manager = ObjectProperty()
     #settings_cls = SettingsScreen.KognitivoSettings
 
@@ -751,8 +775,10 @@ class Myapp(App):
         """
 		Layout builder of main window
         """
+
         # load all kv files 
         load_all_kv_files()
+
         # set bg color to white
         #notification.notify('test tiltle','scanning started')
         #Window.clearcolor = (1, 1, 1, 0)
@@ -770,30 +796,30 @@ class Myapp(App):
             self.lat = float(19.0)
             self.lon = float(72.48)
             self.alki_score = ""
-        try: 
-            # create the screen manager
-            self.sm = BackgroundScreenManager.BackgroundScreenManager()
-            # check the seetings config
-            with open('data.json', 'r') as fp:
-                data = json.load(fp)
-                self.smoker = data['smoker']  
-                self.boy = data['boy'] 
-                self.girl = data['girl'] 
-                self.age = str(data['age'])  
-                self.height = data['height'] 
-                self.weight = data['weight']
+       # try: 
 
-                self.sm.add_widget(DrinkScreen.DrinkScreen(name='drink'))
-                setting = SettingsScreen.SettingsScreen(name='setting')
-                setting.ids.gear_tick.value = float(data['age'])
-                self.sm.add_widget(setting)
+        # create the screen manager
+        self.sm = BackgroundScreenManager.BackgroundScreenManager()
+        # check the seetings config
+        config = ConfigParser.ConfigParser()
+        config.read('myapp.ini')
+        self.smoker = config.getboolean('personaldata','smoker')  
+        self.gender = config.get('personaldata','gender') 
+        self.age =  config.getint('personaldata','age')  
+        self.height = config.getint('personaldata','height') 
+        self.weight = config.getint('personaldata','weight')
 
-        except:
-               import traceback
-               traceback.print_exc()
-               setting = SettingsScreen.SettingsScreen(name='setting')
-               self.sm.add_widget(setting)
-               self.sm.add_widget(DrinkScreen.DrinkScreen(name='drink'))
+        #    # make sure that it is not the initial settings
+        #    if (self.age == 99):
+        #        raise Exception('Initial Run')
+
+        #    self.sm.add_widget(DrinkScreen.DrinkScreen(name='drink'))
+        #except:
+        #       import traceback
+        #       traceback.print_exc()
+        #       self.sm.add_widget(settings)
+
+        self.sm.add_widget(DrinkScreen.DrinkScreen(name='drink'))
                 
         # adding all the sub screens to the screen handler
         self.sm.add_widget(DestroyScreen.DestroyScreen(name='destroy'))
@@ -831,11 +857,13 @@ class Myapp(App):
 
     # for settings screen
     def build_config(self, config):
-        config.setdefaults('example', {
-        'boolexample': True,
-        'numericexample': 28,
-        'optionsexample': 'boy',
-        'stringexample': 'Elias'})
+        config.setdefaults('personaldata', {
+        'name': 'Elias',
+        'smoker': True,
+        'age': 28,
+        'height': 185,
+        'weight': 70,
+        'gender': 'boy'})
 
     def build_settings(self, settings):
         settings.add_json_panel('schluknik settings',

@@ -5,7 +5,7 @@ from kivy.uix.image import Image
 class BackgroundScreenManager(ScreenManager):
     """description of class"""
     background_image = ObjectProperty(
-    Image(source='pics/app/background.png')
+    Image(source='pics/app/back_.png')
     )
 
 
