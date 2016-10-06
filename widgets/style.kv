@@ -4,11 +4,10 @@
 
 
 ## inheried classes
-
 <MyBoxLayout@BoxLayout>:
     orientation: 'vertical'
-    padding: 50,50,0,0
-    spacing: 0
+    padding: 10,10,10,10
+    spacing: 10
 
 # header text
 # todo: make text bubble
@@ -16,18 +15,20 @@
     color: 0,0,0,1
     text_size: root.width, None
     size: self.texture_size
-    font_size: 25
+    font_size: 30
 	font_name: 'RobotoCondensed'
     halign: 'left'
     valign: 'middle'
 
 # header image
 <HeaderImage@Image>
-	source: 'pics/app/icon.png'
-	allow_stretch: True
+	source: 'pics/app/schluknik_logo_pirate.png'
+	allow_stretch: False
     keep_ratio: True
-    size_hint_y: 50
+	height: "40dp"
+    size_hint_y: 3
     size_hint_x: None
+	mipmap: True
 
 <Sliderlein@Slider>:
     canvas:

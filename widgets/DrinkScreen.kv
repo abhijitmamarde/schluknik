@@ -1,11 +1,22 @@
 # Screen for adding the drinks record
+<Seperator@Widget>:
+	id: separator
+	size_hint_y: None
+	height: 1
+	canvas:
+		Color:
+			rgb: 0.5, 0.5, 0.5
+		Rectangle:
+			pos: 25, separator.center_y
+			size: separator.width - 50, 1
 
 <DrinkScreen>:
     grid1: Grid1
     grid2: Grid2
     grid3: Grid3
-
-    MyBoxLayout:	
+	#
+    MyBoxLayout:
+		# header
         GridLayout:
             cols: 2
             rows: 1
@@ -13,7 +24,9 @@
 
             HeaderLabel:
                 text: '- Lets face it! You have been a schluknik again!'
-		
+		##
+		Seperator:
+		##
         # Beer
         GridLayout:
             cols: 2
@@ -31,7 +44,9 @@
             id: Grid1
             cols: 10
             rows: 1
-					        
+		##
+		Seperator:
+		##		        
 		# Wine
         GridLayout:
             cols: 2
@@ -49,7 +64,9 @@
             id: Grid2
             cols: 10
             rows: 1
-
+		##
+		Seperator:
+		##
         # Shots
         GridLayout:
             cols: 2
@@ -67,7 +84,9 @@
             id: Grid3
             cols: 10
             rows: 1
-
+		##
+		Seperator:
+		##
         # Navigation Bar
         AnchorLayout:
             anchor_x: 'center'
@@ -85,6 +104,7 @@
 						x: self.parent.x + 100
 						size: 50,50
 						allow_stretch: False
+						mipmap: True
                 Button:
 					background_normal: str(False)
 					on_press: app.open_settings()
@@ -95,6 +115,8 @@
 						x: self.parent.x + 100
 						size: 50,50
 						allow_stretch: False
+						stretch: False
+						mipmap: True
                 Button:
                     background_normal: str(False)
                     on_press: root.manager.current = 'destroy'
@@ -105,4 +127,6 @@
 						x: self.parent.x + 100
 						size: 50,50
 						allow_stretch: False
+						stretch: False
+						mipmap: True
                     

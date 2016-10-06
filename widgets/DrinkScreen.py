@@ -1,6 +1,8 @@
 ﻿from kivy.uix.screenmanager import ScreenManager, Screen
 from setcard import setcard
 from kivy.uix.image import Image
+from kivy.animation import Animation
+from kivy.core.window import Window
 
 setc = setcard();
 # global path to pictures 
@@ -10,9 +12,18 @@ class DrinkScreen(Screen):
     """
     Evaluating your performance
     """
+
+    # animation
+    def animate(self, id):
+        '''
+        Animate the arrival of the bullets
+        '''
+        animation = Animation(right=780.0, opacity=1, d=3, t='out_bounce')
+        animation.cancel(id)
+        animation.start(id)
+
     # set zero global variables
     # todo: is there a better OOP approach for this??
-
     def addbeer(instance, value):
         """
 		Adding the beer picture
@@ -21,8 +32,9 @@ class DrinkScreen(Screen):
 
         instance.grid1.clear_widgets()
         for x in range(0, int(value)):
-            wimg = Image(source=picpath + 'beer.png')
+            wimg = Image(source=picpath + 'beer_round.png', mipmap= True)
             instance.grid1.add_widget(wimg)
+            DrinkScreen.animate(instance, instance.grid1)
 
     def addwine(instance, value):
         """
@@ -32,8 +44,9 @@ class DrinkScreen(Screen):
 
         instance.grid2.clear_widgets()
         for x in range(0, int(value)):
-            wimg = Image(source=picpath + 'wine.png')
+            wimg = Image(source=picpath + 'wine.png', mipmap= True)
             instance.grid2.add_widget(wimg)
+            DrinkScreen.animate(instance, instance.grid2)
 
     def addshot(instance, value):
         """
@@ -43,5 +56,6 @@ class DrinkScreen(Screen):
 
         instance.grid3.clear_widgets()
         for x in range(0, int(value)):
-            wimg = Image(source=picpath + 'shot.jpg')
+            wimg = Image(source=picpath + 'shot.png', mipmap= True)
             instance.grid3.add_widget(wimg)
+            DrinkScreen.animate(instance, instance.grid3)
