@@ -13,7 +13,7 @@ package.domain = org.test
 source.dir = .
 
 # (list) Source files to include (let empty to include all the files)
-source.include_exts = py,png,jpg,kv,atlas
+source.include_exts = py,png,jpg,kv,atlas,ttf,ini
 
 # (list) List of inclusions using pattern matching
 #source.include_patterns = assets/*,images/*.png
@@ -75,16 +75,16 @@ fullscreen = 1
 android.permissions = INTERNET,ACCESS_FINE_LOCATION,ACCESS_COARSE_LOCATION
 
 # (int) Android API to use
-android.api = 14
+#android.api = 19
 
 # (int) Minimum API required
-android.minapi = 8
+#android.minapi = 9
 
 # (int) Android SDK version to use
-android.sdk = 23
+#android.sdk = 20
 
 # (str) Android NDK version to use
-android.ndk = 9d
+#android.ndk = 9c
 
 # (bool) Use --private data storage (True) or --dir public storage (False)
 #android.private_storage = True
@@ -108,9 +108,6 @@ android.ndk = 9d
 # This can be useful to avoid excess Internet downloads or save time
 # when an update is due and you just want to test/build your package
 # android.skip_update = False
-
-# (str) Bootstrap to use for android builds (android_new only)
-# android.bootstrap = sdl2
 
 # (str) Android entry point, default is ok for Kivy-based app
 #android.entrypoint = org.renpy.android.PythonActivity
@@ -167,7 +164,7 @@ android.ndk = 9d
 #
 
 # (str) Path to a custom kivy-ios folder
-ios.kivy_ios_dir = ../kivy-ios
+#ios.kivy_ios_dir = ../kivy-ios
 
 # (str) Name of the certificate to use for signing the debug version
 # Get a list of available identities: buildozer ios list_identities
@@ -180,7 +177,7 @@ ios.kivy_ios_dir = ../kivy-ios
 [buildozer]
 
 # (int) Log level (0 = error only, 1 = info, 2 = debug (with command output))
-log_level = 2
+log_level = 1
 
 # (int) Display warning if buildozer is run as root (0 = False, 1 = True)
 warn_on_root = 1
