@@ -49,7 +49,7 @@ garden_requirements = graph,mapview
 presplash.filename = %(source.dir)s/pics/app/schluknik_logo_release.png
 
 # (str) Icon of the application
-icon.filename = %(source.dir)s/pics/app/icon.png
+icon.filename = %(source.dir)s/pics/app/schluknik_logo_pirate.png
 
 # (str) Supported orientation (one of landscape, portrait or all)
 orientation = portrait
