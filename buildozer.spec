@@ -46,7 +46,7 @@ requirements = plyer,kivy,openssl,futures,requests,numpy
 garden_requirements = graph,mapview
 
 # (str) Presplash of the application
-presplash.filename = %(source.dir)s/pics/app/schluknik_logo_release.png
+presplash.filename = %(source.dir)s/pics/app/schluknik_pre_round.png
 
 # (str) Icon of the application
 icon.filename = %(source.dir)s/pics/app/schluknik_logo_pirate.png
