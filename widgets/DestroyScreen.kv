@@ -14,10 +14,12 @@
             cols: 2
             rows: 1
             HeaderImage:
-                source: 'pics/app/icon.png'
             HeaderLabel:
-                text: '- Yesterday evenings conditions?'
-
+                text: '  - Yesterday evenings conditions?'
+        #
+        Seperator:
+		Seperator:
+		#
         # Cigarette slider
         GridLayout:
             cols: 2
@@ -35,7 +37,9 @@
             id: Grid
             cols: 30
             rows: 1
-
+        #
+        Seperator:
+        #
 		# Tired
         GridLayout:
             cols: 2
@@ -54,7 +58,9 @@
             id: Grid2
             cols: 10
             rows: 1
-
+        #
+        Seperator:
+        #
 		# Stress
         GridLayout:
             cols: 2
@@ -73,41 +79,19 @@
             id: Grid3
             cols: 10
             rows: 1
+        #
+        Seperator:
+        Seperator:
+        #
 
-                # Navigation Bar
+        # Navigation Bar
         AnchorLayout:
             anchor_x: 'center'
             anchor_y: 'bottom'
             GridLayout:
                 cols: 3
                 rows: 1
-                Button:
-					background_normal: str(False)
-                    on_press: app.get_running_app().stop()
-					background_down: 'pics/app/exit.png'
-					Image:
-						source: 'pics/app/exit.png'
-						y: self.parent.y + 10
-						x: self.parent.x + 100
-						size: 50,50
-						allow_stretch: False
-                Button:
-					background_normal: str(False)
-					on_press: root.manager.current = 'setting'
-					background_down: 'pics/app/settings.png'
-					Image:
-						source: 'pics/app/settings.png'
-						y: self.parent.y + 10
-						x: self.parent.x + 100
-						size: 50,50
-						allow_stretch: False
-                Button:
-                    background_normal: str(False)
+                ExitButton:
+                SettingsButton:
+                NextButton:
                     on_press: root.manager.current = 'heal'
-					background_down: 'pics/app/next.png'
-					Image:
-						source: 'pics/app/next.png'
-						y: self.parent.y + 10
-						x: self.parent.x + 100
-						size: 50,50
-						allow_stretch: False

@@ -1,4 +1,10 @@
 ﻿from kivy.uix.screenmanager import ScreenManager, Screen
+from setcard import setcard
+from kivy.uix.image import Image
+
+setc = setcard();
+# global path to pictures
+picpath = 'pics/app/'
 
 class DestroyScreen(Screen):
     """
@@ -17,22 +23,22 @@ class DestroyScreen(Screen):
 
     def addtired(instance, value):
         """
-	    adding tiredness
+	    adding Energy
         """
         setc.num_tired = value
 
         switcher = {
-        0: "stress",
-        1: "stress",
-        2: "stress",
-        3: "stress",
-        4: "stress",
-        5: "stress",
-        6: "stress",
-        7: "stress",
-        8: "stress",
-        9: "stress",
-        10: "lethal!!!"
+        0: "dead",
+        1: "half dead",
+        2: "ill",
+        3: "weary",
+        4: "tired",
+        5: "normal",
+        6: "alright",
+        7: "top",
+        8: "super",
+        9: "energetic",
+        10: "party!!"
         }
 
         switcher_pic = {
@@ -60,22 +66,22 @@ class DestroyScreen(Screen):
 
     def addstress(instance, value):
         """
-		adding stress
+		adding Emotion
         """
         setc.num_stress = value
 
         switcher = {
-        0: "stress",
-        1: "stress",
-        2: "stress",
-        3: "stress",
-        4: "stress",
-        5: "stress",
-        6: "stress",
-        7: "stress",
-        8: "stress",
-        9: "stress",
-        10: "lethal!!!"
+        0: "dead",
+        1: "half dead",
+        2: "depressed",
+        3: "agressive",
+        4: "stressed",
+        5: "normal",
+        6: "happy",
+        7: "excited",
+        8: "8!",
+        9: "9!!",
+        10: "party!!!"
         }
 
         switcher_pic = {

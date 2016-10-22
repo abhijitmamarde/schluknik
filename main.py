@@ -25,7 +25,7 @@ __status__ = "development"
 ###############################################################################################
 
 # imports from subfolders
-from geartick import *
+#from geartick import *
 # for gps access 
 from plyer import gps
 # notification
@@ -43,6 +43,7 @@ from widgets import DrinkScreen
 from widgets import SettingsScreen
 from widgets import DestroyScreen
 from widgets import HealScreen
+from widgets import FeelScreen
 from widgets import ResultScreen
 from setcard import setcard
 from widgets import settings
@@ -246,6 +247,7 @@ class Myapp(App):
         # adding all the sub screens to the screen handler
         self.sm.add_widget(DestroyScreen.DestroyScreen(name='destroy'))
         self.sm.add_widget(HealScreen.HealScreen(name='heal'))
+        self.sm.add_widget(FeelScreen.FeelScreen(name='feel'))
         self.sm.add_widget(ResultScreen.ResultScreen(name='result'))
 
         # loading in data from server before starting the app

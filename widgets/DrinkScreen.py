@@ -18,7 +18,7 @@ class DrinkScreen(Screen):
         '''
         Animate the arrival of the bullets
         '''
-        animation = Animation(right=780.0, opacity=1, d=3, t='out_bounce')
+        animation = Animation(right=1070.0, opacity=1, d=3, t='out_elastic')
         animation.cancel(id)
         animation.start(id)
 
@@ -34,7 +34,7 @@ class DrinkScreen(Screen):
         for x in range(0, int(value)):
             wimg = Image(source=picpath + 'beer_round.png', mipmap= True)
             instance.grid1.add_widget(wimg)
-            DrinkScreen.animate(instance, instance.grid1)
+        DrinkScreen.animate(instance, instance.grid1)
 
     def addwine(instance, value):
         """
@@ -46,7 +46,7 @@ class DrinkScreen(Screen):
         for x in range(0, int(value)):
             wimg = Image(source=picpath + 'wine.png', mipmap= True)
             instance.grid2.add_widget(wimg)
-            DrinkScreen.animate(instance, instance.grid2)
+        DrinkScreen.animate(instance, instance.grid2)
 
     def addshot(instance, value):
         """
@@ -58,4 +58,4 @@ class DrinkScreen(Screen):
         for x in range(0, int(value)):
             wimg = Image(source=picpath + 'shot.png', mipmap= True)
             instance.grid3.add_widget(wimg)
-            DrinkScreen.animate(instance, instance.grid3)
+        DrinkScreen.animate(instance, instance.grid3)

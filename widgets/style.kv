@@ -11,11 +11,22 @@
 
 # header text
 # todo: make text bubble
+<Seperator@Widget>:
+	id: separator
+	size_hint_y: None
+	height: 1
+	canvas:
+		Color:
+			rgb: 0.5, 0.5, 0.5
+		Rectangle:
+			pos: 25, separator.center_y
+			size: separator.width - 50, 1
+
 <HeaderLabel@Label>:
     color: 0,0,0,1
     text_size: root.width, None
     size: self.texture_size
-    font_size: 30
+    font_size: 50
 	font_name: 'RobotoCondensed'
     halign: 'left'
     valign: 'middle'
@@ -29,6 +40,44 @@
     size_hint_y: 3
     size_hint_x: None
 	mipmap: True
+
+# botton navigation panel
+<ExitButton@Button>:
+    background_normal: str(False)
+    on_press: app.get_running_app().stop()
+    background_down: 'pics/app/exit.png'
+    Image:
+        source: 'pics/app/exit.png'
+        y: self.parent.y + 10
+        x: self.parent.x + 100
+        size: 80,80
+        allow_stretch: False
+        mipmap: True
+
+<SettingsButton@Button>:
+    background_normal: str(False)
+    on_press: app.open_settings()
+    background_down: 'pics/app/settings.png'
+    Image:
+        source: 'pics/app/settings.png'
+        y: self.parent.y + 10
+        x: self.parent.x + 100
+        size: 80,80
+        allow_stretch: False
+        stretch: False
+        mipmap: True
+
+<NextButton@Button>:
+    background_normal: str(False)
+    background_down: 'pics/app/next.png'
+    Image:
+        source: 'pics/app/next.png'
+        y: self.parent.y + 10
+        x: self.parent.x + 100
+        size: 80,80
+        allow_stretch: False
+        stretch: False
+        mipmap: True
 
 <Sliderlein@Slider>:
     canvas:
@@ -73,121 +122,6 @@
             source: 'slider_cursor.png'
 
 ################################################################################################
-
-
-
-
-
-
-
-################################################################################################
-# Screen for adding current feeling stuff
-
-<FeelScreen>:
-	sleepranking: sleepranking
-	headacheranking: headacheranking
-	vomitranking: vomitranking
-	pizza: pizza
-    MyBoxLayout:
-        GridLayout:
-            cols: 2
-            rows: 1
-            HeaderImage:
-                source: 'pics/app/icon.png'
-            HeaderLabel:
-                text: '- Yuck...And how do you feel now?'
-
-        # sleep slider
-        GridLayout:
-            cols: 2
-            rows: 1
-			Label:
-				id: sleepranking
-				text: 'Sleepy'
-				color: 0,0,0,1
-            Sliderlein:
-                id: sleep
-                min: 0
-                step: 1
-                max: 10
-				on_value: root.UpdatePizzaSleep(sleep.value)
-		
-		# headache slider
-        GridLayout:
-            cols: 2
-            rows: 1
-			Label:
-				id: headacheranking
-				text: 'Headache'
-				color: 0,0,0,1
-            Sliderlein2:
-                id: headache
-                min: 0
-                step: 1
-                max: 10
-
-		# vomit slider
-        GridLayout:
-            cols: 2
-            rows: 1
-			Label:
-				id: vomitranking
-				text: 'Sick'
-				color: 0,0,0,1
-            Sliderlein3:
-                id: vomit
-                min: 0
-                step: 1
-                max: 10
-		GridLayout:
-			cols: 1
-			rows: 1
-			id: pizza
-
-        # Navigation Bar
-        AnchorLayout:
-            anchor_x: 'center'
-            anchor_y: 'bottom'
-            GridLayout:
-                cols: 3
-                rows: 1
-                Button:
-					background_normal: str(False)
-                    on_press: app.get_running_app().stop()
-					background_down: 'pics/app/exit.png'
-					Image:
-						source: 'pics/app/exit.png'
-						y: self.parent.y + 10
-						x: self.parent.x + 100
-						size: 50,50
-						allow_stretch: False
-                Button:
-					background_normal: str(False)
-					on_press: root.manager.current = 'setting'
-					background_down: 'pics/app/settings.png'
-					Image:
-						source: 'pics/app/settings.png'
-						y: self.parent.y + 10
-						x: self.parent.x + 100
-						size: 50,50
-						allow_stretch: False
-                Button:
-                    background_normal: str(False)
-                    on_press: root.ftp_transfer()
-					background_down: 'pics/app/next.png'
-					Image:
-						source: 'pics/app/next.png'
-						y: self.parent.y + 10
-						x: self.parent.x + 100
-						size: 50,50
-						allow_stretch: False
-
-################################################################################################
-
-            
-		
-                
-################################################################################################
 # map of schlukniks
 
 <MapScreen>:
@@ -214,14 +148,11 @@
                 on_press: app.get_running_app().stop()
 
 ################################################################################################
-
-################################################################################################
 # hangover transient screen
 # add meaningul computation depending on the input variables
 
 <GraphScreen>:
     grid: Grid
-
 
 	AnchorLayout:
 		anchor_x: 'left'

@@ -1,0 +1,93 @@
+# Screen for adding current feeling stuff
+<FeelScreen>:
+	sleepranking: sleepranking
+	headacheranking: headacheranking
+	vomitranking: vomitranking
+	pizza: pizza
+    MyBoxLayout:
+        GridLayout:
+            cols: 2
+            rows: 1
+            HeaderImage:
+            HeaderLabel:
+                text: '  - Yuck...And how do you feel now?'
+		##
+		Seperator:
+		Seperator:
+		##
+        # sleep slider
+        GridLayout:
+            cols: 2
+            rows: 1
+			Label:
+				id: sleepranking
+				text: 'Sleepy'
+				color: 0,0,0,1
+            Sliderlein:
+                id: sleep
+                min: 0
+                step: 1
+                max: 10
+				on_value: root.UpdatePizzaSleep(sleep.value)
+		#
+		Seperator:
+		#
+		# headache slider
+        GridLayout:
+            cols: 2
+            rows: 1
+			Label:
+				id: headacheranking
+				text: 'Headache'
+				color: 0,0,0,1
+            Sliderlein2:
+                id: headache
+                min: 0
+                step: 1
+                max: 10
+        #
+		Seperator:
+		#
+		# vomit slider
+        GridLayout:
+            cols: 2
+            rows: 1
+			Label:
+				id: vomitranking
+				text: 'Sick'
+				color: 0,0,0,1
+            Sliderlein3:
+                id: vomit
+                min: 0
+                step: 1
+                max: 10
+        #
+		Seperator:
+		#
+		GridLayout:
+			cols: 1
+			rows: 1
+			id: pizza
+		#
+		Seperator:
+		Seperator:
+		#
+        # Navigation Bar
+        AnchorLayout:
+            anchor_x: 'center'
+            anchor_y: 'bottom'
+            GridLayout:
+                cols: 3
+                rows: 1
+                ExitButton:
+                SettingsButton:
+                Button:
+                    background_normal: str(False)
+                    on_press: root.ftp_transfer()
+					background_down: 'pics/app/next.png'
+					Image:
+						source: 'pics/app/next.png'
+						y: self.parent.y + 10
+						x: self.parent.x + 100
+						size: 50,50
+						allow_stretch: False
