@@ -45,7 +45,7 @@
 <ExitButton@Button>:
     background_normal: str(False)
     on_press: app.get_running_app().stop()
-    background_down: 'pics/app/exit.png'
+    #background_down: 'pics/app/exit.png'
     Image:
         source: 'pics/app/exit.png'
         y: self.parent.y + 10
@@ -57,7 +57,7 @@
 <SettingsButton@Button>:
     background_normal: str(False)
     on_press: app.open_settings()
-    background_down: 'pics/app/settings.png'
+    #background_down: 'pics/app/settings.png'
     Image:
         source: 'pics/app/settings.png'
         y: self.parent.y + 10
@@ -69,7 +69,7 @@
 
 <NextButton@Button>:
     background_normal: str(False)
-    background_down: 'pics/app/next.png'
+    #background_down: 'pics/app/next.png'
     Image:
         source: 'pics/app/next.png'
         y: self.parent.y + 10
