@@ -78,7 +78,7 @@ class HealScreen(Screen):
         setc.num_water = value
         instance.grid.clear_widgets()
         for x in range(0, int(value)):
-            wimg = Image(source= picpath + 'water.png')
+            wimg = Image(source= picpath + 'water.png', mipmap= True)
             instance.grid.add_widget(wimg)
 
     def addsleep(instance, value):
@@ -88,7 +88,7 @@ class HealScreen(Screen):
         setc.num_sleep = value
         instance.grid2.clear_widgets()
         for x in range(0, int(value)):
-            wimg = Image(source= picpath + 'sleep.jpg')
+            wimg = Image(source= picpath + 'sleep.png', mipmap= True)
             instance.grid2.add_widget(wimg)
 
     def addfood(instance, value):
@@ -112,9 +112,9 @@ class HealScreen(Screen):
         }
 
         switcher_pic = {
-        0: "banana.jpg",
-        1: "banana.jpg",
-        2: "banana.jpg",
+        0: "banana.png",
+        1: "banana.png",
+        2: "banana.png",
         3: "sushi.png",
         4: "sushi.png",
         5: "sushi.png",
@@ -127,11 +127,11 @@ class HealScreen(Screen):
 
         instance.foodranking.text = switcher.get(value, "Food??")
 
-        pic = switcher_pic.get(value, "banana.jpg")
+        pic = switcher_pic.get(value, "banana.png")
 
         instance.grid3.clear_widgets()
         for x in range(0, int(value)):
-            wimg = Image(source=picpath + pic)
+            wimg = Image(source=picpath + pic, mipmap= True)
             instance.grid3.add_widget(wimg)
 
         
