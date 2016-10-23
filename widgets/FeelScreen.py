@@ -1,13 +1,24 @@
 ﻿from kivy.uix.screenmanager import ScreenManager, Screen
 import numpy as numpy
 from setcard import setcard
+from ftplib import FTP
+import datetime
+import csv
+import traceback
+import io
+import json
+from pizza import *
 from kivy.uix.image import Image
 # for pizza graph
-from pizza import Pizza
+
 
 setc = setcard();
 # global path to pictures
 picpath = 'pics/app/'
+# todo: check what is wrong here
+global avoid_double_execution
+avoid_double_execution = True;
+
 
 class FeelScreen(Screen):
     """

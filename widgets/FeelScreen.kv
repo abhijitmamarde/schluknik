@@ -1,4 +1,5 @@
 # Screen for adding current feeling stuff
+#:import Pizza pizza
 <FeelScreen>:
 	sleepranking: sleepranking
 	headacheranking: headacheranking
@@ -67,7 +68,8 @@
 		GridLayout:
 			cols: 1
 			rows: 1
-			id: pizza
+		    Pizza:
+                id: pizza
 		#
 		Seperator:
 		Seperator:
@@ -89,5 +91,5 @@
 						source: 'pics/app/next.png'
 						y: self.parent.y + 10
 						x: self.parent.x + 100
-						size: 50,50
+						size: 80,80
 						allow_stretch: False

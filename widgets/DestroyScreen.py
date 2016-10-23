@@ -42,16 +42,16 @@ class DestroyScreen(Screen):
         }
 
         switcher_pic = {
-        0: "banana.png",
-        1: "banana.png",
-        2: "banana.png",
-        3: "sushi.png",
-        4: "sushi.png",
-        5: "sushi.png",
-        6: "burger.png",
-        7: "burger.png",
-        8: "burger.png",
-        9: "skull.png",
+        0: "poop.png",
+        1: "sloth.png",
+        2: "zombie.png",
+        3: "powerless.png",
+        4: "sleep.png",
+        5: "normal.png",
+        6: "normal.png",
+        7: "vital.png",
+        8: "superman2.png",
+        9: "superman.png",
         10: "skull.png"
         }
 
@@ -85,8 +85,8 @@ class DestroyScreen(Screen):
         }
 
         switcher_pic = {
-        0: "depressed.png",
-        1: "depressed.png",
+        0: "poop.png",
+        1: "poop.png",
         2: "sad.png",
         3: "agressive.png",
         4: "agressive.png",
