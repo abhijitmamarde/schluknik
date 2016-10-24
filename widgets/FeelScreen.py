@@ -9,6 +9,16 @@ import io
 import json
 from pizza import *
 from kivy.uix.image import Image
+from kivy.utils import get_color_from_hex as rgb
+from GraphScreen import GraphScreen
+from MapScreen import MapScreen
+from kivy.uix.label import Label
+from kivy.uix.bubble import Bubble
+#
+from graph import *
+from mapview import *
+
+from kivy.app import App as app
 
 # for pizza graph
 # todos: how to make setcard globally accessible? 
@@ -43,8 +53,11 @@ class FeelScreen(Screen):
 
         # prepare the hangover forecast
         graphscreen = GraphScreen(name='graph')
-        app.sm.add_widget(graphscreen)
+        Screen.manager.add_widget(graphscreen)
 
+        
+        Screen.manager.current = 'result'
+        return
         # add graph title
         graphscreen.grid.add_widget(Label(text = 'hangover forecast', color = [0,0,0,1]))
 
@@ -61,6 +74,8 @@ class FeelScreen(Screen):
         
          # add graph title
         graphscreen.grid.add_widget(Label(text = 'hangover history', color = [0,0,0,1]))
+
+        
 
         # prepare graph for personal history
         history = Graph( xlabel='time', ylabel='history', x_ticks_minor=5,
@@ -80,6 +95,7 @@ class FeelScreen(Screen):
         alki_score = str(round(numpy.mean(alki_mean, axis=0),2))
         setc.hangover_level = alki_score
         graphscreen.ids.alki_score.text = 'hangover level: ' + str(alki_score)
+   
 
     def hang_forecast(instance, x):
         """
@@ -121,7 +137,7 @@ class FeelScreen(Screen):
                 try:
                     Screen.prepareGraphs(Screen)
                     # global table to be stored on server
-                    new_table = numpy.array([timestamp, app.lat, app.lon, setc.num_beer, setc.num_wine, setc.num_shot, setc.num_cig, setc.num_tired, setc.num_stress, setc.num_water, setc.num_sleep, setc.num_food, setc.hangover_level], dtype='string')
+                    new_table = numpy.array([timestamp, Screen.lat, Screen.lon, setc.num_beer, setc.num_wine, setc.num_shot, setc.num_cig, setc.num_tired, setc.num_stress, setc.num_water, setc.num_sleep, setc.num_food, setc.hangover_level], dtype='string')
                 except:
                     tb = traceback.format_exc()
                     print (tb)
@@ -131,7 +147,7 @@ class FeelScreen(Screen):
                 # combine global and local table
                 try:
                     # append old table to new table
-                    results = numpy.append(new_table,app.global_history)
+                    results = numpy.append(new_table,Screen.global_history)
                     results = results.reshape((len(results)/13,13))
                     # store data as a local csv file 
                     numpy.savetxt(filename, results, delimiter=';', fmt=('%s', '%s', '%s', '%s','%s','%s', '%s', '%s', '%s','%s', '%s','%s','%s'))
@@ -170,7 +186,7 @@ class FeelScreen(Screen):
                         m = MapMarkerPopup(lon=float(lon[i]), lat=float(lat[i]), placeholder= a)
                         map.ids.map.add_marker(m)
                         i = i + 1
-                    app.sm.add_widget(map)
+                    Screen.manager.add_widget(map)
                 except:
                     tb = traceback.format_exc()
                     print (tb)

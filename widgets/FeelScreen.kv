@@ -5,6 +5,9 @@
 	sleepranking: sleepranking
 	headacheranking: headacheranking
 	vomitranking: vomitranking
+	lat: app.lat
+	lon: app.lon
+	global_history: app.global_history
 	pizza: pizza
     MyBoxLayout:
         GridLayout:
@@ -13,11 +16,6 @@
             HeaderImage:
             HeaderLabel:
                 text: '  - Yuck...And how do you feel now?'
-		##
-		Seperator:
-		Seperator:
-		Spacer:
-		Spacer:
 		##
 		GridLayout:
 			cols: 2
@@ -41,7 +39,7 @@
 					id: headacheranking
 					text: 'Headache'
 					color: 0,0,0,1
-				Slider:
+				Sliderlein2:
 					id: headache
 					min: 0
 					step: 1
@@ -51,7 +49,7 @@
 					id: vomitranking
 					text: 'Sick'
 					color: 0,0,0,1
-				Slider:
+				Sliderlein3:
 					id: vomit
 					min: 0
 					step: 1
@@ -72,7 +70,7 @@
 		#
 		Seperator:
 		HeaderLabel: 
-			text: 'Hangover Rating: '
+			text: ('Hangover Rating: {} of 10').format(int(3.5/10*(sleep.value + headache.value + vomit.value))) 
 		#
 		Seperator:
 		Seperator:
