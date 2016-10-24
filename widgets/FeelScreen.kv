@@ -16,19 +16,15 @@
 		##
 		Seperator:
 		Seperator:
+		Spacer:
+		Spacer:
 		##
 		GridLayout:
 			cols: 2
 			rows: 1
-			id: pizza
-			Pizza:
-				serie: [["Sleepy", sleep.value, 'a9a9a9'],["Headache", headache.value, '808080'], ["Sick", vomit.value, '696969'], ["OK", (100 - (sleep.value + headache.value + vomit.value)), '696969']]
-				#chart_size: (sleep.value + headache.value + vomit.value)
-				legend_color: '808080'
-				chart_border: 2
-
+			spacing: 100
 			# sleep slider
-			GridLayout:
+			GridLayout:	
 				cols: 2
 				rows: 3
 				Label:
@@ -45,7 +41,7 @@
 					id: headacheranking
 					text: 'Headache'
 					color: 0,0,0,1
-				Sliderlein2:
+				Slider:
 					id: headache
 					min: 0
 					step: 1
@@ -55,11 +51,28 @@
 					id: vomitranking
 					text: 'Sick'
 					color: 0,0,0,1
-				Sliderlein3:
+				Slider:
 					id: vomit
 					min: 0
 					step: 1
-					max: 10
+					max: 10						
+			Pizza:
+				
+				id: pizza
+				serie: [["Sleepy", (33/10) *sleep.value, '0000FF'],["Headache", (33/10) *headache.value, 'FF0000'], ["Sick", (33/10) *vomit.value, '2EFE2E'], ["OK", (100 - (33/10)*(sleep.value + headache.value + vomit.value)), 'F6CEE3']]
+				chart_size: 256
+				legend_color: '000000'
+				chart_border: 1
+				legend_value_rayon: 100
+				legend_title_rayon: 160
+		#
+		Spacer:
+		Spacer:
+		Spacer:
+		#
+		Seperator:
+		HeaderLabel: 
+			text: 'Hangover Rating: '
 		#
 		Seperator:
 		Seperator:
