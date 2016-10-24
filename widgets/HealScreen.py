@@ -4,10 +4,11 @@ from setcard import setcard
 from kivy.uix.image import Image
 from FeelScreen import FeelScreen
 from pizza import *
-
+from kivy.app import App
 setc = setcard();
 # global path to pictures
 picpath = 'pics/app/'
+import BackgroundScreenManager
 
 class HealScreen(Screen):
     """
@@ -159,22 +160,9 @@ class HealScreen(Screen):
         setc.headache_avg_pie = (100/G) * weary_avg
         setc.vomit_avg_pie = (100/G) * vomit_avg
 
-        # todo get dynamic sizing for the chart to work
-        pie = Pizza(serie=[
-            ["Sleepy",  setc.sleepy_avg_pie, 'a9a9a9'],
-            ["Headache",  setc.headache_avg_pie, '708090'],
-            ["Vomit",  setc.vomit_avg_pie, '808080']],
-            chart_size=G*20,
-            legend_color='808080',
-            legend_value_rayon=100,
-            legend_title_rayon=160,
-            chart_border=2)
-
-        feelscreen.ids.pizza.add_widget(pie)
-
         # switch over to feelscreen
-        #Screen.add_widget(feelscreen)
-
+        Screen.add_widget(feelscreen)
+        Screen.manager.add_widget(feelscreen)
         Screen.manager.current = 'feel'
 
     # todo compute sleepy
@@ -208,4 +196,3 @@ class HealScreen(Screen):
     # todo compute vomit
     def CompVomit(Screen,event):
         return
-

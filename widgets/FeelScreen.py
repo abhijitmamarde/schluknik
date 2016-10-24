@@ -9,9 +9,9 @@ import io
 import json
 from pizza import *
 from kivy.uix.image import Image
+
 # for pizza graph
-
-
+# todos: how to make setcard globally accessible? 
 setc = setcard();
 # global path to pictures
 picpath = 'pics/app/'
@@ -101,28 +101,8 @@ class FeelScreen(Screen):
         except:
                 tb = traceback.format_exc()
                 print (tb)
-        return y
-
-    def UpdatePizzaSleep(instance, value):
-        '''
-        update the pizza chart 
-        '''
-    #    instance.ids.pizza.clear_widgets()
-    #     # todo get dynamic sizing for the chart to work
-
-    #    G = value + setc.headache_avg_pie + setc.vomit_avg_pie
-    #    pie = Pizza(serie=[
-    #        ["Sleepy",  value, 'a9a9a9'],
-    #        ["Headache",  setc.headache_avg_pie, '708090'],
-    #        ["Vomit",  setc.vomit_avg_pie, '808080']],
-    #        chart_size=G,
-    #        legend_color='808080',
-    #        legend_value_rayon=100,
-    #        legend_title_rayon=160,
-    #        chart_border=2)
-    #    instance.ids.pizza.add_widget(pie)
-        return
-
+        return 
+    
     def ftp_transfer(Screen):
             """
 		    accessing the global performance data
