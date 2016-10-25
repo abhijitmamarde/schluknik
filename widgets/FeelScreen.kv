@@ -16,61 +16,62 @@
             HeaderImage:
             HeaderLabel:
                 text: '  - Yuck...And how do you feel now?'
+		Seperator:
+		Seperator:
 		##
 		GridLayout:
 			cols: 2
 			rows: 1
-			spacing: 100
 			# sleep slider
-			GridLayout:	
-				cols: 2
-				rows: 3
-				Label:
-					id: sleepranking
-					text: 'Sleepy'
-					color: 0,0,0,1
-				Sliderlein:
-					id: sleep
-					min: 0
-					step: 1
-					max: 10
-			# headache slider
-				Label:
-					id: headacheranking
-					text: 'Headache'
-					color: 0,0,0,1
-				Sliderlein2:
-					id: headache
-					min: 0
-					step: 1
-					max: 10
-			# vomit slider
-				Label:
-					id: vomitranking
-					text: 'Sick'
-					color: 0,0,0,1
-				Sliderlein3:
-					id: vomit
-					min: 0
-					step: 1
-					max: 10						
+			Sliderlein:
+				id: sleep
+				min: 0
+				step: 0.5
+				max: 10
+			Label:
+				id: sleepranking
+				text: str(sleep.value) + '% Sleepy'
+				color: 0,0,0,1
+		GridLayout:
+			cols: 2
+			rows: 1
+		# headache slider
+			Sliderlein2:
+				id: headache
+				min: 0
+				step: 0.5
+				max: 10
+			Label:
+				id: headacheranking
+				text: str(headache.value) +'% Headache'
+				color: 0,0,0,1
+		GridLayout:
+			cols: 2
+			rows: 1
+		# vomit slider
+			Sliderlein3:
+				id: vomit
+				min: 0
+				step: 0.5
+				max: 10
+			Label:
+				id: vomitranking
+				text: str(vomit.value) + '% Sick'
+				color: 0,0,0,1						
+		
+		GridLayout:	
+			cols: 2
+			rows: 1
+			HeaderLabel: 
+				text: ('Hangover Rating: {} of 10').format(int(3.5/10*(sleep.value + headache.value + vomit.value))) 
 			Pizza:
-				
 				id: pizza
 				serie: [["Sleepy", (33/10) *sleep.value, '0000FF'],["Headache", (33/10) *headache.value, 'FF0000'], ["Sick", (33/10) *vomit.value, '2EFE2E'], ["OK", (100 - (33/10)*(sleep.value + headache.value + vomit.value)), 'F6CEE3']]
 				chart_size: 256
 				legend_color: '000000'
-				chart_border: 1
+				chart_border: 3
 				legend_value_rayon: 100
 				legend_title_rayon: 160
-		#
-		Spacer:
-		Spacer:
-		Spacer:
-		#
-		Seperator:
-		HeaderLabel: 
-			text: ('Hangover Rating: {} of 10').format(int(3.5/10*(sleep.value + headache.value + vomit.value))) 
 		#
 		Seperator:
 		Seperator:
