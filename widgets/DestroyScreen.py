@@ -48,7 +48,7 @@ class DestroyScreen(Screen):
         3: "powerless.png",
         4: "sleep.png",
         5: "normal.png",
-        6: "normal.png",
+        6: "sport.png",
         7: "vital.png",
         8: "superman2.png",
         9: "superman.png",
@@ -89,12 +89,12 @@ class DestroyScreen(Screen):
         1: "poop.png",
         2: "sad.png",
         3: "agressive.png",
-        4: "agressive.png",
+        4: "stressed.png",
         5: "normal.png",
-        6: "normal.png",
-        7: "normal.png",
-        8: "normal.png",
-        9: "skull.png",
+        6: "happy.png",
+        7: "excited.png",
+        8: "8.png",
+        9: "9.png",
         10: "skull.png"
         }
 

@@ -46,12 +46,9 @@
     <Content Include="pics\app\cigarette.png" />
     <Content Include="pics\app\exit.png" />
     <Content Include="pics\app\icon.png" />
-    <Content Include="pics\app\logo.png" />
-    <Content Include="pics\app\man.png" />
     <Content Include="pics\app\map.png" />
     <Content Include="pics\app\men.jpeg" />
     <Content Include="pics\app\next.png" />
-    <Content Include="pics\app\nosmoke.png" />
     <Content Include="pics\app\poop.png" />
     <Content Include="pics\app\result.png" />
     <Content Include="pics\app\settings.png" />
@@ -64,7 +61,6 @@
     <Content Include="pics\app\sushi.png" />
     <Content Include="pics\app\water.png" />
     <Content Include="pics\app\wine.png" />
-    <Content Include="pics\app\woman.png" />
     <Content Include="pics\dev\1_stable.png" />
     <Content Include="pics\dev\1_stable.svg" />
     <Content Include="pics\dev\2_stable.png" />
