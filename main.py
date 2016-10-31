@@ -182,6 +182,16 @@ class Myapp(App):
     """
     Main class
     """
+
+    # control functions for interaction with android lifecycle
+    def on_pause(self):
+        # Here you can save data if needed
+        return True
+
+    def on_resume(self):
+        # Here you can check if any data needs replacing (usually nothing)
+        pass
+
     KIVY_DEFAULT_FONT = "RobotoCondensed"
 
     #manager = ObjectProperty()

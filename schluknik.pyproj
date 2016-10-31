@@ -40,14 +40,12 @@
     <Content Include="pics\app\backup\sushi.png" />
     <Content Include="pics\app\backup\water.png" />
     <Content Include="pics\app\backup\wine.png" />
-    <Content Include="pics\app\banana.jpg" />
     <Content Include="pics\app\beer.png" />
     <Content Include="pics\app\burger.png" />
     <Content Include="pics\app\cigarette.png" />
     <Content Include="pics\app\exit.png" />
     <Content Include="pics\app\icon.png" />
     <Content Include="pics\app\map.png" />
-    <Content Include="pics\app\men.jpeg" />
     <Content Include="pics\app\next.png" />
     <Content Include="pics\app\poop.png" />
     <Content Include="pics\app\result.png" />
