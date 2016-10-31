@@ -1,42 +1,77 @@
 # Navigation page for going to the presented results
 
 <ResultScreen>:
-	BoxLayout:
-		orientation: 'vertical'
-		padding: 200,0,200,50
+	MyBoxLayout:
 		GridLayout:
-			halign: 'center'
-			valign: 'middle'
 			cols: 2
 			rows: 1
 			HeaderImage:
-				source: 'pics/app/icon.png'
 			HeaderLabel:
-				text: '- Lets check the results!'
+				text: ' - Thanks for your rating. Lets check the results!'
+		##
+		Seperator:
+		Seperator:
+		##
+		GridLayout:
+			cols: 2
+			rows: 4
+			
+			# hangover day forcast 
+			Button:
+				halign: 'center'
+				valign: 'middle'
+				background_normal: str(False)
+				on_press: root.manager.current = 'graph'
+				Image:
+					source: 'pics/app/forecast.png'
+					y: self.parent.y 
+					x: self.parent.x 
+					size: 200,200
+					allow_stretch: False
+			HeaderLabel:
+				text: '// hangover day forcast'
 
+			# hangover map 
+			Button:
+				halign: 'center'
+				valign: 'middle'
+				background_normal: str(False)
+				on_press: root.manager.current = 'map'
+				Image:
+					source: 'pics/app/map.png'
+					y: self.parent.y 
+					x: self.parent.x 
+					size: 200,200
+					allow_stretch: False
+			HeaderLabel:
+				text: '// hangover city map'
 
-		Button:
-			halign: 'center'
-			valign: 'middle'
-			background_normal: str(False)
-			on_press: root.manager.current = 'graph'
-			background_down: 'pics/app/sine.png'
-			Image:
-				source: 'pics/app/sine.png'
-				y: self.parent.y 
-				x: self.parent.x 
-				size: 200,200
-				allow_stretch: False
-                
-		Button:
-			halign: 'center'
-			valign: 'middle'
-			background_normal: str(False)
-			on_press: root.manager.current = 'map'
-			background_down: 'pics/app/map.png'
-			Image:
-				source: 'pics/app/map.png'
-				y: self.parent.y 
-				x: self.parent.x 
-				size: 200,200
-				allow_stretch: False
+			# hangover history 	
+			Button:
+				halign: 'center'
+				valign: 'middle'
+				background_normal: str(False)
+				on_press: root.manager.current = 'map'
+				Image:
+					source: 'pics/app/history.png'
+					y: self.parent.y 
+					x: self.parent.x 
+					size: 200,200
+					allow_stretch: False
+			HeaderLabel:
+				text: '// check personal history'
+
+			# hangover sharing 
+			Button:
+				halign: 'center'
+				valign: 'middle'
+				background_normal: str(False)
+				on_press: root.manager.current = 'map'
+				Image:
+					source: 'pics/app/share.png'
+					y: self.parent.y 
+					x: self.parent.x 
+					size: 200,200
+					allow_stretch: False
+			HeaderLabel:
+				text: '// share your rating'

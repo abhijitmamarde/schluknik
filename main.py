@@ -194,9 +194,6 @@ class Myapp(App):
 
     KIVY_DEFAULT_FONT = "RobotoCondensed"
 
-    #manager = ObjectProperty()
-    #settings_cls = SettingsScreen.KognitivoSettings
-
     global_location = StringProperty()
     # some random intitial location
     lat = 19.0
@@ -222,9 +219,6 @@ class Myapp(App):
         # load all kv files 
         load_all_kv_files()
 
-        # set bg color to white
-        #notification.notify('test tiltle','scanning started')
-        #Window.clearcolor = (1, 1, 1, 0)
         self.gps = gps
         try:
             # get gps coordinates
