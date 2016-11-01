@@ -47,7 +47,7 @@ class FeelScreen(Screen):
                 'label_options': {
                 'color': rgb('444444'),  # color of tick labels and titles
                 'bold': True},
-                'background_color': rgb('f8f8f2'),  # back ground color of canvas
+                'background_color': rgb('ffffff'),  # back ground color of canvas
                 'tick_color': rgb('808080'),  # ticks and grid
                 'border_color': rgb('808080')} # border drawn around each graph
 
@@ -57,11 +57,11 @@ class FeelScreen(Screen):
 
         
         Screen.manager.current = 'result'
-        return
+
         # add graph title
         graphscreen.grid.add_widget(Label(text = 'hangover forecast', color = [0,0,0,1]))
 
-        graph = Graph( xlabel='time', ylabel='today', x_ticks_minor=5,
+        graph = Graph( xlabel='time',  x_ticks_minor=5,
         x_ticks_major=1, y_ticks_major=2,
         y_grid_label=True, x_grid_label=True, padding=1,
         x_grid=True, y_grid=True, xmin=-0, xmax=12, ymin=0, ymax=10, **graph_theme)
@@ -72,23 +72,21 @@ class FeelScreen(Screen):
         graph.add_plot(plot)
         graphscreen.grid.add_widget(graph)
         
-         # add graph title
-        graphscreen.grid.add_widget(Label(text = 'hangover history', color = [0,0,0,1]))
+        # add graph title
+        #graphscreen.grid.add_widget(Label(text = 'hangover history', color = [0,0,0,1]))
 
-        
+        ## prepare graph for personal history
+        #history = Graph( xlabel='time', ylabel='history', x_ticks_minor=5,
+        #x_ticks_major=1, y_ticks_major=2,
+        #y_grid_label=True, x_grid_label=True, padding=1,
+        #x_grid=True, y_grid=True, xmin=-0, xmax=12, ymin=0, ymax=10, **graph_theme)
 
-        # prepare graph for personal history
-        history = Graph( xlabel='time', ylabel='history', x_ticks_minor=5,
-        x_ticks_major=1, y_ticks_major=2,
-        y_grid_label=True, x_grid_label=True, padding=1,
-        x_grid=True, y_grid=True, xmin=-0, xmax=12, ymin=0, ymax=10, **graph_theme)
-
-        plot = SmoothLinePlot(color=[0, 1, 1, 1])
-        ## add points to plot
-        plot.points = [(x, Screen.hang_forecast(x)) for x in range(0, 12)]
-        history.add_plot(plot)
+        #plot = SmoothLinePlot(color=[0, 1, 1, 1])
+        ### add points to plot
+        #plot.points = [(x, Screen.hang_forecast(x)) for x in range(0, 12)]
+        #history.add_plot(plot)
  
-        graphscreen.grid.add_widget(history)
+        #graphscreen.grid.add_widget(history)
         
         # calculate alki score from numpy array
         global alki_score
@@ -104,10 +102,10 @@ class FeelScreen(Screen):
         # fall time defenitly depends on smoker or not
         # also the n must depend on the number of cigarettes
         m = -0.7
-        y = m*x + setc.num_beer
+        y = m*x + 6
 
         # no negative hangover
-        if y < 0:
+        if y < 0 or y == 0:
             y = 0
 
         # average calculator 
@@ -117,7 +115,7 @@ class FeelScreen(Screen):
         except:
                 tb = traceback.format_exc()
                 print (tb)
-        return 
+        return y
     
     def ftp_transfer(Screen):
             """
