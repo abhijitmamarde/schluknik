@@ -55,45 +55,30 @@ class FeelScreen(Screen):
         graphscreen = GraphScreen(name='graph')
         Screen.manager.add_widget(graphscreen)
 
-        
         Screen.manager.current = 'result'
 
         # add graph title
         graphscreen.grid.add_widget(Label(text = 'hangover forecast', color = [0,0,0,1]))
 
-        graph = Graph( xlabel='time',  x_ticks_minor=5,
+        i = Screen.get_timestamp()
+
+        graph = Graph( xlabel='hours of the day', ylabel='rate',  x_ticks_minor=5,
         x_ticks_major=1, y_ticks_major=2,
         y_grid_label=True, x_grid_label=True, padding=1,
-        x_grid=True, y_grid=True, xmin=-0, xmax=12, ymin=0, ymax=10, **graph_theme)
+        x_grid=True, y_grid=True, xmin=i[0], xmax=i[11], ymin=0, ymax=10, **graph_theme)
 
         plot = SmoothLinePlot(color=[0, 0, 1, 1])
         ## add points to plot
-        plot.points = [(x, Screen.hang_forecast(x)) for x in range(0, 12)]
+        # get time stamp
+        plot.points = [(i[x], Screen.hang_forecast(x)) for x in range(0, 12)]
         graph.add_plot(plot)
         graphscreen.grid.add_widget(graph)
-        
-        # add graph title
-        #graphscreen.grid.add_widget(Label(text = 'hangover history', color = [0,0,0,1]))
-
-        ## prepare graph for personal history
-        #history = Graph( xlabel='time', ylabel='history', x_ticks_minor=5,
-        #x_ticks_major=1, y_ticks_major=2,
-        #y_grid_label=True, x_grid_label=True, padding=1,
-        #x_grid=True, y_grid=True, xmin=-0, xmax=12, ymin=0, ymax=10, **graph_theme)
-
-        #plot = SmoothLinePlot(color=[0, 1, 1, 1])
-        ### add points to plot
-        #plot.points = [(x, Screen.hang_forecast(x)) for x in range(0, 12)]
-        #history.add_plot(plot)
- 
-        #graphscreen.grid.add_widget(history)
         
         # calculate alki score from numpy array
         global alki_score
         alki_score = str(round(numpy.mean(alki_mean, axis=0),2))
         setc.hangover_level = alki_score
         graphscreen.ids.alki_score.text = 'hangover level: ' + str(alki_score)
-   
 
     def hang_forecast(instance, x):
         """
@@ -116,7 +101,14 @@ class FeelScreen(Screen):
                 tb = traceback.format_exc()
                 print (tb)
         return y
-    
+
+    def get_timestamp(i):
+
+        str = float(datetime.datetime.now().strftime('%H')) 
+        x = [str + i for i in range(12)]
+
+        return x
+
     def ftp_transfer(Screen):
             """
 		    accessing the global performance data
