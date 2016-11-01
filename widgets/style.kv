@@ -2,15 +2,12 @@
 #:import MapSource mapview.MapSource
 #:import MapMarkerPopup mapview.MapMarkerPopup
 
-
 ## inheried classes
 <MyBoxLayout@BoxLayout>:
-    orientation: 'vertical'
-    padding: 50,50,10,10
-    spacing: 10
+    orientation: 'vertical' # If the orientation is vertical: x, right and center_x will be used.
+    padding: 20,0,20,0 #[padding_left, padding_top, padding_right, padding_bottom]
+    spacing: 5 #Spacing between children, in pixels
 
-# header text
-# todo: make text bubble
 <Seperator@Widget>:
 	id: separator
 	size_hint_y: None
@@ -22,13 +19,14 @@
 			pos: 25, separator.center_y
 			size: separator.width - 50, 1
 
+# filling element
 <Spacer@Widget>:
 	id: separator
 	size_hint_y: None
 	height: 10
 	canvas:
 		Color:
-			rgb: 1, 1, 1
+			rgb: 1, 1, 1 # white space
 		Rectangle:
 			pos: 25, separator.center_y
 			size: separator.width - 50, 1
@@ -53,7 +51,7 @@
 	mipmap: True
 
 # botton navigation panel
-<ExitButton@Button>:
+<ExitButton@ButtonBehavior+Image>:
     background_normal: str(False)
     on_press: app.get_running_app().stop()
     #background_down: 'pics/app/exit.png'
@@ -65,7 +63,7 @@
         allow_stretch: False
         mipmap: True
 
-<SettingsButton@Button>:
+<SettingsButton@ButtonBehavior+Image>:
     background_normal: str(False)
     on_press: app.open_settings()
     #background_down: 'pics/app/settings.png'
@@ -78,7 +76,16 @@
         stretch: False
         mipmap: True
 
-<NextButton@Button>:
+<ResultButton@ButtonBehavior+Image>:
+    background_normal: str(False)
+    y: self.parent.y 
+	x: self.parent.x 
+	size: 200,200
+    allow_stretch: False
+    stretch: False
+    mipmap: True
+
+<NextButton@ButtonBehavior+Image>:
     background_normal: str(False)
     #background_down: 'pics/app/next.png'
     Image:

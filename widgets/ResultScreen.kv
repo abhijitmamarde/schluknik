@@ -17,61 +17,32 @@
 			rows: 4
 			
 			# hangover day forcast 
-			Button:
-				halign: 'center'
-				valign: 'middle'
-				background_normal: str(False)
+			ResultButton:
 				on_press: root.manager.current = 'graph'
-				Image:
-					source: 'pics/app/forecast.png'
-					y: self.parent.y 
-					x: self.parent.x 
-					size: 200,200
-					allow_stretch: False
+				source: 'pics/app/forecast.png'
 			HeaderLabel:
 				text: '// hangover day forcast'
 
 			# hangover map 
-			Button:
-				halign: 'center'
-				valign: 'middle'
-				background_normal: str(False)
+			ResultButton:
 				on_press: root.manager.current = 'map'
-				Image:
-					source: 'pics/app/map.png'
-					y: self.parent.y 
-					x: self.parent.x 
-					size: 200,200
-					allow_stretch: False
+				source: 'pics/app/map.png'
 			HeaderLabel:
 				text: '// hangover city map'
 
 			# hangover history 	
-			Button:
-				halign: 'center'
-				valign: 'middle'
-				background_normal: str(False)
+			ResultButton:
 				on_press: root.manager.current = 'map'
-				Image:
-					source: 'pics/app/history.png'
-					y: self.parent.y 
-					x: self.parent.x 
-					size: 200,200
-					allow_stretch: False
+				source: 'pics/app/history.png'
+
 			HeaderLabel:
 				text: '// check personal history'
 
 			# hangover sharing 
-			Button:
-				halign: 'center'
-				valign: 'middle'
+			ResultButton:
 				background_normal: str(False)
 				on_press: root.manager.current = 'map'
-				Image:
-					source: 'pics/app/share.png'
-					y: self.parent.y 
-					x: self.parent.x 
-					size: 200,200
-					allow_stretch: False
+				source: 'pics/app/share.png'
+
 			HeaderLabel:
 				text: '// share your rating'
