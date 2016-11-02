@@ -62,16 +62,30 @@ class FeelScreen(Screen):
 
         i = Screen.get_timestamp()
 
-        graph = Graph( xlabel='hours of the day', ylabel='rate',  x_ticks_minor=5,
+        # max forecast of steps
+        loop_count = 12
+
+        graph = Graph( xlabel='hours of the day',x_ticks_minor=5,
         x_ticks_major=1, y_ticks_major=2,
         y_grid_label=True, x_grid_label=True, padding=1,
-        x_grid=True, y_grid=True, xmin=i[0], xmax=i[11], ymin=0, ymax=10, **graph_theme)
+        x_grid=True, y_grid=True, xmin=i[0], xmax=i[loop_count - 1], ymin=0, ymax=10, **graph_theme)
 
-        plot = SmoothLinePlot(color=[0, 0, 1, 1])
-        ## add points to plot
-        # get time stamp
-        plot.points = [(i[x], Screen.hang_forecast(x)) for x in range(0, 12)]
-        graph.add_plot(plot)
+         
+        sleepy_plot = SmoothLinePlot(color=[0, 0, 1, 1])
+        weary_plot = SmoothLinePlot(color=[1, 0, 0, 1])
+        vomit_plot = SmoothLinePlot(color=[0, 1, 0, 1])
+
+        # compute sleepy
+        sleepy_plot.points = [(i[x], Screen.sleep_forecast(x, Screen.ids.sleep.value)) for x in range(0, loop_count)] 
+        # compute weary
+        weary_plot.points = [(i[x], Screen.sleep_forecast(x, Screen.ids.sleep.value)) for x in range(0, loop_count)] 
+        # comute womit  
+        vomit_plot.points = [(i[x], Screen.vomit_forecast(x, Screen.ids.vomit.value)) for x in range(0, loop_count)] 
+        # add plots to graph
+        graph.add_plot(sleepy_plot)
+        graph.add_plot(weary_plot)
+        graph.add_plot(vomit_plot)
+        # add graph to widget
         graphscreen.grid.add_widget(graph)
         
         # calculate alki score from numpy array
@@ -80,14 +94,14 @@ class FeelScreen(Screen):
         setc.hangover_level = alki_score
         graphscreen.ids.alki_score.text = 'hangover level: ' + str(alki_score)
 
-    def hang_forecast(instance, x):
+    def sleep_forecast(instance, x, sleep):
         """
-        math part
+        math part for sleep
         """
         # fall time defenitly depends on smoker or not
         # also the n must depend on the number of cigarettes
-        m = -0.7
-        y = m*x + 6
+        m = 1
+        y = m*(pow(x-(sleep/3),2)) + (sleep/2)
 
         # no negative hangover
         if y < 0 or y == 0:
@@ -100,7 +114,19 @@ class FeelScreen(Screen):
         except:
                 tb = traceback.format_exc()
                 print (tb)
-        return y
+        return round(y,1)
+
+    def vomit_forecast(instance, x, vomit):
+        """
+        math part for vomit
+        """
+        m = -1
+        y = m*(x) + vomit
+
+        # no negative hangover
+        if y < 0 or y == 0:
+            y = 0
+        return round(y,1)
 
     def get_timestamp(i):
 

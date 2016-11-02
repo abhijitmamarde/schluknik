@@ -153,6 +153,7 @@ class HealScreen(Screen):
 
         # compute vomit avg
         vomit_avg = sleepy_avg
+        feelscreen.ids.vomit.value = vomit_avg
 
         # prepare pie chart
         G = sleepy_avg + weary_avg + vomit_avg
