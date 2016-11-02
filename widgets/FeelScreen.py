@@ -72,18 +72,18 @@ class FeelScreen(Screen):
 
          
         sleepy_plot = SmoothLinePlot(color=[0, 0, 1, 1])
-        weary_plot = SmoothLinePlot(color=[1, 0, 0, 1])
+        headache_plot = SmoothLinePlot(color=[1, 0, 0, 1])
         vomit_plot = SmoothLinePlot(color=[0, 1, 0, 1])
 
         # compute sleepy
         sleepy_plot.points = [(i[x], Screen.sleep_forecast(x, Screen.ids.sleep.value)) for x in range(0, loop_count)] 
         # compute weary
-        weary_plot.points = [(i[x], Screen.sleep_forecast(x, Screen.ids.sleep.value)) for x in range(0, loop_count)] 
+        headache_plot.points = [(i[x], Screen.headache_forecast(x, Screen.ids.headache.value)) for x in range(0, loop_count)] 
         # comute womit  
         vomit_plot.points = [(i[x], Screen.vomit_forecast(x, Screen.ids.vomit.value)) for x in range(0, loop_count)] 
         # add plots to graph
         graph.add_plot(sleepy_plot)
-        graph.add_plot(weary_plot)
+        graph.add_plot(headache_plot)
         graph.add_plot(vomit_plot)
         # add graph to widget
         graphscreen.grid.add_widget(graph)
@@ -114,6 +114,18 @@ class FeelScreen(Screen):
         except:
                 tb = traceback.format_exc()
                 print (tb)
+        return round(y,1)
+
+    def headache_forecast(instance, x, headache):
+        """
+        math part for headache
+        """
+        m = 1
+        y = m*(x) + headache
+
+        # no negative hangover
+        if y < 0 or y == 0:
+            y = 0
         return round(y,1)
 
     def vomit_forecast(instance, x, vomit):
