@@ -215,6 +215,8 @@ class Myapp(App):
         """
 		Layout builder of main window
         """
+        # app-wide variables
+        self.get_total_entries = 0
 
         # load all kv files 
         load_all_kv_files()
@@ -270,6 +272,7 @@ class Myapp(App):
             ftp.quit()
             gFile.close()
             self.global_history = numpy.genfromtxt(filename, delimiter=';', dtype='string')
+            
         except:
             tb = traceback.format_exc()
             print (tb)

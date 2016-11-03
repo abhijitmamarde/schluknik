@@ -14,6 +14,8 @@ from GraphScreen import GraphScreen
 from MapScreen import MapScreen
 from kivy.uix.label import Label
 from kivy.uix.bubble import Bubble
+import numpy as np
+
 #
 from graph import *
 from mapview import *
@@ -29,6 +31,9 @@ picpath = 'pics/app/'
 global avoid_double_execution
 avoid_double_execution = True;
 
+# memory value for previous run
+global last_run
+last_run = 1
 
 class FeelScreen(Screen):
     """
@@ -56,6 +61,9 @@ class FeelScreen(Screen):
         Screen.manager.add_widget(graphscreen)
 
         Screen.manager.current = 'result'
+
+        # add overview
+        graphscreen.grid.add_widget(Label(text = 'total number of todays rating ' + str(Screen.get_total_entries), id = 'get_total_entries', color = [0,0,0,1]))
 
         # add graph title
         graphscreen.grid.add_widget(Label(text = 'hangover forecast', color = [0,0,0,1]))
@@ -85,7 +93,7 @@ class FeelScreen(Screen):
         graph.add_plot(sleepy_plot)
         graph.add_plot(headache_plot)
         graph.add_plot(vomit_plot)
-        # add graph to widget
+
         graphscreen.grid.add_widget(graph)
         
         # calculate alki score from numpy array
@@ -107,6 +115,10 @@ class FeelScreen(Screen):
         if y < 0 or y == 0:
             y = 0
 
+        # not higher than 10
+        if y > 10 :
+            y = 10
+
         # average calculator 
         try:
             global alki_mean
@@ -114,7 +126,10 @@ class FeelScreen(Screen):
         except:
                 tb = traceback.format_exc()
                 print (tb)
-        return round(y,1)
+        
+        y = instance.sleep_recover(int(datetime.datetime.now().strftime('%H')) + x,y)
+        last_run = round(y,1)
+        return y
 
     def headache_forecast(instance, x, headache):
         """
@@ -126,6 +141,12 @@ class FeelScreen(Screen):
         # no negative hangover
         if y < 0 or y == 0:
             y = 0
+        # not higher than 10
+        if y > 10 :
+            y = 10
+
+        y = instance.sleep_recover(int(datetime.datetime.now().strftime('%H')) + x,y)
+        last_run = round(y,1)
         return round(y,1)
 
     def vomit_forecast(instance, x, vomit):
@@ -138,7 +159,38 @@ class FeelScreen(Screen):
         # no negative hangover
         if y < 0 or y == 0:
             y = 0
+        # not higher than 10
+        if y > 10 :
+            y = 10
+
+        y = instance.sleep_recover(int(datetime.datetime.now().strftime('%H')) + x,y)
+        last_run = round(y,1)
         return round(y,1)
+
+    def sleep_recover(instace, time, y):
+        """
+        compute the slope during night time
+        """
+        # going to bed value
+        start = 23
+        global last_run
+
+        if(time < start):
+            last_run = y
+            return y
+
+        m = -0.5 # slope for recovery during night time
+        y = last_run + m
+        last_run = y
+
+        # no negative hangover
+        if y < 0 or y == 0:
+            y = 0
+        # not higher than 10
+        if y > 10 :
+            y = 10
+
+        return round(y,1) 
 
     def get_timestamp(i):
 
@@ -163,9 +215,10 @@ class FeelScreen(Screen):
                 # 13 pcs
                 # |timestamp | latitude | longitude | beer | wine | shots | cigarettes | tired | stressed | water | sleep | food | hang_level
                 try:
-                    Screen.prepareGraphs(Screen)
+                    
                     # global table to be stored on server
                     new_table = numpy.array([timestamp, Screen.lat, Screen.lon, setc.num_beer, setc.num_wine, setc.num_shot, setc.num_cig, setc.num_tired, setc.num_stress, setc.num_water, setc.num_sleep, setc.num_food, setc.hangover_level], dtype='string')
+
                 except:
                     tb = traceback.format_exc()
                     print (tb)
@@ -176,10 +229,15 @@ class FeelScreen(Screen):
                 try:
                     # append old table to new table
                     results = numpy.append(new_table,Screen.global_history)
+
+                    # get total number of entries 
+                    Screen.get_total_entries = len(results)/13
+                    # prepare graphs
+                    Screen.prepareGraphs(Screen)
                     results = results.reshape((len(results)/13,13))
                     # store data as a local csv file 
                     numpy.savetxt(filename, results, delimiter=';', fmt=('%s', '%s', '%s', '%s','%s','%s', '%s', '%s', '%s','%s', '%s','%s','%s'))
-                    
+                   
                 except:
                     tb = traceback.format_exc()
                     print (tb)
